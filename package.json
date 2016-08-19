@@ -1,0 +1,20 @@
+{
+    "name": "atlauncher-backend-next",
+    "version": "1.0.0-alpha.1",
+    "description": "This is the code for the NEXT iteration of the backend running ATLauncher.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@gitlab.com/ATLauncher/Backend-NEXT.git"
+    },
+    "author": "RyanTheAllmighty <ryantheallmighty@atlauncher.com>",
+    "license": "UNLICENSED",
+    "private": true,
+    "bugs": {
+        "url": "https://gitlab.com/ATLauncher/Backend-NEXT/issues"
+    },
+    "homepage": "https://gitlab.com/ATLauncher/Backend-NEXT#README"
+}
