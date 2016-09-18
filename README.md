@@ -48,6 +48,7 @@ All configuration files can be found in the `/config` folder.
 They're divided up into 3 main files:
 
  - `base.json`: This file is the very base file and contains configuration that is used in both production and development.
+ - `test.json`: This file contains setting overrides for when in test.
  - `development.json`: This file contains setting overrides for when in development.
  - `production.json`: This file contains setting overrides for when in prodution.
 
