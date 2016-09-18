@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/ATLauncher/Backend-NEXT/tree/initial-code.svg?style=svg)](https://circleci.com/gh/ATLauncher/Backend-NEXT/tree/initial-code)
+
 # Backend-NEXT
 Backend API server for ATLauncher NEXT.
 
