@@ -5,7 +5,7 @@ machine:
 dependencies:
   override:
     - npm prune
-    - npm install
+    - npm install --dev
     - npm run build
   cache_directories:
     - "node_modules"
