@@ -1,0 +1,37 @@
+machine:
+  node:
+    version: 4.5.0
+
+dependencies:
+  override:
+    - npm prune
+    - npm install
+    - npm run build
+  cache_directories:
+    - "node_modules"
+
+test:
+  override:
+     - npm run lint
+     - npm run test:clean
+     - npm run test
+
+deployment:
+  beta:
+    branch: develop
+    commands:
+      - npm publish --tag next
+  release:
+    branch: master
+    commands:
+      - npm publish
+
+general:
+  branches:
+    only:
+      - initial-code
+      - /feature\/.*/
+      - /release\/.*/
+      - /hotfix\/.*/
+      - master
+      - develop
