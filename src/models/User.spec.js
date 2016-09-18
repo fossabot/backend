@@ -1,9 +1,8 @@
 import chai, { expect } from 'chai';
-import { format as dateFormat } from 'date-fns';
 
 import knex from '../../db';
 
-import { User } from '../../src/models';
+import { User } from './index';
 
 describe('Model: User', function () {
     beforeEach(function (done) {

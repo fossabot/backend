@@ -1,8 +1,8 @@
 import v1ApiRoutes from './api/v1';
 
-export default ({app, config, db}) => {
+export default (app) => {
     // v1 API routes
-    app.use('/v1', v1ApiRoutes({config, db}));
+    app.use('/v1', v1ApiRoutes());
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {

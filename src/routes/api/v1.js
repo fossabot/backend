@@ -1,12 +1,11 @@
 import { Router } from 'express';
 
-import RootController from '../../controllers/api/v1/RootController';
+import { RootController } from '../../controllers/api/v1';
 
-export default ({config, db}) => {
+export default () => {
     const routes = Router();
-    const RootControllerInstance = new RootController({config, db});
 
-    routes.get('/', RootControllerInstance.root);
+    routes.get('/', RootController.root);
 
     return routes;
 }

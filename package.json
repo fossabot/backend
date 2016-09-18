@@ -9,38 +9,12 @@
     "start": "node dist",
     "prestart": "npm run -s build",
     "lint": "eslint src config migrations knexfile.js",
-    "test": "cross-env NODE_ENV=test mocha",
-    "test:watch": "cross-env NODE_ENV=test mocha --watch",
+    "test": "cross-env NODE_ENV=test mocha --opts ./mocha.opts",
+    "test:watch": "cross-env NODE_ENV=test mocha --opts ./mocha.opts --watch",
     "test:clean": "rimraf ./db/test.sqlite3 && cross-env NODE_ENV=test npm run migrate && cross-env NODE_ENV=test npm run seed",
     "seed": "knex seed:run",
     "migrate": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback"
-  },
-  "eslintConfig": {
-    "parserOptions": {
-      "ecmaVersion": 7,
-      "sourceType": "module"
-    },
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "eslint:recommended"
-    ],
-    "rules": {
-      "no-console": "off",
-      "no-trailing-spaces": "error",
-      "no-multiple-empty-lines": "error",
-      "consistent-return": "error",
-      "comma-dangle": [
-        "error",
-        "never"
-      ],
-      "no-use-before-define": [
-        "error",
-        "nofunc"
-      ]
-    }
   },
   "repository": {
     "type": "git",

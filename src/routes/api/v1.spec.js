@@ -1,9 +1,9 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 
-import app from '../src';
-import knex from '../db';
-import { version } from '../package.json';
+import app from '../../index';
+import knex from '../../../db';
+import { version } from '../../../package.json';
 
 chai.use(chaiHttp);
 

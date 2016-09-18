@@ -2,7 +2,7 @@ import { format as dateFormat }  from 'date-fns';
 
 import knex from '../../db';
 
-class Model {
+class BaseModel {
     /**
      * Sets up the table name and the knex DB connector.
      *
@@ -52,13 +52,13 @@ class Model {
         return {
             'get.notFound': 'Not found.',
             'create.onlyOne': 'Only one model can be created using this method.'
-        }
-    };
+        };
+    }
 
     /**
      * This function is run before inserting the data into the database.
      *
-     * Useful for overwriding any attributes you may need to such as hashing a password.
+     * Useful for overriding any attributes you may need to such as hashing a password.
      *
      * @param {Object} attributes
      * @returns {Object}
@@ -67,6 +67,12 @@ class Model {
         return attributes;
     }
 
+    /**
+     * This will cast any set values in the casts attribute to the specified type.
+     *
+     * @param {Object} input
+     * @returns {Object}
+     */
     cast(input) {
         let returnValue = {...input};
 
@@ -85,6 +91,12 @@ class Model {
         return returnValue;
     }
 
+    /**
+     * This will remove any specified hidden fields from the object passed in.
+     *
+     * @param {Object} input
+     * @returns {Object}
+     */
     removeHiddenFields(input) {
         let returnValue = {...input};
 
@@ -97,6 +109,14 @@ class Model {
         return returnValue;
     }
 
+    /**
+     * This is a base function for creating a model with the given attributes.
+     *
+     * Should be overwritten on a Model by Model basis depending on needs.
+     *
+     * @param {Object} attributes
+     * @returns {Promise}
+     */
     create(attributes) {
         return new Promise((resolve, reject) => {
             if (Array.isArray(attributes)) {
@@ -120,6 +140,14 @@ class Model {
         });
     }
 
+    /**
+     * This is a base function for getting a model based on a given id.
+     *
+     * Should be overwritten on a Model by Model basis depending on needs.
+     *
+     * @param {Number} id
+     * @returns {Promise}
+     */
     get(id) {
         return new Promise((resolve, reject) => {
             this.knex
@@ -140,4 +168,4 @@ class Model {
     }
 }
 
-export default Model;
+export default BaseModel;

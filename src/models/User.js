@@ -1,12 +1,12 @@
 import bcrypt from 'bcryptjs';
 
-import Model from './Model';
+import BaseModel from './BaseModel';
 
 import { getConfig } from '../../config';
 
 const config = getConfig();
 
-class User extends Model {
+class User extends BaseModel {
     constructor() {
         super('users');
     }
@@ -31,8 +31,8 @@ class User extends Model {
         return {
             'get.notFound': 'User not found.',
             'create.onlyOne': 'Only one user can be created using this method.'
-        }
-    };
+        };
+    }
 
     beforeCreate(attributes) {
         const password = bcrypt.hashSync(attributes.password, config.bcryptRounds);
