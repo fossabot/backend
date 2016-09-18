@@ -1,0 +1,8 @@
+{
+    "port": 443,
+    "database": {
+        "name": "atlauncher-next",
+        "username": "atlauncher-next",
+        "password": "changeme"
+    }
+}
