@@ -2,7 +2,7 @@ import chai, { expect } from 'chai';
 
 import knex from '../../db';
 
-import { User } from './index';
+import User from './User';
 
 describe('Model: User', function () {
     beforeEach(function (done) {
@@ -26,84 +26,74 @@ describe('Model: User', function () {
     });
 
     describe('get', function () {
-        it('should return the data for the given user', function () {
+        it('should return the data for the given user', async function () {
             const input = {
                 username: 'test',
                 password: 'test',
                 email: 'test@example.com'
             };
 
-            const expectedOutput = {
-                id: 1,
-                username: 'test',
-                email: 'test@example.com',
-                must_change_password: 0,
-                created_at: null,
-                updated_at: null
-            };
+            const insertedUser = await User.query().insert(input);
 
-            User.create(input).then(() => {
-                return User.get(1).then((user) => {
-                    expect(user).to.be.an('object');
-                    expect(user).to.deep.equal(expectedOutput);
-                });
-            });
+            expect(insertedUser).to.not.be.undefined;
+
+            const user = await User.query().findById(insertedUser.id);
+
+            expect(user).to.be.an('object');
+
+            expect(user).to.have.property('id').that.is.a('number');
+            expect(user).to.have.property('id').that.equals(insertedUser.id);
+
+            expect(user).to.have.property('username').that.is.a('string');
+            expect(user).to.have.property('username').that.equals('test');
+
+            expect(user).to.have.property('password').that.is.a('string');
+
+            expect(user).to.have.property('email').that.is.a('string');
+            expect(user).to.have.property('email').that.equals('test@example.com');
+
+            expect(user).to.have.property('must_change_password').that.is.a('boolean');
+            expect(user).to.have.property('must_change_password').that.equals(false);
+
+            expect(user).to.have.property('created_at').that.is.a('string');
+            expect(user).to.have.property('updated_at').that.is.null;
         });
 
-        it('should reject with an error if the given user cannot be found by id', function () {
-            return User.get(100).catch((err) => {
-                expect(err).to.be.an('Error');
-                expect(err.message).to.equal('User not found.');
-            });
+        it('should return undefined if a user cannot be found by id', async function () {
+            const user = await User.query().findById(1);
+
+            expect(user).to.be.undefined;
         });
     });
 
     describe('create', function () {
-        it('should create a user and return the created user', function () {
+        it('should create a user', async function () {
             const input = {
                 username: 'test',
                 password: 'test',
                 email: 'test@example.com'
             };
 
-            return User.create(input).then((user) => {
-                expect(user).to.be.an('object');
+            const user = await User.query().insert(input);
 
-                expect(user).to.have.property('id').that.is.a('number');
-                expect(user).to.have.property('id').that.equals(1);
+            expect(user).to.be.an('object');
 
-                expect(user).to.have.property('username').that.is.a('string');
-                expect(user).to.have.property('username').that.equals('test');
+            expect(user).to.have.property('id').that.is.a('number');
+            expect(user).to.have.property('id').that.equals(1);
 
-                expect(user).to.have.property('email').that.is.a('string');
-                expect(user).to.have.property('email').that.equals('test@example.com');
+            expect(user).to.have.property('username').that.is.a('string');
+            expect(user).to.have.property('username').that.equals('test');
 
-                expect(user).to.have.property('must_change_password').that.is.a('boolean');
-                expect(user).to.have.property('must_change_password').that.equals(false);
+            expect(user).to.have.property('email').that.is.a('string');
+            expect(user).to.have.property('email').that.equals('test@example.com');
 
-                expect(user).to.have.property('created_at').that.is.a('string');
-                expect(user).to.have.property('updated_at').that.is.null;
-            });
-        });
+            expect(user).to.have.property('password').that.is.a('string');
 
-        it('should reject with an error if the passed in data isn\'t an array', function () {
-            const input = [
-                {
-                    username: 'test',
-                    password: 'test',
-                    email: 'test@example.com'
-                },
-                {
-                    username: 'test2',
-                    password: 'test2',
-                    email: 'test2@example.com'
-                }
-            ];
+            expect(user).to.have.property('must_change_password').that.is.a('boolean');
+            expect(user).to.have.property('must_change_password').that.equals(false);
 
-            return User.create(input).catch((err) => {
-                expect(err).to.be.an('Error');
-                expect(err.message).to.equal('Only one user can be created using this method.');
-            });
+            expect(user).to.have.property('created_at').that.is.a('string');
+            expect(user).to.have.property('updated_at').that.is.null;
         });
     });
 });

@@ -3,18 +3,22 @@ import cors from 'cors';
 import helmet from 'helmet';
 import logger from 'morgan';
 import express from 'express';
+import { Model } from 'objection';
 import compress from 'compression';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
+import knex from '../db';
 import routes from './routes';
-import { environment, getConfig } from '../config';
 import middleware from './middleware';
+import { environment, getConfig } from '../config';
 
 const config = getConfig();
 
 let app = express();
 app.server = http.createServer(app);
+
+Model.knex(knex);
 
 // 3rd party middleware
 app.use(cors());

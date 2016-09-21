@@ -41,11 +41,6 @@ Link: https://github.com/sindresorhus/pretty-bytes
 
 Converts bytes into human readable format. Such as `1337` => `1.34 kB`.
 
-## objection.js
-Link: https://github.com/Vincit/objection.js
-
-Very lightweight replacement for the hacky stuff currently being done with models. Still based on knex but allows specifying more advanced things such as eager loading and relationships.
-
 ## ava
 Link: https://github.com/avajs/ava
 
