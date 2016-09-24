@@ -4,6 +4,10 @@ import knex from '../../db';
 
 import User from './User';
 
+/**
+ * These tests are here not to test the functionality of the provided Model library (Objection.js) and is more to make sure commonly used queries (with custom changes to the models) are returning as
+ * expected
+ */
 describe('Model: User', function () {
     beforeEach(function (done) {
         knex.migrate.rollback()
@@ -25,7 +29,7 @@ describe('Model: User', function () {
             });
     });
 
-    describe('get', function () {
+    describe('findById', function () {
         it('should return the data for the given user', async function () {
             const input = {
                 username: 'test',
@@ -66,7 +70,7 @@ describe('Model: User', function () {
         });
     });
 
-    describe('create', function () {
+    describe('insert', function () {
         it('should create a user', async function () {
             const input = {
                 username: 'test',
@@ -94,6 +98,30 @@ describe('Model: User', function () {
 
             expect(user).to.have.property('created_at').that.is.a('string');
             expect(user).to.have.property('updated_at').that.is.null;
+        });
+
+        it('should throw an error if email is invalid format', function () {
+            const input = {
+                username: 'test',
+                password: 'test',
+                email: 'error'
+            };
+
+            const expectedError = '"email": "should match format \\"email\\"';
+
+            return expect(User.query().insert(input)).to.be.rejectedWith(expectedError);
+        });
+
+        it('should throw an error if username is invalid format', function () {
+            const input = {
+                username: 'a',
+                password: 'test',
+                email: 'test@example.com'
+            };
+
+            const expectedError = '"username": "should NOT be shorter than 3 characters"';
+
+            return expect(User.query().insert(input)).to.be.rejectedWith(expectedError);
         });
     });
 });
