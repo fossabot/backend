@@ -30,8 +30,9 @@ general:
   branches:
     only:
       - initial-code
-      - /feature\/.*/
-      - /release\/.*/
-      - /hotfix\/.*/
+      - feature\/.*
+      - release\/.*
+      - hotfix\/.*
       - master
       - develop
+      - greenkeeper-.*
