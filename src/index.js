@@ -7,6 +7,7 @@ import { Model } from 'objection';
 import compress from 'compression';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import responseTime from 'response-time';
 
 import knex from '../db';
 import routes from './routes';
@@ -17,6 +18,11 @@ const config = getConfig();
 
 let app = express();
 app.server = http.createServer(app);
+
+// response time headers
+app.use(responseTime({
+    suffix: false
+}));
 
 Model.knex(knex);
 

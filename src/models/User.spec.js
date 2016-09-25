@@ -51,8 +51,6 @@ describe('Model: User', function () {
             expect(user).to.have.property('username').that.is.a('string');
             expect(user).to.have.property('username').that.equals('test');
 
-            expect(user).to.have.property('password').that.is.a('string');
-
             expect(user).to.have.property('email').that.is.a('string');
             expect(user).to.have.property('email').that.equals('test@example.com');
 

@@ -9,6 +9,7 @@
     "start": "node dist",
     "prestart": "npm run -s build",
     "lint": "eslint src config migrations knexfile.js",
+    "lint:watch": "esw src config migrations knexfile.js --watch",
     "test": "cross-env NODE_ENV=test mocha --opts ./mocha.opts",
     "test:watch": "cross-env NODE_ENV=test mocha --opts ./mocha.opts --watch",
     "test:clean": "rimraf ./db/test.sqlite3 && cross-env NODE_ENV=test npm run migrate && cross-env NODE_ENV=test npm run seed",
@@ -45,6 +46,7 @@
     "mysql": "~2.11.1",
     "objection": "~0.5.5",
     "resource-router-middleware": "~0.6.0",
+    "response-time": "~2.3.1",
     "sqlite3": "~3.1.4"
   },
   "devDependencies": {
@@ -57,11 +59,12 @@
     "babel-preset-stage-0": "~6.5.0",
     "babel-register": "~6.14.0",
     "chai": "~3.5.0",
-    "chai-as-promised": "^5.3.0",
+    "chai-as-promised": "~5.3.0",
     "chai-http": "~3.0.0",
     "eslint": "~3.6.0",
     "eslint-config-airbnb": "~11.2.0",
-    "faker": "^3.1.0",
+    "eslint-watch": "^2.1.14",
+    "faker": "~3.1.0",
     "mocha": "~3.0.2",
     "nodemon": "~1.10.2",
     "rimraf": "~2.5.4"

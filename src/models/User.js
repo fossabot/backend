@@ -29,9 +29,18 @@ class User extends BaseModel {
      *
      * @type {object}
      */
-    transforms = {
+    static transforms = {
         must_change_password: (input) => (!!input)
     };
+
+    /**
+     * An array of attribute names that will be excluded from being returned.
+     *
+     * @type {array}
+     */
+    static hidden = [
+        'password'
+    ];
 
     /**
      * Before inserting make sure we hash the password if provided.

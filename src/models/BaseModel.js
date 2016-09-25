@@ -7,20 +7,27 @@ class BaseModel extends Model {
      *
      * @type {boolean}
      */
-    timestamps = true;
+    static timestamps = true;
 
     /**
      * An object of attribute names with function values to transform attributes on the model if they exist.
      *
      * @type {object}
      */
-    transforms = {};
+    static transforms = {};
+
+    /**
+     * An array of attribute names that will be excluded from being returned.
+     *
+     * @type {array}
+     */
+    static hidden = [];
 
     /**
      * Ran before inserting into the database.
      */
     $beforeInsert() {
-        if (this.timestamps) {
+        if (this.constructor.timestamps) {
             this.created_at = dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss');
         }
     }
@@ -29,7 +36,7 @@ class BaseModel extends Model {
      * Ran before updating the database.
      */
     $beforeUpdate() {
-        if (this.timestamps) {
+        if (this.constructor.timestamps) {
             this.updated_at = dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss');
         }
     }
@@ -43,9 +50,15 @@ class BaseModel extends Model {
     $parseDatabaseJson(json) {
         json = super.$parseDatabaseJson.call(this, json);
 
-        Object.keys(this.transforms).forEach((key) => {
+        Object.keys(this.constructor.transforms).forEach((key) => {
             if (json.hasOwnProperty(key)) {
-                json[key] = this.transforms[key](json[key]);
+                json[key] = this.constructor.transforms[key](json[key]);
+            }
+        });
+
+        this.constructor.hidden.forEach((hidden) => {
+            if (json.hasOwnProperty(hidden)) {
+                delete json[hidden];
             }
         });
 
