@@ -8,7 +8,7 @@ class Role extends BaseModel {
     static jsonSchema = {
         type: 'object',
 
-        required: ['username', 'email', 'password'],
+        required: ['name', 'description'],
 
         properties: {
             id: {type: 'integer'},
@@ -21,24 +21,24 @@ class Role extends BaseModel {
     };
 
     static relationMappings = {
-        created_by: {
+        creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: 'role.created_by',
-                to: 'user.id'
+                from: 'roles.created_by',
+                to: 'users.id'
             }
         },
         users: {
             relation: Model.ManyToManyRelation,
             modelClass: User,
             join: {
-                from: 'role.id',
+                from: 'roles.id',
                 through: {
                     from: 'user_roles.role_id',
                     to: 'user_roles.user_id'
                 },
-                to: 'user.id'
+                to: 'users.id'
             }
         }
     };

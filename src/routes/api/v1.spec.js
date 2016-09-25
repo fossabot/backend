@@ -5,6 +5,8 @@ import app from '../../index';
 import knex from '../../../db';
 import { version } from '../../../package.json';
 
+import * as testUtils from '../../../test/utils';
+
 chai.use(chaiHttp);
 
 describe('V1 Routes', function () {
@@ -34,18 +36,42 @@ describe('V1 Routes', function () {
     });
 
     describe('GET /v1', function () {
-        it('should return the version', function (done) {
-            chai.request(app).get('/v1').end(function (err, res) {
-                expect(res).to.have.status(200);
-                expect(res).to.be.json;
+        it('should return the version', async function () {
+            const response = await chai.request(app).get('/v1');
 
-                const body = res.body;
+            expect(response).to.have.status(200);
+            expect(response).to.be.json;
 
-                expect(body).to.be.a('object');
-                expect(body).to.have.property('version').that.is.a('string');
-                expect(body).to.have.property('version').that.equals(version);
-                done();
+            const body = response.body;
+
+            expect(body).to.be.a('object');
+            expect(body).to.have.property('version').that.is.a('string');
+            expect(body).to.have.property('version').that.equals(version);
+        });
+    });
+
+    describe('GET /v1/roles', function () {
+        it('should return all the roles in the system', async function () {
+            await testUtils.createRole({
+                name: 'test',
+                description: 'This is a test role.'
             });
+
+            const response = await chai.request(app).get('/v1/roles');
+
+            expect(response).to.have.status(200);
+            expect(response).to.be.json;
+
+            const body = response.body;
+
+            expect(body).to.be.a('array');
+            expect(body).to.have.length(1);
+
+            const role = body[0];
+
+            expect(role).to.be.an('object');
+            expect(role.name).to.equal('test');
+            expect(role.description).to.equal('This is a test role.');
         });
     });
 });

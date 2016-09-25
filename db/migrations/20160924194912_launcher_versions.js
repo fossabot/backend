@@ -3,7 +3,7 @@ exports.up = function (knex) {
         table.increments('id').primary();
         table.string('version', 16).index().notNullable();
         table.text('changelog').notNullable();
-        table.integer('created_by').unsigned().notNullable().references('id').inTable('users').onDelete('cascade').onUpdate('cascade');
+        table.integer('created_by').unsigned().notNullable();
         table.timestamps();
 
         table.foreign('created_by').references('id').inTable('users').onDelete('cascade').onUpdate('cascade');
