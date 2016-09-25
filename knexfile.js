@@ -13,7 +13,12 @@ module.exports = {
         seeds: {
             directory: __dirname + '/db/seeds/test'
         },
-        useNullAsDefault: true
+        useNullAsDefault: true,
+        pool: {
+            afterCreate: (conn, cb) => {
+                conn.run('PRAGMA foreign_keys = ON', cb)
+            }
+        }
     },
 
     development: {
@@ -28,7 +33,12 @@ module.exports = {
         seeds: {
             directory: __dirname + '/db/seeds/development'
         },
-        useNullAsDefault: true
+        useNullAsDefault: true,
+        pool: {
+            afterCreate: (conn, cb) => {
+                conn.run('PRAGMA foreign_keys = ON', cb)
+            }
+        }
     },
 
     production: {
