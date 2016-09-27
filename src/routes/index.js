@@ -1,6 +1,10 @@
+import rootRoutes from './root';
 import v1ApiRoutes from './api/v1';
 
 export default (app) => {
+    // route routes
+    app.use('/', rootRoutes());
+
     // v1 API routes
     app.use('/v1', v1ApiRoutes());
 

@@ -25,8 +25,12 @@ class BaseModel extends Model {
 
     /**
      * Ran before inserting into the database.
+     *
+     * @param queryContext
      */
-    $beforeInsert() {
+    $beforeInsert(queryContext) {
+        super.$beforeInsert(queryContext);
+
         if (this.constructor.timestamps) {
             this.created_at = dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss');
         }
@@ -34,8 +38,12 @@ class BaseModel extends Model {
 
     /**
      * Ran before updating the database.
+     *
+     * @param queryContext
      */
-    $beforeUpdate() {
+    $beforeUpdate(queryContext) {
+        super.$beforeUpdate(queryContext);
+
         if (this.constructor.timestamps) {
             this.updated_at = dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss');
         }
