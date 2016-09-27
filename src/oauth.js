@@ -92,7 +92,7 @@ export const authorization = [
 
         const client = await OAuthClient.query().where({
             client_id: clientID,
-            redirect_uri: redirectURI,
+            redirect_uri: redirectURI
         }).first();
 
         console.log('client', client);

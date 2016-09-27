@@ -85,5 +85,5 @@ passport.use(new BearerStrategy(async function (accessToken, done) {
         return done(null, false);
     }
 
-    done(null, user, {scope: '*'});
+    return done(null, user, {scope: '*'});
 }));
