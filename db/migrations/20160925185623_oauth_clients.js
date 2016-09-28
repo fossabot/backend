@@ -6,6 +6,7 @@ exports.up = function (knex) {
         table.string('client_id', 80).index().notNullable();
         table.string('client_secret', 80).index().notNullable();
         table.string('redirect_uri', 2000).notNullable();
+        table.boolean('revoked').notNullable().defaultTo(false);
         table.timestamps();
 
         table.foreign('user_id').references('id').inTable('users').onDelete('cascade').onUpdate('cascade');

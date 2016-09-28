@@ -16,6 +16,7 @@ class OAuthClient extends BaseModel {
             user_id: {type: ['integer', 'null'], minimum: 1, default: null},
             client_id: {type: 'string'},
             client_secret: {type: 'string'},
+            revoked: {type: 'boolean', default: false},
             created_at: {type: ['string', 'null'], format: 'date-time', default: null},
             updated_at: {type: ['string', 'null'], format: 'date-time', default: null}
         }
@@ -30,6 +31,15 @@ class OAuthClient extends BaseModel {
                 to: 'users.id'
             }
         }
+    };
+
+    /**
+     * Transform the revoked field into a boolean.
+     *
+     * @type {object}
+     */
+    static transforms = {
+        revoked: (input) => (!!input)
     };
 }
 

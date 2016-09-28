@@ -1,7 +1,6 @@
-import User from './User';
 import { Model } from 'objection';
 import BaseModel from './BaseModel';
-import OAuthClient from './OAuthClient';
+import OAuthAccessToken from './OAuthAccessToken';
 
 class OAuthRefreshToken extends BaseModel {
     static tableName = 'oauth_refresh_tokens';
@@ -9,37 +8,55 @@ class OAuthRefreshToken extends BaseModel {
     static jsonSchema = {
         type: 'object',
 
-        required: ['user_id', 'client_id', 'authorization_code', 'redirect_uri', 'expires_at'],
+        required: ['access_token_id', 'refresh_token', 'expires_at'],
 
         properties: {
             id: {type: 'integer'},
-            user_id: {type: 'integer', minimum: 1},
-            client_id: {type: 'integer', minimum: 1},
+            access_token_id: {type: 'integer', minimum: 1},
             refresh_token: {type: 'string'},
+            revoked: {type: 'boolean', default: false},
             created_at: {type: ['string', 'null'], format: 'date-time', default: null},
             updated_at: {type: ['string', 'null'], format: 'date-time', default: null},
-            expires_at: {type: ['string', 'null'], format: 'date-time', default: null}
+            expires_at: {type: 'string', format: 'date-time'}
         }
     };
 
     static relationMappings = {
-        client: {
+        access_token: {
             relation: Model.BelongsToOneRelation,
-            modelClass: OAuthClient,
+            modelClass: OAuthAccessToken,
             join: {
-                from: 'oauth_refresh_tokens.user_id',
-                to: 'oauth_clients.id'
-            }
-        },
-        user: {
-            relation: Model.BelongsToOneRelation,
-            modelClass: User,
-            join: {
-                from: 'oauth_refresh_tokens.client_id',
-                to: 'users.id'
+                from: 'oauth_refresh_tokens.access_token_id',
+                to: 'oauth_access_tokens.id'
             }
         }
     };
+
+    /**
+     * Transform the revoked field into a boolean.
+     *
+     * @type {object}
+     */
+    static transforms = {
+        revoked: (input) => (!!input)
+    };
+
+    /**
+     * Ran when creating model from Json.
+     *
+     * @param {Object} json
+     * @param {Object} opt
+     * @returns {Object}
+     */
+    $parseJson(json, opt) {
+        json = super.$parseJson(json, opt);
+
+        if (json.expires_at && typeof json.expires_at !== 'string' && typeof json.expires_at.toJSON === 'function') {
+            json.expires_at = json.expires_at.toJSON();
+        }
+
+        return json;
+    }
 }
 
 export default OAuthRefreshToken;

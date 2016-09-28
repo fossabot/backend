@@ -1,5 +1,4 @@
 import { Model } from 'objection';
-import { format as dateFormat } from 'date-fns';
 
 class BaseModel extends Model {
     /**
@@ -32,7 +31,7 @@ class BaseModel extends Model {
         super.$beforeInsert(queryContext);
 
         if (this.constructor.timestamps) {
-            this.created_at = dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss');
+            this.created_at = new Date().toJSON();
         }
     }
 
@@ -45,7 +44,7 @@ class BaseModel extends Model {
         super.$beforeUpdate(queryContext);
 
         if (this.constructor.timestamps) {
-            this.updated_at = dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss');
+            this.updated_at = new Date().toJSON();
         }
     }
 

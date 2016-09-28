@@ -5,8 +5,9 @@ exports.up = function (knex) {
         table.integer('client_id').index().notNullable();
         table.string('authorization_code').index().notNullable();
         table.string('redirect_uri', 2000).notNullable();
+        table.boolean('revoked').notNullable().defaultTo(false);
         table.timestamps();
-        table.timestamp('expires_at').nullable().defaultTo(null);
+        table.timestamp('expires_at').notNullable();
 
         table.foreign('client_id').references('id').inTable('oauth_clients').onDelete('cascade').onUpdate('cascade');
         table.foreign('user_id').references('id').inTable('users').onDelete('cascade').onUpdate('cascade');

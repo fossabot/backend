@@ -1,3 +1,10 @@
 {
-    "bcryptRounds": 10
+    "bcryptRounds": 10,
+    "oauth": {
+        "validity": {
+            "authorization_code": "10M",
+            "access_token": "14D",
+            "refresh_token": "3MO"
+        }
+    }
 }
