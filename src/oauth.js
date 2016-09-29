@@ -33,7 +33,6 @@ server.deserializeClient(async function (id, done) {
 });
 
 server.grant(oauth2orize.grant.code({scopeSeparator: ','}, async function (client, redirectURI, user, ares, done) {
-    console.log(ares);
     const code = {
         authorization_code: generateUID(),
         client_id: client.id,
@@ -51,6 +50,41 @@ server.grant(oauth2orize.grant.code({scopeSeparator: ','}, async function (clien
         }
 
         return done(null, code.authorization_code);
+    } catch (err) {
+        return done(err);
+    }
+}));
+
+server.grant(oauth2orize.grant.token({scopeSeparator: ','}, async function(client, user, ares, done) {
+    try {
+        const accessToken = await OAuthAccessToken.query().insert({
+            user_id: user.id,
+            client_id: client.id,
+            scope: ares.scope,
+            access_token: generateUID(256),
+            expires_at: addTimeStringToDate(config.oauth.validity.access_token)
+        });
+
+        if (!accessToken) {
+            return done(new Error('Error creating access token.'));
+        }
+
+        const refreshToken = await OAuthRefreshToken.query().insert({
+            access_token_id: accessToken.id,
+            refresh_token: generateUID(256),
+            scope: accessToken.scope,
+            expires_at: addTimeStringToDate(config.oauth.validity.refresh_token)
+        });
+
+        if (!refreshToken) {
+            return done(new Error('Error creating refresh token.'));
+        }
+
+        return done(null, accessToken.access_token, {
+            refresh_token: refreshToken.refresh_token,
+            scope: accessToken.scope,
+            expires_at: accessToken.expires_at
+        });
     } catch (err) {
         return done(err);
     }
