@@ -1,0 +1,437 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+.logged-in-as {
+    margin-top: -45px;
+    padding-bottom: 20px;
+}
+
+.authorize-button {
+    padding-top: 20px;
+}
+
+.authorize-page {
+    width: 600px;
+    padding: 50px 0 0;
+    margin: auto;
+}
+
+.scope-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.login-page {
+    width: 360px;
+    padding: 50px 0 0;
+    margin: auto;
+}
+
+.form {
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+    max-width: 600px;
+    margin: 0 auto 100px;
+    padding: 45px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.form input {
+    font-family: "Roboto", sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.form button {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    outline: 0;
+    background: #4CAF50;
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    color: #FFFFFF;
+    font-size: 14px;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+    cursor: pointer;
+}
+
+.form button:hover, .form button:active, .form button:focus {
+    background: #43A047;
+}
+
+.form .message {
+    margin: 15px 0 0;
+    color: #b3b3b3;
+    font-size: 12px;
+}
+
+.form .message a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.form .register-form {
+    display: none;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.container:before, .container:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.container .info {
+    margin: 50px auto;
+    text-align: center;
+}
+
+.container .info h1 {
+    margin: 0 0 15px;
+    padding: 0;
+    font-size: 36px;
+    font-weight: 300;
+    color: #1a1a1a;
+}
+
+.container .info span {
+    color: #4d4d4d;
+    font-size: 12px;
+}
+
+.container .info span a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.container .info span .fa {
+    color: #EF3B3A;
+}
+
+body {
+    background: #4d4d4d;
+    font-family: "Roboto", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    z-index: -99;
+}
+
+@-webkit-keyframes easeInElastic {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    25% {
+        -webkit-transform: scale(1.135);
+        transform: scale(1.135);
+    }
+    100% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+}
+
+@keyframes easeInElastic {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    25% {
+        -webkit-transform: scale(1.135);
+        transform: scale(1.135);
+    }
+    100% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+}
+
+@-webkit-keyframes easeInElasticVisible {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    25% {
+        -webkit-transform: scale(1.135);
+        transform: scale(1.135);
+    }
+    100% {
+        -webkit-transform: scale(0.85);
+        transform: scale(0.85);
+    }
+}
+
+@keyframes easeInElasticVisible {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    25% {
+        -webkit-transform: scale(1.135);
+        transform: scale(1.135);
+    }
+    100% {
+        -webkit-transform: scale(0.85);
+        transform: scale(0.85);
+    }
+}
+
+@-webkit-keyframes easeOutElastic {
+    0% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+    60% {
+        -webkit-transform: scale(1.135);
+        transform: scale(1.135);
+    }
+    80% {
+        -webkit-transform: scale(0.95);
+        transform: scale(0.95);
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes easeOutElastic {
+    0% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+    60% {
+        -webkit-transform: scale(1.135);
+        transform: scale(1.135);
+    }
+    80% {
+        -webkit-transform: scale(0.95);
+        transform: scale(0.95);
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@-webkit-keyframes easeOutElasticVisible {
+    0% {
+        -webkit-transform: scale(0.85);
+        transform: scale(0.85);
+    }
+    20% {
+        -webkit-transform: scale(1.05);
+        transform: scale(1.05);
+    }
+    40% {
+        -webkit-transform: scale(0.95);
+        transform: scale(0.95);
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes easeOutElasticVisible {
+    0% {
+        -webkit-transform: scale(0.85);
+        transform: scale(0.85);
+    }
+    20% {
+        -webkit-transform: scale(1.05);
+        transform: scale(1.05);
+    }
+    40% {
+        -webkit-transform: scale(0.95);
+        transform: scale(0.95);
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.logo {
+    height: 150px;
+}
+
+.logo a {
+    position: relative;
+    top: 70px;
+    left: 50%;
+    display: block;
+    width: 100px;
+    height: 100px;
+    margin-top: -50px;
+    margin-left: -50px;
+    cursor: pointer;
+}
+
+.logo a span {
+    position: relative;
+    display: block;
+    width: 100px;
+    height: 100px;
+    background: #ef3b3a;
+    border-radius: 50%;
+    box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.15);
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+
+.cdunn {
+    position: relative;
+    top: -96px;
+    left: 10px;
+    width: 80px;
+    height: auto;
+    -webkit-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+}
+
+.logo.animate a span {
+    -webkit-animation: easeInElastic .35s forwards;
+    animation: easeInElastic .35s forwards;
+}
+
+.logo.animate a .cdunn {
+    -webkit-animation: easeOutElasticVisible .5s forwards;
+    animation: easeOutElasticVisible .5s forwards;
+}
+
+.logo.animate a:focus span,
+.logo.animate a:hover span {
+    -webkit-animation: easeOutElastic .5s forwards;
+    animation: easeOutElastic .5s forwards;
+}
+
+.logo.animate a:focus .cdunn,
+.logo.animate a:hover .cdunn {
+    -webkit-animation: easeInElasticVisible .35s forwards;
+    animation: easeInElasticVisible .35s forwards;
+}
+
+* {
+    font-family: Roboto;
+}
+
+h2 {
+    font-weight: 100;
+    font-size: 30pt;
+    line-height: 1.3em;
+    margin: 15px 0;
+}
+
+div.display-message {
+    position: relative;
+    padding: 10px;
+    padding-left: 35px;
+    margin: 30px 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .3);
+    background: #BBB;
+    color: #FFF;
+
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    transition: all .5s ease;
+}
+
+div.display-message:hover {
+    box-shadow: 0 15px 20px rgba(10, 0, 10, .3);
+    -webkit-filter: brightness(110%);
+}
+
+div.display-message.information {
+    background: #39B;
+}
+
+div.display-message.warning {
+    background: #E74;
+}
+
+div.display-message.success {
+    background: #5A6;
+}
+
+div.display-message.announcement {
+    background: #EA0;
+}
+
+div.display-message.error {
+    background: #C43;
+}
+
+input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+
+label {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 10px;
+    line-height: 36px;
+    cursor: pointer;
+}
+
+label::before {
+    content: " ";
+    position: absolute;
+    top: 6px;
+    left: 0;
+    display: block;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #4CAF50;
+    border-radius: 4px;
+    z-index: -1;
+}
+
+/* Checked */
+input[type="checkbox"]:checked + label {
+    padding-left: 10px;
+    color: #fff;
+}
+
+input[type="checkbox"]:checked + label::before {
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #4CAF50;
+}
+
+/* Transition */
+label,
+label::before {
+    -webkit-transition: .25s all ease;
+    -o-transition: .25s all ease;
+    transition: .25s all ease;
+}

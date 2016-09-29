@@ -31,10 +31,11 @@ app.use(responseTime({
 
 Model.knex(knex);
 
-// setup view engine
+// setup view engine and static
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(flash());
+app.use(express.static(__dirname + '/public'));
 
 // 3rd party middleware
 app.use(cors());

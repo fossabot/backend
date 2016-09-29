@@ -7,16 +7,20 @@ exports.seed = function (knex, Promise) {
         knex('oauth_scopes').insert([
             {
                 name: 'self:read',
-                description: 'Allow reading own user credentials.'
+                description: 'Read own user credentials (except password).'
             },
             {
                 name: 'self:write',
-                description: 'Allow modifying own user credentials.'
+                description: 'Change own user credentials (including password).'
             },
             {
-                name: 'admin',
-                description: 'Allow administration of the system.'
+                name: 'users:read',
+                description: 'Read other users credentials (except password) (requires admin role).'
             },
+            {
+                name: 'users:write',
+                description: 'Change other users credentials (including password) (requires admin role).'
+            }
         ])
     );
 };
