@@ -4,6 +4,7 @@ exports.up = function (knex) {
         table.integer('user_id').index().notNullable();
         table.integer('client_id').index().notNullable();
         table.string('access_token').index().notNullable();
+        table.string('scope').notNullable();
         table.boolean('revoked').notNullable().defaultTo(false);
         table.timestamps();
         table.timestamp('expires_at').notNullable();

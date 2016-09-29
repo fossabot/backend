@@ -9,7 +9,7 @@ class OAuthAuthorizationCode extends BaseModel {
     static jsonSchema = {
         type: 'object',
 
-        required: ['user_id', 'client_id', 'authorization_code', 'redirect_uri', 'expires_at'],
+        required: ['user_id', 'client_id', 'authorization_code', 'redirect_uri', 'scope', 'expires_at'],
 
         properties: {
             id: {type: 'integer'},
@@ -17,6 +17,7 @@ class OAuthAuthorizationCode extends BaseModel {
             client_id: {type: 'integer', minimum: 1},
             authorization_code: {type: 'string'},
             redirect_uri: {type: 'string'},
+            scope: {type: 'string'},
             revoked: {type: 'boolean', default: false},
             created_at: {type: ['string', 'null'], format: 'date-time', default: null},
             updated_at: {type: ['string', 'null'], format: 'date-time', default: null},

@@ -1,6 +1,4 @@
-import { Model } from 'objection';
 import BaseModel from './BaseModel';
-import OAuthAccessToken from './OAuthAccessToken';
 
 class OAuthRefreshToken extends BaseModel {
     static tableName = 'oauth_refresh_tokens';
@@ -8,27 +6,17 @@ class OAuthRefreshToken extends BaseModel {
     static jsonSchema = {
         type: 'object',
 
-        required: ['access_token_id', 'refresh_token', 'expires_at'],
+        required: ['access_token_id', 'refresh_token', 'scope', 'expires_at'],
 
         properties: {
             id: {type: 'integer'},
             access_token_id: {type: 'integer', minimum: 1},
             refresh_token: {type: 'string'},
+            scope: {type: 'string'},
             revoked: {type: 'boolean', default: false},
             created_at: {type: ['string', 'null'], format: 'date-time', default: null},
             updated_at: {type: ['string', 'null'], format: 'date-time', default: null},
             expires_at: {type: 'string', format: 'date-time'}
-        }
-    };
-
-    static relationMappings = {
-        access_token: {
-            relation: Model.BelongsToOneRelation,
-            modelClass: OAuthAccessToken,
-            join: {
-                from: 'oauth_refresh_tokens.access_token_id',
-                to: 'oauth_access_tokens.id'
-            }
         }
     };
 

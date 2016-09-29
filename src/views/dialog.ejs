@@ -1,9 +1,17 @@
 <p>Hi <%= user.username %>!</p>
 <p><b><%= client.name %></b> is requesting access to your account.</p>
+
+<ul>
+    <% scopes.forEach(function(scope) { %>
+        <li><strong><%= scope.name %></strong> - <%= scope.description %></li>
+    <% }); %>
+</ul>
+
 <p>Do you approve?</p>
 
 <form action="/oauth/authorize" method="post">
     <input name="transaction_id" type="hidden" value="<%= transactionID %>">
+    <input name="scope" type="hidden" value="<%= scopeString %>">
     <div>
         <input type="submit" value="Allow" id="allow">
         <input type="submit" value="Deny" name="cancel" id="deny">

@@ -3,6 +3,7 @@ exports.up = function (knex) {
         table.increments('id').primary();
         table.integer('access_token_id').index().notNullable();
         table.string('refresh_token').index().notNullable();
+        table.string('scope').notNullable();
         table.boolean('revoked').notNullable().defaultTo(false);
         table.timestamps();
         table.timestamp('expires_at').notNullable();

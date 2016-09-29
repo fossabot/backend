@@ -5,6 +5,7 @@ import login from 'connect-ensure-login';
 import { getConfig } from '../config';
 import { addTimeStringToDate, generateUID } from './utils';
 
+import OAuthScope from './models/OAuthScope';
 import OAuthClient from './models/OAuthClient';
 import OAuthAccessToken from './models/OAuthAccessToken';
 import OAuthRefreshToken from './models/OAuthRefreshToken';
@@ -14,12 +15,10 @@ const config = getConfig();
 const server = oauth2orize.createServer();
 
 server.serializeClient(function (client, done) {
-    console.log('serializeClient', client);
     return done(null, client.client_id);
 });
 
 server.deserializeClient(async function (id, done) {
-    console.log('deserializeClient', id);
     try {
         const client = await OAuthClient.query().where({client_id: id}).first();
 
@@ -27,24 +26,22 @@ server.deserializeClient(async function (id, done) {
             return done(new Error('Client not found.'));
         }
 
-        console.log('deserializeClient:client', client);
-
         return done(null, client);
     } catch (err) {
         return done(err);
     }
 });
 
-server.grant(oauth2orize.grant.code(async function (client, redirectURI, user, ares, done) {
+server.grant(oauth2orize.grant.code({scopeSeparator: ','}, async function (client, redirectURI, user, ares, done) {
+    console.log(ares);
     const code = {
         authorization_code: generateUID(),
         client_id: client.id,
         user_id: user.id,
         redirect_uri: redirectURI,
+        scope: ares.scope,
         expires_at: addTimeStringToDate(config.oauth.validity.authorization_code)
     };
-
-    console.log('code', code);
 
     try {
         const authorizationCode = await OAuthAuthorizationCode.query().insert(code);
@@ -59,25 +56,19 @@ server.grant(oauth2orize.grant.code(async function (client, redirectURI, user, a
     }
 }));
 
-server.exchange(oauth2orize.exchange.authorizationCode(async function (client, code, redirectURI, done) {
-    console.log('exchange', client, code, redirectURI);
+server.exchange(oauth2orize.exchange.authorizationCode({scopeSeparator: ','}, async function (client, code, redirectURI, done) {
     try {
         const authorizationCode = await OAuthAuthorizationCode.query().where({authorization_code: code}).first();
 
-        console.log('authorizationCode', authorizationCode);
-
         if (!authorizationCode) {
-            console.log('no authorizationCode');
             return done(null, false);
         }
 
         if (client.id !== authorizationCode.client_id) {
-            console.log('non matching client id');
             return done(null, false);
         }
 
         if (redirectURI !== authorizationCode.redirect_uri) {
-            console.log('non matching redirect uri');
             return done(null, false);
         }
 
@@ -86,11 +77,10 @@ server.exchange(oauth2orize.exchange.authorizationCode(async function (client, c
         const accessToken = await OAuthAccessToken.query().insert({
             user_id: authorizationCode.user_id,
             client_id: authorizationCode.client_id,
+            scope: authorizationCode.scope,
             access_token: generateUID(256),
             expires_at: addTimeStringToDate(config.oauth.validity.access_token)
         });
-
-        console.log('accessToken', accessToken);
 
         if (!accessToken) {
             return done(new Error('Error creating access token.'));
@@ -99,16 +89,18 @@ server.exchange(oauth2orize.exchange.authorizationCode(async function (client, c
         const refreshToken = await OAuthRefreshToken.query().insert({
             access_token_id: accessToken.id,
             refresh_token: generateUID(256),
+            scope: accessToken.scope,
             expires_at: addTimeStringToDate(config.oauth.validity.refresh_token)
         });
-
-        console.log('refreshToken', refreshToken);
 
         if (!refreshToken) {
             return done(new Error('Error creating refresh token.'));
         }
 
-        return done(null, accessToken.access_token, refreshToken.refresh_token);
+        return done(null, accessToken.access_token, refreshToken.refresh_token, {
+            scope: accessToken.scope,
+            expires_at: accessToken.expires_at
+        });
     } catch (err) {
         return done(err);
     }
@@ -117,36 +109,45 @@ server.exchange(oauth2orize.exchange.authorizationCode(async function (client, c
 export const authorization = [
     login.ensureLoggedIn(),
     server.authorization(async function (clientID, redirectURI, done) {
-        console.log('authorization', clientID, redirectURI);
-
         try {
             const client = await OAuthClient.query().where({
                 client_id: clientID,
                 redirect_uri: redirectURI
             }).first();
 
-            console.log('client', client);
-
             if (!client) {
-                console.log('no client');
                 return done(new Error('Client not found.'));
             }
-
-            console.log('authorized');
 
             return done(null, client, redirectURI);
         } catch (err) {
             return done(err);
         }
     }),
-    function (req, res) {
-        res.render('dialog', {transactionID: req.oauth2.transactionID, user: req.user, client: req.oauth2.client});
+    async function (req, res, next) {
+        const scope = req.oauth2.req.scope;
+
+        if (!await OAuthScope.isValidScopes(scope)) {
+            return next(new Error('Invalid scope provided.'));
+        }
+
+        const scopes = await OAuthScope.query().whereIn('name', scope);
+
+        return res.render('dialog', {
+            transactionID: req.oauth2.transactionID,
+            user: req.user,
+            scopes,
+            scopeString: scope.join(','),
+            client: req.oauth2.client
+        });
     }
 ];
 
 export const decision = [
     login.ensureLoggedIn(),
-    server.decision()
+    server.decision((req, done) => {
+        done(null, {scope: req.body.scope});
+    })
 ];
 
 export const token = [

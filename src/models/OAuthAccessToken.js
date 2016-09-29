@@ -10,13 +10,14 @@ class OAuthAccessToken extends BaseModel {
     static jsonSchema = {
         type: 'object',
 
-        required: ['user_id', 'client_id', 'access_token', 'revoked', 'expires_at'],
+        required: ['user_id', 'client_id', 'access_token', 'scope', 'revoked', 'expires_at'],
 
         properties: {
             id: {type: 'integer'},
             user_id: {type: 'integer', minimum: 1},
             client_id: {type: 'integer', minimum: 1},
             access_token: {type: 'string'},
+            scope: {type: 'string'},
             revoked: {type: 'boolean', default: false},
             created_at: {type: ['string', 'null'], format: 'date-time', default: null},
             updated_at: {type: ['string', 'null'], format: 'date-time', default: null},
