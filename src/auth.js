@@ -3,11 +3,14 @@ import passport from 'passport';
 import { BasicStrategy } from 'passport-http';
 import LocalStrategy from 'passport-local';
 import BearerStrategy from 'passport-http-bearer';
+import AnonymousStrategy from 'passport-anonymous';
 import ClientPasswordStrategy from 'passport-oauth2-client-password';
 
 import User from './models/User';
 import OAuthClient from './models/OAuthClient';
 import OAuthAccessToken from './models/OAuthAccessToken';
+
+passport.use(new AnonymousStrategy());
 
 passport.use(new LocalStrategy(async function (username, password, done) {
     const user = await User.query().where({username}).first();
@@ -87,7 +90,7 @@ passport.use(new BearerStrategy(async function (accessToken, done) {
             return done(null, false);
         }
 
-        return done(null, user, {scope: '*'});
+        return done(null, user, {token});
     } catch (err) {
         return done(err);
     }
