@@ -1,5 +1,12 @@
 {
     "bcryptRounds": 10,
+    "session": {
+        "name": "atlauncher-backend",
+        "resave": false,
+        "saveUninitialized": false,
+        "secret": "6mVi37A8m0W0A2B3D19RbseKIHepy866",
+        "secure": false
+    },
     "oauth": {
         "validity": {
             "authorization_code": "10M",

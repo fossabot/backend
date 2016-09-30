@@ -11,6 +11,7 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import responseTime from 'response-time';
+import ConnectSessionKnex from 'connect-session-knex';
 
 import knex from '../db';
 import routes from './routes';
@@ -18,15 +19,25 @@ import middleware from './middleware';
 import { environment, getConfig } from '../config';
 
 const config = getConfig();
+const KnexSessionStore = new ConnectSessionKnex(session);
+const sessionStore = new KnexSessionStore({
+    tablename: 'sessions',
+    createtable: false,
+    knex
+});
 
 let app = express();
 app.server = http.createServer(app);
 
-app.use(session({secret: 'keyboard cat'}));
-
 // response time headers
 app.use(responseTime({
     suffix: false
+}));
+
+// setup sessions
+app.use(session({
+    ...config.session,
+    store: sessionStore
 }));
 
 Model.knex(knex);
@@ -42,7 +53,8 @@ app.use(cors());
 app.use(helmet());
 app.use(compress());
 app.use(cookieParser());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.json({type: 'application/*+json'}));
+app.use(bodyParser.urlencoded({type: 'application/x-www-form-urlencoded', extended: true}));
 
 // OAuth
 app.use(passport.initialize());

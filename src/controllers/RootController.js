@@ -12,7 +12,7 @@ class RootController extends BaseController {
      * @returns {Object}
      */
     login(req, res) {
-        return res.render('login', { error: req.flash('error') });
+        return res.render('login', {error: req.flash('error')});
     }
 
     /**
@@ -23,8 +23,10 @@ class RootController extends BaseController {
      * @returns {Object}
      */
     logout(req, res) {
+        const redirectUrl = req.header('Referer') || '/';
+
         req.logout();
-        res.redirect('/');
+        res.redirect(redirectUrl);
     }
 }
 

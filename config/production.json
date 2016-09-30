@@ -4,5 +4,9 @@
         "name": "atlauncher-next",
         "username": "atlauncher-next",
         "password": "changeme"
+    },
+    "session": {
+        "secret": "changeme",
+        "secure": true
     }
 }

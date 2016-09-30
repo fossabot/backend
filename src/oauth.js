@@ -55,7 +55,7 @@ server.grant(oauth2orize.grant.code({scopeSeparator: ','}, async function (clien
     }
 }));
 
-server.grant(oauth2orize.grant.token({scopeSeparator: ','}, async function(client, user, ares, done) {
+server.grant(oauth2orize.grant.token({scopeSeparator: ','}, async function (client, user, ares, done) {
     try {
         const accessToken = await OAuthAccessToken.query().insert({
             user_id: user.id,

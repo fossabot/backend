@@ -4,8 +4,8 @@
   "description": "Backend API server for ATLauncher NEXT.",
   "main": "dist",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon -w src -e js,ejs --exec \"babel-node src --presets es2015,stage-0\"",
-    "dev:debug": "cross-env NODE_ENV=development DEBUG=oauth2orize nodemon -w src -e js,ejs --exec \"babel-node src --presets es2015,stage-0\"",
+    "dev": "cross-env NODE_ENV=development nodemon -w src -e js,ejs,json --exec \"babel-node src --presets es2015,stage-0\"",
+    "dev:debug": "cross-env NODE_ENV=development DEBUG=oauth2orize nodemon -w src -e js,ejs,json --exec \"babel-node src --presets es2015,stage-0\"",
     "build": "babel src -D -d dist --presets es2015,stage-0",
     "start": "node dist",
     "prestart": "npm run -s build",
@@ -38,6 +38,7 @@
     "compression": "~1.6.2",
     "connect-ensure-login": "~0.1.1",
     "connect-flash": "^0.1.1",
+    "connect-session-knex": "RyanTheAllmighty/connect-session-knex#feature/add-option-to-not-create-table",
     "cookie-parser": "~1.4.3",
     "cors": "~2.8.1",
     "cross-env": "~3.0.0",
