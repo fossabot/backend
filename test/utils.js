@@ -2,6 +2,7 @@ import Faker from 'faker';
 
 import Role from '../src/models/Role';
 import User from '../src/models/User';
+import OAuthScope from '../src/models/OAuthScope';
 
 export async function createUser(overrides) {
     const defaults = {
@@ -44,6 +45,18 @@ export async function createUserWithRole(userOverrides, roleOverrides, overrides
     };
 
     return await Role.$relatedQuery('users').insert({
+        ...defaults,
+        ...overrides
+    });
+}
+
+export async function createScope(overrides) {
+    const defaults = {
+        name: Faker.random.word(),
+        description: Faker.random.words(10)
+    };
+
+    return await OAuthScope.query().insert({
         ...defaults,
         ...overrides
     });
