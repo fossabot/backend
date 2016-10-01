@@ -11,7 +11,7 @@ class ScopesController extends BaseController {
      * @returns {Object}
      */
     static async index(req, res) {
-        const scopes = await OAuthScope.query();
+        const scopes = await OAuthScope.query().select(['name', 'description']);
         return res.json(scopes);
     }
 }
