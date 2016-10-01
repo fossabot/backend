@@ -9,7 +9,7 @@
     },
     "oauth": {
         "validity": {
-            "authorization_code": "10M",
+            "authorization_code": "10MI",
             "access_token": "14D",
             "refresh_token": "3MO"
         }

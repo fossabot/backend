@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
 import passport from 'passport';
-import { BasicStrategy } from 'passport-http';
+import { isFuture, parse } from 'date-fns';
 import LocalStrategy from 'passport-local';
+import { BasicStrategy } from 'passport-http';
 import BearerStrategy from 'passport-http-bearer';
 import AnonymousStrategy from 'passport-anonymous';
 import ClientPasswordStrategy from 'passport-oauth2-client-password';
@@ -81,6 +82,13 @@ passport.use(new BearerStrategy(async function (accessToken, done) {
         const token = await OAuthAccessToken.query().where({access_token: accessToken}).first();
 
         if (!token) {
+            return done(null, false);
+        }
+
+        const expiresAt = parse(token.expires_at);
+
+        if (token.revoked || !isFuture(expiresAt)) {
+            await OAuthAccessToken.query().deleteById(token.id);
             return done(null, false);
         }
 

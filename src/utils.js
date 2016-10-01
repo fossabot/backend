@@ -47,11 +47,11 @@ export function addTimeStringToDate(date, string) {
     const isValid = isValidTimeString(string);
 
     if (!isValid) {
-        return new Date();
+        return date;
     }
 
     const units = getTimeStringUnits(string);
-    const amount = string.substr(0, -(units.length));
+    const amount = parseInt(string.substr(0, string.length - units.length), 10);
 
     switch (units) {
         case 'S':
@@ -68,7 +68,7 @@ export function addTimeStringToDate(date, string) {
             return addYears(date, amount);
     }
 
-    return new Date();
+    return date;
 }
 
 /**

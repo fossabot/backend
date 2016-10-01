@@ -1,6 +1,7 @@
 import passport from 'passport';
 import oauth2orize from 'oauth2orize';
 import login from 'connect-ensure-login';
+import { isFuture, parse } from 'date-fns';
 
 import { getConfig } from '../config';
 import { addTimeStringToDate, generateUID } from './utils';
@@ -106,7 +107,14 @@ server.exchange(oauth2orize.exchange.authorizationCode({scopeSeparator: ','}, as
             return done(null, false);
         }
 
-        await OAuthAuthorizationCode.query().findById(authorizationCode.id).delete();
+        const expiresAt = parse(authorizationCode.expires_at);
+
+        if (authorizationCode.revoked || !isFuture(expiresAt)) {
+            await OAuthAuthorizationCode.query().deleteById(authorizationCode.id);
+            return done(null, false);
+        }
+
+        await OAuthAuthorizationCode.query().deleteById(authorizationCode.id);
 
         const accessToken = await OAuthAccessToken.query().insert({
             user_id: authorizationCode.user_id,
