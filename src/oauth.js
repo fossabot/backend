@@ -70,19 +70,7 @@ server.grant(oauth2orize.grant.token({scopeSeparator: ','}, async function (clie
             return done(new Error('Error creating access token.'));
         }
 
-        const refreshToken = await OAuthRefreshToken.query().insert({
-            access_token_id: accessToken.id,
-            refresh_token: generateUID(256),
-            scope: accessToken.scope,
-            expires_at: addTimeStringToDate(config.oauth.validity.refresh_token)
-        });
-
-        if (!refreshToken) {
-            return done(new Error('Error creating refresh token.'));
-        }
-
         return done(null, accessToken.access_token, {
-            refresh_token: refreshToken.refresh_token,
             scope: accessToken.scope,
             expires_at: accessToken.expires_at
         });
