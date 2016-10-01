@@ -3,14 +3,14 @@ import { Router } from 'express';
 
 import { authorization, decision, token } from '../oauth';
 
-import { RootController } from '../controllers';
+import AuthController from '../controllers/AuthController';
 
 export default () => {
     const routes = Router();
 
-    routes.get('/login', RootController.login);
+    routes.get('/login', AuthController.login);
     routes.post('/login', passport.authenticate('local', {successReturnToOrRedirect: '/', failureRedirect: '/login', failureFlash: true}));
-    routes.get('/logout', RootController.logout);
+    routes.get('/logout', AuthController.logout);
 
     routes.get('/oauth/authorize', authorization);
     routes.post('/oauth/authorize', decision);

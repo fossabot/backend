@@ -3,7 +3,7 @@ import BaseController from './BaseController';
 /**
  * The RootController controls the routes for the root of the API.
  */
-class RootController extends BaseController {
+class AuthController extends BaseController {
     /**
      * This returns the current version of the api as defined in the package.json.
      *
@@ -11,7 +11,7 @@ class RootController extends BaseController {
      * @param {Object} res
      * @returns {Object}
      */
-    login(req, res) {
+    static login(req, res) {
         return res.render('login', {error: req.flash('error')});
     }
 
@@ -22,7 +22,7 @@ class RootController extends BaseController {
      * @param {Object} res
      * @returns {Object}
      */
-    logout(req, res) {
+    static logout(req, res) {
         const redirectUrl = req.header('Referer') || '/';
 
         req.logout();
@@ -30,4 +30,4 @@ class RootController extends BaseController {
     }
 }
 
-export default RootController;
+export default AuthController;

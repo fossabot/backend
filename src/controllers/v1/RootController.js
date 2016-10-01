@@ -1,9 +1,6 @@
-import BaseController from '../../BaseController';
+import BaseController from '../BaseController';
 
-import { version } from '../../../../package.json';
-
-import Role from '../../../models/Role';
-import OAuthScope from '../../../models/OAuthScope';
+import { version } from '../../../package.json';
 
 /**
  * The RootController controls the routes for the root of the API.
@@ -16,7 +13,7 @@ class RootController extends BaseController {
      * @param {Object} res
      * @returns {Object}
      */
-    root(req, res) {
+    static index(req, res) {
         const extraForSpread = !req.isAuthenticated() ? {} : {
             scopes: req.authInfo.token.scope.split(','),
             created_at: req.authInfo.token.created_at,
@@ -28,30 +25,6 @@ class RootController extends BaseController {
             authenticated: req.isAuthenticated(),
             ...extraForSpread
         });
-    }
-
-    /**
-     * This returns all the roles in the system.
-     *
-     * @param {Object} req
-     * @param {Object} res
-     * @returns {Object}
-     */
-    async roles(req, res) {
-        const roles = await Role.query();
-        return res.json(roles);
-    }
-
-    /**
-     * This returns all the scopes for the OAuth system.
-     *
-     * @param {Object} req
-     * @param {Object} res
-     * @returns {Object}
-     */
-    async scopes(req, res) {
-        const scopes = await OAuthScope.query();
-        return res.json(scopes);
     }
 }
 

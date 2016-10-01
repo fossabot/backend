@@ -1,5 +1,5 @@
 import rootRoutes from './root';
-import v1ApiRoutes from './api/v1';
+import v1ApiRoutes from './v1';
 
 export default (app) => {
     // route routes
