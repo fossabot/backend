@@ -1,5 +1,5 @@
-import rootRoutes from './root';
 import v1ApiRoutes from './v1';
+import rootRoutes from './root';
 
 export default (app) => {
     // route routes
@@ -10,9 +10,10 @@ export default (app) => {
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
-        var err = new Error('Not Found');
+        const err = new Error('Not found.');
         err.status = 404;
-        next(err);
+
+        return next(err);
     });
 
     // development error handler

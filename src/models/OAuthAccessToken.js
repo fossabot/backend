@@ -77,6 +77,22 @@ class OAuthAccessToken extends BaseModel {
 
         return json;
     }
+
+    /**
+     * Checks to see if this access token has the provided scope or not.
+     *
+     * @param {string} scope
+     * @returns {boolean}
+     */
+    hasScope(scope) {
+        if (!this.scopes) {
+            return false;
+        }
+
+        const validScopes = this.scopes.filter(({name}) => (name === scope));
+
+        return validScopes.length;
+    }
 }
 
 export default OAuthAccessToken;

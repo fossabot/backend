@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import { Model } from 'objection';
 
 import BaseModel from './BaseModel';
 import { getConfig } from '../../config';
@@ -21,6 +22,21 @@ class User extends BaseModel {
             must_change_password: {type: 'boolean', default: false},
             created_at: {type: ['string', 'null'], format: 'date-time', default: null},
             updated_at: {type: ['string', 'null'], format: 'date-time', default: null}
+        }
+    };
+
+    static relationMappings = {
+        roles: {
+            relation: Model.ManyToManyRelation,
+            modelClass: `${__dirname}/Role`,
+            join: {
+                from: 'users.id',
+                through: {
+                    from: 'user_roles.user_id',
+                    to: 'user_roles.role_id'
+                },
+                to: 'roles.id'
+            }
         }
     };
 
@@ -57,6 +73,22 @@ class User extends BaseModel {
         if (this.hasOwnProperty('password')) {
             this.password = bcrypt.hashSync(this.password, config.bcryptRounds);
         }
+    }
+
+    /**
+     * Checks to see if this user has the provided role or not.
+     *
+     * @param {string} role
+     * @returns {boolean}
+     */
+    hasRole(role) {
+        if (!this.roles) {
+            return false;
+        }
+
+        const validRoles = this.roles.filter(({name}) => (name === role));
+
+        return validRoles.length;
     }
 }
 

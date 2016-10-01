@@ -1,4 +1,3 @@
-import User from './User';
 import { Model } from 'objection';
 import BaseModel from './BaseModel';
 
@@ -23,7 +22,7 @@ class Role extends BaseModel {
     static relationMappings = {
         creator: {
             relation: Model.BelongsToOneRelation,
-            modelClass: User,
+            modelClass: `${__dirname}/User`,
             join: {
                 from: 'roles.created_by',
                 to: 'users.id'
@@ -31,7 +30,7 @@ class Role extends BaseModel {
         },
         users: {
             relation: Model.ManyToManyRelation,
-            modelClass: User,
+            modelClass: `${__dirname}/User`,
             join: {
                 from: 'roles.id',
                 through: {

@@ -92,7 +92,7 @@ passport.use(new BearerStrategy(async function (accessToken, done) {
             return done(null, false);
         }
 
-        const user = await User.query().findById(token.user_id);
+        const user = await User.query().findById(token.user_id).eager('roles');
 
         if (!user) {
             return done(null, false);

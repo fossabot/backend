@@ -21,11 +21,6 @@ Link: https://github.com/winstonjs/winston
 
 Logger.
 
-## Koa.js
-Link: http://koajs.com/
-
-Might be good to look into replacing current ExpressJS with KoaJS.
-
 ## joi
 Link: https://github.com/hapijs/joi
 
