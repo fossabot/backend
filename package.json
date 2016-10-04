@@ -75,7 +75,7 @@
     "chai": "~3.5.0",
     "chai-as-promised": "~6.0.0",
     "chai-http": "~3.0.0",
-    "eslint": "~3.6.0",
+    "eslint": "~3.7.1",
     "eslint-config-airbnb": "~11.2.0",
     "eslint-watch": "~2.1.14",
     "faker": "~3.1.0",
