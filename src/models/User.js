@@ -33,7 +33,10 @@ class User extends BaseModel {
                 from: 'users.id',
                 through: {
                     from: 'user_roles.user_id',
-                    to: 'user_roles.role_id'
+                    to: 'user_roles.role_id',
+                    extra: [
+                        'created_by'
+                    ]
                 },
                 to: 'roles.id'
             }

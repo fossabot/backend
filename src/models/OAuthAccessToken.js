@@ -55,7 +55,8 @@ class OAuthAccessToken extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        revoked: (input) => (!!input)
+        revoked: (input) => (!!input),
+        scope: (input) => (input.split(','))
     };
 
     /**
@@ -82,11 +83,11 @@ class OAuthAccessToken extends BaseModel {
      * @returns {boolean}
      */
     hasScope(scope) {
-        if (!this.scopes) {
+        if (!this.scope || !this.scope.length) {
             return false;
         }
 
-        const validScopes = this.scopes.filter(({name}) => (name === scope));
+        const validScopes = this.scope.filter((name) => (name === scope));
 
         return validScopes.length;
     }

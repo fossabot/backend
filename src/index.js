@@ -51,11 +51,7 @@ app.engine('md', function (path, options, fn) {
             return fn(err);
         }
 
-        try {
-            fn(null, marked(str));
-        } catch (err) {
-            fn(err);
-        }
+        return fn(null, marked(str));
     });
 });
 

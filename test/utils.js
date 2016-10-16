@@ -66,10 +66,10 @@ export async function createScope(overrides) {
     });
 }
 
-export async function createUserRole({user_id, role_id}) {
-    return await Role.$relatedQuery('users').insert({
-        role_id,
-        user_id
+export async function addRoleToUser(role, user) {
+    return await user.$relatedQuery('roles').relate({
+        id: role.id,
+        created_by: user.id
     });
 }
 

@@ -45,10 +45,7 @@ describe('/v1/users', function () {
                 email: 'test@example.com'
             });
 
-            await testUtils.createUserRole({
-                role_id: created_role.id,
-                user_id: created_user.id
-            });
+            await testUtils.addRoleToUser(created_role, created_user);
 
             const client = await testUtils.createOAuthClient({
                 user_id: created_user.id
@@ -57,7 +54,7 @@ describe('/v1/users', function () {
             const token = await testUtils.createAccessToken({
                 user_id: created_user.id,
                 client_id: client.id,
-                scope: 'users:read'
+                scope: 'admin:read'
             });
 
             const response = await chai.request(app).get('/v1/users').set('Authorization', `Bearer ${token.access_token}`);
@@ -68,13 +65,13 @@ describe('/v1/users', function () {
             const body = response.body;
 
             expect(body).to.be.a('array');
-            expect(body).to.have.length(1);
+            expect(body).to.have.length(2);
 
-            const user = body[0];
+            const user = body[1];
 
             expect(user).to.be.an('object');
             expect(user.username).to.equal('test');
-            expect(user.email).to.equal('test@exmaple.com');
+            expect(user.email).to.equal('test@example.com');
         });
     });
 });
