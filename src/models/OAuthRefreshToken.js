@@ -1,3 +1,4 @@
+import { Model } from 'objection';
 import BaseModel from './BaseModel';
 
 class OAuthRefreshToken extends BaseModel {
@@ -17,6 +18,17 @@ class OAuthRefreshToken extends BaseModel {
             created_at: {type: ['string', 'null'], format: 'date-time', default: null},
             updated_at: {type: ['string', 'null'], format: 'date-time', default: null},
             expires_at: {type: 'string', format: 'date-time'}
+        }
+    };
+
+    static relationMappings = {
+        user: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: `${__dirname}/User`,
+            join: {
+                from: 'oauth_clients.client_id',
+                to: 'users.id'
+            }
         }
     };
 

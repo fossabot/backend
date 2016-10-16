@@ -1,4 +1,3 @@
-import User from './User';
 import { Model } from 'objection';
 import BaseModel from './BaseModel';
 
@@ -8,7 +7,7 @@ class OAuthClient extends BaseModel {
     static jsonSchema = {
         type: 'object',
 
-        required: ['name', 'client_id', 'client_secret', 'refresh_token', 'expires_at'],
+        required: ['name', 'user_id', 'client_id', 'client_secret', 'redirect_uri'],
 
         properties: {
             id: {type: 'integer'},
@@ -16,6 +15,7 @@ class OAuthClient extends BaseModel {
             user_id: {type: ['integer', 'null'], minimum: 1, default: null},
             client_id: {type: 'string'},
             client_secret: {type: 'string'},
+            redirect_uri: {type: 'string'},
             revoked: {type: 'boolean', default: false},
             created_at: {type: ['string', 'null'], format: 'date-time', default: null},
             updated_at: {type: ['string', 'null'], format: 'date-time', default: null}
@@ -25,7 +25,7 @@ class OAuthClient extends BaseModel {
     static relationMappings = {
         user: {
             relation: Model.BelongsToOneRelation,
-            modelClass: User,
+            modelClass: `${__dirname}/User`,
             join: {
                 from: 'oauth_clients.client_id',
                 to: 'users.id'

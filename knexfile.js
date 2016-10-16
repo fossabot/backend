@@ -8,10 +8,10 @@ module.exports = {
         },
         migrations: {
             tableName: 'migrations',
-            directory: __dirname + '/db/migrations'
+            directory: `${__dirname}/db/migrations`
         },
         seeds: {
-            directory: __dirname + '/db/seeds/test'
+            directory: `${__dirname}/db/seeds/test`
         },
         useNullAsDefault: true,
         pool: {
@@ -28,10 +28,10 @@ module.exports = {
         },
         migrations: {
             tableName: 'migrations',
-            directory: __dirname + '/db/migrations'
+            directory: `${__dirname}/db/migrations`
         },
         seeds: {
-            directory: __dirname + '/db/seeds/development'
+            directory: `${__dirname}/db/seeds/development`
         },
         useNullAsDefault: true,
         pool: {
@@ -54,10 +54,10 @@ module.exports = {
         },
         migrations: {
             tableName: 'migrations',
-            directory: __dirname + '/db/migrations'
+            directory: `${__dirname}/db/migrations`
         },
         seeds: {
-            directory: __dirname + '/db/seeds/production'
+            directory: `${__dirname}/db/seeds/production`
         }
     }
 };

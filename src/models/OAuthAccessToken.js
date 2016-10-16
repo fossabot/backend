@@ -1,8 +1,5 @@
-import User from './User';
 import { Model } from 'objection';
 import BaseModel from './BaseModel';
-import OAuthClient from './OAuthClient';
-import OAuthRefreshToken from './OAuthRefreshToken';
 
 class OAuthAccessToken extends BaseModel {
     static tableName = 'oauth_access_tokens';
@@ -10,7 +7,7 @@ class OAuthAccessToken extends BaseModel {
     static jsonSchema = {
         type: 'object',
 
-        required: ['user_id', 'client_id', 'access_token', 'scope', 'revoked', 'expires_at'],
+        required: ['user_id', 'client_id', 'access_token', 'scope', 'expires_at'],
 
         properties: {
             id: {type: 'integer'},
@@ -28,7 +25,7 @@ class OAuthAccessToken extends BaseModel {
     static relationMappings = {
         client: {
             relation: Model.HasOneRelation,
-            modelClass: OAuthClient,
+            modelClass: `${__dirname}/OAuthClient`,
             join: {
                 from: 'oauth_access_tokens.user_id',
                 to: 'oauth_clients.id'
@@ -36,7 +33,7 @@ class OAuthAccessToken extends BaseModel {
         },
         refresh_token: {
             relation: Model.HasOneRelation,
-            modelClass: OAuthRefreshToken,
+            modelClass: `${__dirname}/OAuthRefreshToken`,
             join: {
                 from: 'oauth_access_tokens.id',
                 to: 'oauth_refresh_tokens.refresh_token_id'
@@ -44,7 +41,7 @@ class OAuthAccessToken extends BaseModel {
         },
         user: {
             relation: Model.HasOneRelation,
-            modelClass: User,
+            modelClass: `${__dirname}/User`,
             join: {
                 from: 'oauth_access_tokens.client_id',
                 to: 'users.id'

@@ -1,8 +1,12 @@
 import Faker from 'faker';
 
+import { generateUID } from '../src/utils';
+
 import Role from '../src/models/Role';
 import User from '../src/models/User';
 import OAuthScope from '../src/models/OAuthScope';
+import OAuthClient from '../src/models/OAuthClient';
+import OAuthAccessToken from '../src/models/OAuthAccessToken';
 
 export async function createUser(overrides) {
     const defaults = {
@@ -57,6 +61,39 @@ export async function createScope(overrides) {
     };
 
     return await OAuthScope.query().insert({
+        ...defaults,
+        ...overrides
+    });
+}
+
+export async function createUserRole({user_id, role_id}) {
+    return await Role.$relatedQuery('users').insert({
+        role_id,
+        user_id
+    });
+}
+
+export async function createAccessToken(overrides) {
+    const defaults = {
+        access_token: generateUID(128),
+        expires_at: Faker.date.future()
+    };
+
+    return await OAuthAccessToken.query().insert({
+        ...defaults,
+        ...overrides
+    });
+}
+
+export async function createOAuthClient(overrides) {
+    const defaults = {
+        name: Faker.random.word(),
+        client_id: generateUID(128),
+        client_secret: generateUID(128),
+        redirect_uri: Faker.internet.url()
+    };
+
+    return await OAuthClient.query().insert({
         ...defaults,
         ...overrides
     });

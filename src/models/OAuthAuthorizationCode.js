@@ -1,7 +1,5 @@
-import User from './User';
 import { Model } from 'objection';
 import BaseModel from './BaseModel';
-import OAuthClient from './OAuthClient';
 
 class OAuthAuthorizationCode extends BaseModel {
     static tableName = 'oauth_authorization_codes';
@@ -28,7 +26,7 @@ class OAuthAuthorizationCode extends BaseModel {
     static relationMappings = {
         client: {
             relation: Model.BelongsToOneRelation,
-            modelClass: OAuthClient,
+            modelClass: `${__dirname}/OAuthClient`,
             join: {
                 from: 'oauth_authorization_codes.user_id',
                 to: 'oauth_clients.id'
@@ -36,7 +34,7 @@ class OAuthAuthorizationCode extends BaseModel {
         },
         user: {
             relation: Model.BelongsToOneRelation,
-            modelClass: User,
+            modelClass: `${__dirname}/User`,
             join: {
                 from: 'oauth_authorization_codes.client_id',
                 to: 'users.id'

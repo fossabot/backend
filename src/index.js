@@ -1,6 +1,8 @@
+import fs from 'fs';
 import http from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
+import marked from 'marked';
 import logger from 'morgan';
 import express from 'express';
 import passport from 'passport';
@@ -41,6 +43,21 @@ app.use(session({
 }));
 
 Model.knex(knex);
+
+// setup markdown view engine
+app.engine('md', function (path, options, fn) {
+    fs.readFile(path, 'utf8', function (err, str) {
+        if (err) {
+            return fn(err);
+        }
+
+        try {
+            fn(null, marked(str));
+        } catch (err) {
+            fn(err);
+        }
+    });
+});
 
 // setup view engine and static
 app.set('view engine', 'ejs');
