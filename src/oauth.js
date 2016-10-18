@@ -6,6 +6,7 @@ import { isFuture, parse } from 'date-fns';
 import { getConfig } from '../config';
 import { addTimeStringToDate, generateUID } from './utils';
 
+import APIError from './errors/APIError';
 import OAuthScope from './models/OAuthScope';
 import OAuthClient from './models/OAuthClient';
 import OAuthAccessToken from './models/OAuthAccessToken';
@@ -24,7 +25,7 @@ server.deserializeClient(async function (id, done) {
         const client = await OAuthClient.query().where({client_id: id}).first();
 
         if (!client) {
-            return done(new Error('Client not found.'));
+            return done(new APIError('Client not found.'));
         }
 
         return done(null, client);
@@ -47,7 +48,7 @@ server.grant(oauth2orize.grant.code({scopeSeparator: ','}, async function (clien
         const authorizationCode = await OAuthAuthorizationCode.query().insert(code);
 
         if (!authorizationCode) {
-            return done(new Error('Error creating authorization code.'));
+            return done(new APIError('Error creating authorization code.'));
         }
 
         return done(null, code.authorization_code);
@@ -67,7 +68,7 @@ server.grant(oauth2orize.grant.token({scopeSeparator: ','}, async function (clie
         });
 
         if (!accessToken) {
-            return done(new Error('Error creating access token.'));
+            return done(new APIError('Error creating access token.'));
         }
 
         return done(null, accessToken.access_token, {
@@ -113,7 +114,7 @@ server.exchange(oauth2orize.exchange.authorizationCode({scopeSeparator: ','}, as
         });
 
         if (!accessToken) {
-            return done(new Error('Error creating access token.'));
+            return done(new APIError('Error creating access token.'));
         }
 
         const refreshToken = await OAuthRefreshToken.query().insert({
@@ -124,7 +125,7 @@ server.exchange(oauth2orize.exchange.authorizationCode({scopeSeparator: ','}, as
         });
 
         if (!refreshToken) {
-            return done(new Error('Error creating refresh token.'));
+            return done(new APIError('Error creating refresh token.'));
         }
 
         return done(null, accessToken.access_token, refreshToken.refresh_token, {
@@ -146,7 +147,7 @@ export const authorization = [
             }).first();
 
             if (!client) {
-                return done(new Error('Client not found.'));
+                return done(new APIError('Client not found.'));
             }
 
             return done(null, client, redirectURI);
@@ -158,7 +159,7 @@ export const authorization = [
         const scope = req.oauth2.req.scope;
 
         if (!await OAuthScope.isValidScopes(scope)) {
-            return next(new Error('Invalid scope provided.'));
+            return next(new APIError('Invalid scope provided.'));
         }
 
         const scopes = await OAuthScope.query().whereIn('name', scope);

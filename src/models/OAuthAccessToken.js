@@ -43,7 +43,7 @@ class OAuthAccessToken extends BaseModel {
             relation: Model.HasOneRelation,
             modelClass: `${__dirname}/User`,
             join: {
-                from: 'oauth_access_tokens.client_id',
+                from: 'oauth_access_tokens.user_id',
                 to: 'users.id'
             }
         }

@@ -74,4 +74,32 @@ describe('/v1/users', function () {
             expect(user.email).to.equal('test@example.com');
         });
     });
+
+    xit('should return an error if user doesn\'t have an admin role', async function () {
+        const created_role = await testUtils.createRole({
+            name: 'user'
+        });
+
+        const created_user = await testUtils.createUser({
+            username: 'test',
+            email: 'test@example.com'
+        });
+
+        await testUtils.addRoleToUser(created_role, created_user);
+
+        const client = await testUtils.createOAuthClient({
+            user_id: created_user.id
+        });
+
+        const token = await testUtils.createAccessToken({
+            user_id: created_user.id,
+            client_id: client.id,
+            scope: 'admin:read'
+        });
+
+        const response = await chai.request(app).get('/v1/users').set('Authorization', `Bearer ${token.access_token}`);
+
+        expect(response).to.have.status(200);
+        expect(response).to.be.json;
+    });
 });

@@ -26,7 +26,7 @@ class OAuthRefreshToken extends BaseModel {
             relation: Model.BelongsToOneRelation,
             modelClass: `${__dirname}/User`,
             join: {
-                from: 'oauth_clients.client_id',
+                from: 'oauth_refresh_tokens.user_id',
                 to: 'users.id'
             }
         }

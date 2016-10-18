@@ -8,6 +8,7 @@ import AnonymousStrategy from 'passport-anonymous';
 import ClientPasswordStrategy from 'passport-oauth2-client-password';
 
 import User from './models/User';
+import APIError from './errors/APIError';
 import OAuthClient from './models/OAuthClient';
 import OAuthAccessToken from './models/OAuthAccessToken';
 
@@ -36,7 +37,7 @@ passport.deserializeUser(async function (id, done) {
         const user = await User.query().findById(id);
 
         if (!user) {
-            return done(new Error('Error finding user.'));
+            return done(new APIError('Error finding user.'));
         }
 
         return done(null, user);

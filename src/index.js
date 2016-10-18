@@ -18,6 +18,7 @@ import ConnectSessionKnex from 'connect-session-knex';
 import knex from '../db';
 import routes from './routes';
 import middleware from './middleware';
+import errorHandlers from './errorHandlers';
 import { environment, getConfig } from '../config';
 
 const config = getConfig();
@@ -83,6 +84,9 @@ app.use(middleware());
 
 // routes
 routes(app);
+
+// setup error handlers
+errorHandlers(app);
 
 app.server.listen(process.env.PORT || config.port);
 
