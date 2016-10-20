@@ -14,11 +14,15 @@ export default (app) => {
     app.use(function (err, req, res, next) { // eslint-disable-line no-unused-vars
         const statusCode = err.status || 500;
 
+        const stacktrace = app.get('env') === 'development' ? {
+            stack: err.stack
+        } : {};
+
         res.status(statusCode);
         res.json({
             status: statusCode,
-            message: err.isPublic ? err.message : httpStatus[statusCode],
-            stack: app.get('env') === 'development' ? err.stack : {}
+            message: err.message,
+            ...stacktrace
         });
     });
 };

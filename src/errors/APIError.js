@@ -4,12 +4,11 @@ import httpStatus from 'http-status';
  * @extends Error
  */
 class ExtendableError extends Error {
-    constructor(message, status, isPublic) {
+    constructor(message, status) {
         super(message);
         this.name = this.constructor.name;
         this.message = message;
         this.status = status;
-        this.isPublic = isPublic;
         Error.captureStackTrace(this, this.constructor.name);
     }
 }
@@ -27,8 +26,8 @@ class APIError extends ExtendableError {
      * @param {number} status - HTTP status code of error.
      * @param {boolean} isPublic - Whether the message should be visible to user or not.
      */
-    constructor(message, status = httpStatus.INTERNAL_SERVER_ERROR, isPublic = false) {
-        super(message, status, isPublic);
+    constructor(message, status = httpStatus.INTERNAL_SERVER_ERROR) {
+        super(message, status);
     }
 }
 

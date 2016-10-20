@@ -73,33 +73,93 @@ describe('/v1/users', function () {
             expect(user.username).to.equal('test');
             expect(user.email).to.equal('test@example.com');
         });
-    });
 
-    xit('should return an error if user doesn\'t have an admin role', async function () {
-        const created_role = await testUtils.createRole({
-            name: 'user'
+        it('should return an error if user doesn\'t have an admin role', function (done) {
+            (async() => {
+                const created_role = await testUtils.createRole({
+                    name: 'user'
+                });
+
+                const created_user = await testUtils.createUser({
+                    username: 'test',
+                    email: 'test@example.com'
+                });
+
+                await testUtils.addRoleToUser(created_role, created_user);
+
+                const client = await testUtils.createOAuthClient({
+                    user_id: created_user.id
+                });
+
+                const token = await testUtils.createAccessToken({
+                    user_id: created_user.id,
+                    client_id: client.id,
+                    scope: 'admin:read'
+                });
+
+                chai.request(app).get('/v1/users').set('Authorization', `Bearer ${token.access_token}`).then(() => {
+                    done(new Error('Response was not an error.'));
+                }).catch(({response}) => {
+                    expect(response).to.have.status(500);
+                    expect(response).to.be.json;
+
+                    const {body} = response;
+
+                    expect(body).to.be.an('object');
+
+                    expect(body).to.have.property('status').that.is.a('number');
+                    expect(body).to.have.property('status').that.equals(500);
+
+                    expect(body).to.have.property('message').that.is.a('string');
+                    expect(body).to.have.property('message').that.equals("User doesn't have required role. 'admin' role is needed.");
+
+                    done();
+                });
+            })();
         });
 
-        const created_user = await testUtils.createUser({
-            username: 'test',
-            email: 'test@example.com'
+        it('should return an error if token doesn\'t have the admin:read', function (done) {
+            (async() => {
+                const created_role = await testUtils.createRole({
+                    name: 'admin'
+                });
+
+                const created_user = await testUtils.createUser({
+                    username: 'test',
+                    email: 'test@example.com'
+                });
+
+                await testUtils.addRoleToUser(created_role, created_user);
+
+                const client = await testUtils.createOAuthClient({
+                    user_id: created_user.id
+                });
+
+                const token = await testUtils.createAccessToken({
+                    user_id: created_user.id,
+                    client_id: client.id,
+                    scope: 'self:read'
+                });
+
+                chai.request(app).get('/v1/users').set('Authorization', `Bearer ${token.access_token}`).then(() => {
+                    done(new Error('Response was not an error.'));
+                }).catch(({response}) => {
+                    expect(response).to.have.status(500);
+                    expect(response).to.be.json;
+
+                    const {body} = response;
+
+                    expect(body).to.be.an('object');
+
+                    expect(body).to.have.property('status').that.is.a('number');
+                    expect(body).to.have.property('status').that.equals(500);
+
+                    expect(body).to.have.property('message').that.is.a('string');
+                    expect(body).to.have.property('message').that.equals("Invalid scope on token. Scope 'admin:read' is needed.");
+
+                    done();
+                });
+            })();
         });
-
-        await testUtils.addRoleToUser(created_role, created_user);
-
-        const client = await testUtils.createOAuthClient({
-            user_id: created_user.id
-        });
-
-        const token = await testUtils.createAccessToken({
-            user_id: created_user.id,
-            client_id: client.id,
-            scope: 'admin:read'
-        });
-
-        const response = await chai.request(app).get('/v1/users').set('Authorization', `Bearer ${token.access_token}`);
-
-        expect(response).to.have.status(200);
-        expect(response).to.be.json;
     });
 });
