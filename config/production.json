@@ -5,6 +5,15 @@
         "username": "atlauncher-next",
         "password": "changeme"
     },
+    "cache": {
+        "type": "redis",
+        "options": {
+            "host": "localhost",
+            "port": 6379,
+            "db": 0,
+            "ttl": 600
+        }
+    },
     "session": {
         "secret": "changeme",
         "secure": true

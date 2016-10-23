@@ -35,6 +35,8 @@
   "dependencies": {
     "bcryptjs": "~2.3.0",
     "body-parser": "~1.15.2",
+    "cache-manager": "~2.2.0",
+    "cache-manager-fs": "~1.0.5",
     "compression": "~1.6.2",
     "connect-ensure-login": "~0.1.1",
     "connect-flash": "~0.1.1",
@@ -46,7 +48,7 @@
     "ejs": "~2.5.2",
     "express": "~4.14.0",
     "express-session": "~1.14.1",
-    "express-validator": "^2.20.10",
+    "express-validator": "~2.20.10",
     "helmet": "~2.3.0",
     "http-status": "~0.2.3",
     "knex": "0.12.1",

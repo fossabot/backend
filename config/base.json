@@ -7,6 +7,12 @@
         "secret": "6mVi37A8m0W0A2B3D19RbseKIHepy866",
         "secure": false
     },
+    "cache": {
+        "type": "memory",
+        "options": {
+            "ttl": 10
+        }
+    },
     "oauth": {
         "validity": {
             "authorization_code": "10MI",

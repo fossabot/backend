@@ -4,6 +4,8 @@ import User from '../../models/User';
 import APIError from '../../errors/APIError';
 import BaseController from '../BaseController';
 
+import cache from '../../cache';
+
 class ScopesController extends BaseController {
     /**
      * This returns all the users for the system.
@@ -37,7 +39,7 @@ class ScopesController extends BaseController {
 
         const userId = req.params.user_id;
 
-        const user = await User.query().findById(userId);
+        const user = await cache.wrap(`/v1/users/${userId}`, () => (User.query().findById(userId)));
 
         if (!user) {
             return next(new APIError(`User with ID of ${userId} not found.`, httpStatusCode.NOT_FOUND));
