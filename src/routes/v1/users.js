@@ -11,9 +11,10 @@ export default () => {
     routes.use(checkRole('admin'));
 
     routes.get('/', checkScope('admin:read'), UsersController.index);
+    routes.get('/:user_id', checkScope('admin:read'), UsersController.get);
     routes.post('/', checkScope('admin:write'), UsersController.post);
-    routes.put('/{id}', checkScope('admin:write'), UsersController.put);
-    routes.delete('/{id}', checkScope('admin:write'), UsersController.delete);
+    routes.put('/:user_id', checkScope('admin:write'), UsersController.put);
+    routes.delete('/:user_id', checkScope('admin:write'), UsersController.delete);
 
     return routes;
 }

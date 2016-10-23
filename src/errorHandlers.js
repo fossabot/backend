@@ -21,7 +21,7 @@ export default (app) => {
         res.status(statusCode);
         res.json({
             status: statusCode,
-            message: err.message,
+            error: err.error || err.message,
             ...stacktrace
         });
     });

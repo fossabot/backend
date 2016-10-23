@@ -14,12 +14,12 @@ exports.seed = function (knex, Promise) {
                 description: 'Change own user credentials (including password).'
             },
             {
-                name: 'users:read',
-                description: 'Read other users credentials (except password) (requires admin role).'
+                name: 'admin:read',
+                description: 'Read all system information (requires admin role).'
             },
             {
-                name: 'users:write',
-                description: 'Change other users credentials (including password) (requires admin role).'
+                name: 'admin:write',
+                description: 'Change all system information (requires admin role).'
             }
         ])
     );
