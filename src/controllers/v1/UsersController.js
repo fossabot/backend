@@ -45,7 +45,7 @@ class ScopesController extends BaseController {
             return next(new APIError(`User with ID of ${userId} not found.`, httpStatusCode.NOT_FOUND));
         }
 
-        return res.json({ttl: getTTL(req), user});
+        return res.json(user.$omit('password'));
     }
 
     /**
