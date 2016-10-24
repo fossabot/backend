@@ -4,7 +4,7 @@ import User from '../../models/User';
 import APIError from '../../errors/APIError';
 import BaseController from '../BaseController';
 
-import cache from '../../cache';
+import cache, { getTTL } from '../../cache';
 
 class ScopesController extends BaseController {
     /**
@@ -15,7 +15,7 @@ class ScopesController extends BaseController {
      * @returns {object}
      */
     static async index(req, res) {
-        const users = await User.query();
+        const users = await cache.wrap('/v1/users', () => (User.query()), {ttl: getTTL(req)});
 
         return res.json(users);
     }
@@ -39,13 +39,13 @@ class ScopesController extends BaseController {
 
         const userId = req.params.user_id;
 
-        const user = await cache.wrap(`/v1/users/${userId}`, () => (User.query().findById(userId)));
+        const user = await cache.wrap(`/v1/users/${userId}`, () => (User.query().findById(userId)), {ttl: getTTL(req)});
 
         if (!user) {
             return next(new APIError(`User with ID of ${userId} not found.`, httpStatusCode.NOT_FOUND));
         }
 
-        return res.json(user.$omit('password'));
+        return res.json({ttl: getTTL(req), user});
     }
 
     /**

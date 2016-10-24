@@ -17,3 +17,17 @@ function isCacheableValue(value) {
 }
 
 export default cache;
+
+export function getTTL(req) {
+    const user = req.user;
+
+    if (!user) {
+        return config.cache.ttl.guest;
+    }
+
+    if (user.hasRole('admin')) {
+        return config.cache.ttl.admin;
+    }
+
+    return config.cache.ttl.user;
+}

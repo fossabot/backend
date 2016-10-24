@@ -9,8 +9,13 @@
     },
     "cache": {
         "type": "memory",
+        "ttl": {
+            "guest": 600,
+            "user": 60,
+            "admin": -1
+        },
         "options": {
-            "ttl": 10
+            "ttl": 600
         }
     },
     "oauth": {
