@@ -50,8 +50,3 @@ Send emails.
 Link: https://github.com/OptimalBits/bull
 
 Allows running queues.
-
-## node-cache-manager
-Link: https://github.com/BryanDonovan/node-cache-manager
-
-Cache manager.
