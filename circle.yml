@@ -31,8 +31,8 @@ deployment:
 general:
   branches:
     only:
-      - /feature\/.*
-      - /release\/.*
-      - /hotfix\/.*
+      - /feature\/.*/
+      - /release\/.*/
+      - /hotfix\/.*/
       - master
       - develop
