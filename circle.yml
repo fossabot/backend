@@ -4,19 +4,18 @@ machine:
 
 dependencies:
   pre:
-    - npm install -g npm@3
-    - npm prune
-    - npm install
+    - npm install -g yarn
+    - yarn install
   override:
-    - npm run build
+    - yarn run build
   cache_directories:
     - "node_modules"
 
 test:
   override:
-     - npm run lint
-     - npm run test:clean
-     - npm run test
+     - yarn run lint
+     - yarn run test:clean
+     - yarn run test
 
 deployment:
   beta:
