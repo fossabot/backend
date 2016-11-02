@@ -10,6 +10,7 @@ dependencies:
     - yarn run build
   cache_directories:
     - "node_modules"
+    - /opt/circleci/nodejs/v6.9.1/lib/node_modules
 
 test:
   override:
