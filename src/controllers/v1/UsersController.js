@@ -1,10 +1,13 @@
 import * as httpStatusCode from 'http-status';
+import validate from 'validate.js';
 
 import User from '../../models/User';
 import APIError from '../../errors/APIError';
 import BaseController from '../BaseController';
 
 import cache, { getTTL } from '../../cache';
+
+import * as validations from '../../validation/users';
 
 class ScopesController extends BaseController {
     /**
@@ -29,15 +32,13 @@ class ScopesController extends BaseController {
      * @returns {object}
      */
     static async get(req, res, next) {
-        req.checkParams('user_id', 'Invalid user_id').isInt({min: 1});
+        const userId = req.params.user_id || null;
 
-        const errors = req.validationErrors();
+        const errors = validate({id: userId}, validations.GET);
 
         if (errors) {
             return next(new APIError(errors, httpStatusCode.BAD_REQUEST));
         }
-
-        const userId = req.params.user_id;
 
         const user = await cache.wrap(`/v1/users/${userId}`, () => (User.query().findById(userId)), {ttl: getTTL(req)});
 

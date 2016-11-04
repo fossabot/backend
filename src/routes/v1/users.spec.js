@@ -256,13 +256,13 @@ describe('/v1/users', function () {
                         expect(body).to.have.property('status').that.is.a('number');
                         expect(body).to.have.property('status').that.equals(400);
 
-                        expect(body).to.have.property('error').that.is.an('array');
+                        expect(body).to.have.property('error').that.is.an('object');
 
-                        const firstError = body.error[0];
+                        const error = body.error;
 
-                        expect(firstError).to.have.property('param').that.equals('user_id');
-                        expect(firstError).to.have.property('msg').that.equals('Invalid user_id');
-                        expect(firstError).to.have.property('value').that.equals('bad');
+                        expect(error).to.have.property('id').that.is.an('array');
+
+                        expect(error.id[0]).to.be.a('string').that.equals('Id must be a valid number');
 
                         done();
                     });
@@ -284,13 +284,13 @@ describe('/v1/users', function () {
                         expect(body).to.have.property('status').that.is.a('number');
                         expect(body).to.have.property('status').that.equals(400);
 
-                        expect(body).to.have.property('error').that.is.an('array');
+                        expect(body).to.have.property('error').that.is.an('object');
 
-                        const firstError = body.error[0];
+                        const error = body.error;
 
-                        expect(firstError).to.have.property('param').that.equals('user_id');
-                        expect(firstError).to.have.property('msg').that.equals('Invalid user_id');
-                        expect(firstError).to.have.property('value').that.equals('-12');
+                        expect(error).to.have.property('id').that.is.an('array');
+
+                        expect(error.id[0]).to.be.a('string').that.equals('Id must be a valid number');
 
                         done();
                     });

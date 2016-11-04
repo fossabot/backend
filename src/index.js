@@ -13,7 +13,6 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import responseTime from 'response-time';
-import expressValidation from 'express-validator';
 import ConnectSessionKnex from 'connect-session-knex';
 
 import knex from '../db';
@@ -68,9 +67,8 @@ app.use(cors());
 app.use(helmet());
 app.use(compress());
 app.use(cookieParser());
-app.use(bodyParser.json({type: 'application/*+json'}));
+app.use(bodyParser.json({type: 'application/json'}));
 app.use(bodyParser.urlencoded({type: 'application/x-www-form-urlencoded', extended: true}));
-app.use(expressValidation());
 
 // OAuth
 app.use(passport.initialize());
