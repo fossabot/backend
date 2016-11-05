@@ -100,15 +100,31 @@ class ScopesController extends BaseController {
     }
 
     /**
-     * THis deleted a user in the system.
+     * This deleted a user in the system.
      *
      * @param {object} req
      * @param {object} res
+     * @param {function} next
      * @returns {object}
      */
-    static async delete(req, res) {
-        const users = await User.query();
-        return res.json(users);
+    static async delete(req, res, next) {
+        const userId = req.params.user_id || null;
+
+        try {
+            await validate.async({id: userId}, validations.VALIDATE_ID);
+        } catch (errors) {
+            return next(new APIError(errors, httpStatusCode.BAD_REQUEST));
+        }
+
+        const user = await User.query().findById(userId);
+
+        if (!user) {
+            return next(new APIError(`User with ID of ${userId} not found.`, httpStatusCode.NOT_FOUND));
+        }
+
+        await User.query().deleteById(userId);
+
+        return res.status(httpStatusCode.NO_CONTENT).end();
     }
 }
 

@@ -1377,4 +1377,217 @@ describe('/v1/users', function () {
             });
         });
     });
+
+    describe('DELETE /v1/users/{id}', function () {
+        describe('When Authenticated', function () {
+            let created_role;
+            let created_user;
+            let client;
+            let token;
+
+            beforeEach(async() => {
+                created_role = await testUtils.createRole({
+                    name: 'admin'
+                });
+
+                created_user = await testUtils.createUser({
+                    username: 'test',
+                    email: 'test@example.com'
+                });
+
+                await testUtils.addRoleToUser(created_role, created_user);
+
+                client = await testUtils.createOAuthClient({
+                    user_id: created_user.id
+                });
+
+                token = await testUtils.createAccessToken({
+                    user_id: created_user.id,
+                    client_id: client.id,
+                    scope: 'admin:write'
+                });
+            });
+
+            it('should delete the given user by their ID', async function () {
+                const user = await testUtils.createUser({
+                    username: '_test-User1',
+                    email: 'testuser@example.com',
+                    password: 'testing'
+                });
+
+                const response = await chai.request(app).delete(`/v1/users/${user.id}`).set('Authorization', `Bearer ${token.access_token}`);
+
+                expect(response).to.have.status(204);
+            });
+
+            it('should return a 404 error if the given user cannot be found', function (done) {
+                (async() => {
+                    chai.request(app).delete(`/v1/users/42`).set('Authorization', `Bearer ${token.access_token}`).then(() => {
+                        done(new Error('Response was not an error.'));
+                    }).catch(({response}) => {
+                        expect(response).to.have.status(404);
+                        expect(response).to.be.json;
+
+                        const {body} = response;
+
+                        expect(body).to.be.an('object');
+
+                        expect(body).to.have.property('status').that.is.a('number');
+                        expect(body).to.have.property('status').that.equals(404);
+
+                        expect(body).to.have.property('error').that.is.a('string');
+                        expect(body).to.have.property('error').that.equals('User with ID of 42 not found.');
+
+                        done();
+                    });
+                })();
+            });
+
+            it('should return a 400 error if the passed in user id isn\'t an integer', function (done) {
+                (async() => {
+                    chai.request(app).delete(`/v1/users/bad`).set('Authorization', `Bearer ${token.access_token}`).then(() => {
+                        done(new Error('Response was not an error.'));
+                    }).catch(({response}) => {
+                        expect(response).to.have.status(400);
+                        expect(response).to.be.json;
+
+                        const {body} = response;
+
+                        expect(body).to.be.an('object');
+
+                        expect(body).to.have.property('status').that.is.a('number');
+                        expect(body).to.have.property('status').that.equals(400);
+
+                        expect(body).to.have.property('error').that.is.an('object');
+
+                        const error = body.error;
+
+                        expect(error).to.have.property('id').that.is.an('array');
+
+                        expect(error.id[0]).to.be.a('string').that.equals('Id must be a valid number');
+
+                        done();
+                    });
+                })();
+            });
+
+            it('should return a 400 error if the passed in user id is <= 0', function (done) {
+                (async() => {
+                    chai.request(app).delete(`/v1/users/-12`).set('Authorization', `Bearer ${token.access_token}`).then(() => {
+                        done(new Error('Response was not an error.'));
+                    }).catch(({response}) => {
+                        expect(response).to.have.status(400);
+                        expect(response).to.be.json;
+
+                        const {body} = response;
+
+                        expect(body).to.be.an('object');
+
+                        expect(body).to.have.property('status').that.is.a('number');
+                        expect(body).to.have.property('status').that.equals(400);
+
+                        expect(body).to.have.property('error').that.is.an('object');
+
+                        const error = body.error;
+
+                        expect(error).to.have.property('id').that.is.an('array');
+
+                        expect(error.id[0]).to.be.a('string').that.equals('Id must be a valid number');
+
+                        done();
+                    });
+                })();
+            });
+        });
+
+        describe('When Unauthenticated', function () {
+            it('should return an error if user doesn\'t have an admin role', function (done) {
+                (async() => {
+                    const created_role = await testUtils.createRole({
+                        name: 'user'
+                    });
+
+                    const created_user = await testUtils.createUser({
+                        username: 'test',
+                        email: 'test@example.com'
+                    });
+
+                    await testUtils.addRoleToUser(created_role, created_user);
+
+                    const client = await testUtils.createOAuthClient({
+                        user_id: created_user.id
+                    });
+
+                    const token = await testUtils.createAccessToken({
+                        user_id: created_user.id,
+                        client_id: client.id,
+                        scope: 'admin:read'
+                    });
+
+                    chai.request(app).get(`/v1/users/${created_user.id}`).set('Authorization', `Bearer ${token.access_token}`).then(() => {
+                        done(new Error('Response was not an error.'));
+                    }).catch(({response}) => {
+                        expect(response).to.have.status(500);
+                        expect(response).to.be.json;
+
+                        const {body} = response;
+
+                        expect(body).to.be.an('object');
+
+                        expect(body).to.have.property('status').that.is.a('number');
+                        expect(body).to.have.property('status').that.equals(500);
+
+                        expect(body).to.have.property('error').that.is.a('string');
+                        expect(body).to.have.property('error').that.equals("User doesn't have required role. 'admin' role is needed.");
+
+                        done();
+                    });
+                })();
+            });
+
+            it('should return an error if token doesn\'t have the admin:read scope', function (done) {
+                (async() => {
+                    const created_role = await testUtils.createRole({
+                        name: 'admin'
+                    });
+
+                    const created_user = await testUtils.createUser({
+                        username: 'test',
+                        email: 'test@example.com'
+                    });
+
+                    await testUtils.addRoleToUser(created_role, created_user);
+
+                    const client = await testUtils.createOAuthClient({
+                        user_id: created_user.id
+                    });
+
+                    const token = await testUtils.createAccessToken({
+                        user_id: created_user.id,
+                        client_id: client.id,
+                        scope: 'self:read'
+                    });
+
+                    chai.request(app).get(`/v1/users/${created_user.id}`).set('Authorization', `Bearer ${token.access_token}`).then(() => {
+                        done(new Error('Response was not an error.'));
+                    }).catch(({response}) => {
+                        expect(response).to.have.status(500);
+                        expect(response).to.be.json;
+
+                        const {body} = response;
+
+                        expect(body).to.be.an('object');
+
+                        expect(body).to.have.property('status').that.is.a('number');
+                        expect(body).to.have.property('status').that.equals(500);
+
+                        expect(body).to.have.property('error').that.is.a('string');
+                        expect(body).to.have.property('error').that.equals("Invalid scope on token. Scope 'admin:read' is needed.");
+
+                        done();
+                    });
+                })();
+            });
+        });
+    });
 });
