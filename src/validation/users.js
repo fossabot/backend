@@ -40,7 +40,7 @@ const emailValidation = {
     uniqueEmail: true
 };
 
-export const GET = {
+export const VALIDATE_ID = {
     id: idValidation
 };
 
@@ -48,4 +48,19 @@ export const POST = {
     username: usernameValidation,
     password: passwordValidation,
     email: emailValidation
+};
+
+export const PUT = {
+    username: {
+        ...usernameValidation,
+        presence: false
+    },
+    password: {
+        ...passwordValidation,
+        presence: false
+    },
+    email: {
+        ...emailValidation,
+        presence: false
+    }
 };

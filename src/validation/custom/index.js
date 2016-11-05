@@ -47,4 +47,25 @@ export default function () {
             return resolve();
         });
     };
+
+    validate.validators.userExistsById = function (value) {
+        return new validate.Promise(async function (resolve, reject) {
+            if (!value) {
+                // we resolve this as passed since it will be catched by other validators anyway
+                return resolve();
+            }
+
+            try {
+                const user = await User.query().findById(value);
+
+                if (!user) {
+                    return resolve('doesn\'t exist');
+                }
+            } catch (e) {
+                return reject(e);
+            }
+
+            return resolve();
+        });
+    };
 }

@@ -35,7 +35,7 @@ class ScopesController extends BaseController {
         const userId = req.params.user_id || null;
 
         try {
-            await validate.async({id: userId}, validations.GET);
+            await validate.async({id: userId}, validations.VALIDATE_ID);
         } catch (errors) {
             return next(new APIError(errors, httpStatusCode.BAD_REQUEST));
         }
@@ -74,11 +74,29 @@ class ScopesController extends BaseController {
      *
      * @param {object} req
      * @param {object} res
+     * @param {function} next
      * @returns {object}
      */
-    static async put(req, res) {
-        const users = await User.query();
-        return res.json(users);
+    static async put(req, res, next) {
+        const userId = req.params.user_id || null;
+
+        try {
+            await validate.async({id: userId}, validations.VALIDATE_ID);
+
+            const user = await User.query().findById(userId);
+
+            if (!user) {
+                return next(new APIError(`User with ID of ${userId} not found.`, httpStatusCode.NOT_FOUND));
+            }
+
+            await validate.async(req.body, validations.PUT);
+        } catch (errors) {
+            return next(new APIError(errors, httpStatusCode.BAD_REQUEST));
+        }
+
+        const updatedUser = await User.query().patchAndFetchById(userId, req.body);
+
+        return res.json(updatedUser.$omit('password'));
     }
 
     /**
