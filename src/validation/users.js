@@ -20,9 +20,10 @@ const usernameValidation = {
         tooLong: 'must be less than 64 characters'
     },
     exclusion: {
-        within: ['admin', 'atlauncher'],
-        message: '\'%{value}\' is not allowed'
-    }
+        within: ['admin', 'atlauncher', 'root'],
+        message: 'is not allowed'
+    },
+    uniqueUsername: true
 };
 
 const passwordValidation = {
@@ -35,7 +36,8 @@ const passwordValidation = {
 
 const emailValidation = {
     presence: true,
-    email: true
+    email: true,
+    uniqueEmail: true
 };
 
 export const GET = {

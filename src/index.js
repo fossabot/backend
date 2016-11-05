@@ -20,6 +20,7 @@ import routes from './routes';
 import middleware from './middleware';
 import errorHandlers from './errorHandlers';
 import { environment, getConfig } from '../config';
+import setupCustomValidators from './validation/custom';
 
 const config = getConfig();
 const KnexSessionStore = new ConnectSessionKnex(session);
@@ -69,6 +70,9 @@ app.use(compress());
 app.use(cookieParser());
 app.use(bodyParser.json({type: 'application/json'}));
 app.use(bodyParser.urlencoded({type: 'application/x-www-form-urlencoded', extended: true}));
+
+// setup custom validations
+setupCustomValidators();
 
 // OAuth
 app.use(passport.initialize());

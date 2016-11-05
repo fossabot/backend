@@ -34,9 +34,9 @@ class ScopesController extends BaseController {
     static async get(req, res, next) {
         const userId = req.params.user_id || null;
 
-        const errors = validate({id: userId}, validations.GET);
-
-        if (errors) {
+        try {
+            await validate.async({id: userId}, validations.GET);
+        } catch (errors) {
             return next(new APIError(errors, httpStatusCode.BAD_REQUEST));
         }
 
@@ -54,11 +54,19 @@ class ScopesController extends BaseController {
      *
      * @param {object} req
      * @param {object} res
+     * @param {function} next
      * @returns {object}
      */
-    static async post(req, res) {
-        const users = await User.query();
-        return res.json(users);
+    static async post(req, res, next) {
+        try {
+            await validate.async(req.body, validations.POST);
+        } catch (errors) {
+            return next(new APIError(errors, httpStatusCode.BAD_REQUEST));
+        }
+
+        const user = await User.query().insert(req.body);
+
+        return res.json(user.$omit('password'));
     }
 
     /**
