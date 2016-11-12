@@ -1,3 +1,8 @@
+---
+title: ATLauncher API - Roles
+template: templates/base.pug
+---
+
 # Roles
 Roles are a way to provide different users with one or many roles.
 

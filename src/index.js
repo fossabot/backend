@@ -1,8 +1,8 @@
 import fs from 'fs';
-import http from 'http';
 import cors from 'cors';
+import http from 'http';
+import path from 'path';
 import helmet from 'helmet';
-import marked from 'marked';
 import logger from 'morgan';
 import express from 'express';
 import passport from 'passport';
@@ -15,6 +15,7 @@ import cookieParser from 'cookie-parser';
 import responseTime from 'response-time';
 import httpStatusCodes from 'http-status';
 import RateLimit from 'express-rate-limit';
+import remarkable from 'express-remarkable';
 import ConnectSessionKnex from 'connect-session-knex';
 
 import knex from '../db';
@@ -50,19 +51,14 @@ app.use(session({
 Model.knex(knex);
 
 // setup markdown view engine
-app.engine('md', function (path, options, fn) {
-    fs.readFile(path, 'utf8', function (err, str) {
-        if (err) {
-            return fn(err);
-        }
-
-        return fn(null, marked(str));
-    });
-});
+app.engine('md', remarkable(app));
 
 // setup view engine and static
 app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');
+app.set('views', [
+    __dirname + '/views',
+    path.resolve(__dirname, '../docs')
+]);
 app.use(flash());
 app.use(express.static(__dirname + '/public'));
 
@@ -96,11 +92,7 @@ app.use('/v1', new RateLimit({
     delayMs: 0,
     statusCode: httpStatusCodes.TOO_MANY_REQUESTS,
     handler: function (req, res) {
-        res.format({
-            json: function () {
-                res.status(httpStatusCodes.TOO_MANY_REQUESTS).json({status: httpStatusCodes.TOO_MANY_REQUESTS, error: 'Too many requests'});
-            }
-        });
+        res.status(httpStatusCodes.TOO_MANY_REQUESTS).json({status: httpStatusCodes.TOO_MANY_REQUESTS, error: 'Too many requests'});
     },
     skip: function () {
         return environment === 'test';
