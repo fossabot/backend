@@ -83,6 +83,44 @@ describe('Utils', function () {
         });
     });
 
+    describe('convertTimeStringToMilliseconds', function () {
+        it('should return correctly for 1S', async function () {
+            const expectedOutput = 1000;
+
+            expect(utils.convertTimeStringToMilliseconds('1S')).to.equal(expectedOutput);
+        });
+
+        it('should return correctly for 1MI', async function () {
+            const expectedOutput = 60 * 1000;
+
+            expect(utils.convertTimeStringToMilliseconds('1MI')).to.equal(expectedOutput);
+        });
+
+        it('should return correctly for 1H', async function () {
+            const expectedOutput = 60 * 60 * 1000;
+
+            expect(utils.convertTimeStringToMilliseconds('1H')).to.equal(expectedOutput);
+        });
+
+        it('should return correctly for 1D', async function () {
+            const expectedOutput = 24 * 60 * 60 * 1000;
+
+            expect(utils.convertTimeStringToMilliseconds('1D')).to.equal(expectedOutput);
+        });
+
+        it('should return correctly for 1MO', async function () {
+            const expectedOutput = 30 * 24 * 60 * 60 * 1000;
+
+            expect(utils.convertTimeStringToMilliseconds('1MO')).to.equal(expectedOutput);
+        });
+
+        it('should return correctly for 1Y', async function () {
+            const expectedOutput = 12 * 30 * 24 * 60 * 60 * 1000;
+
+            expect(utils.convertTimeStringToMilliseconds('1Y')).to.equal(expectedOutput);
+        });
+    });
+
     describe('addTimeStringToDate', function () {
         it('should add 1 second to the given date', async function () {
             const date = new Date();

@@ -13,6 +13,8 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import responseTime from 'response-time';
+import httpStatusCodes from 'http-status';
+import RateLimit from 'express-rate-limit';
 import ConnectSessionKnex from 'connect-session-knex';
 
 import knex from '../db';
@@ -21,6 +23,7 @@ import middleware from './middleware';
 import errorHandlers from './errorHandlers';
 import { environment, getConfig } from '../config';
 import setupCustomValidators from './validation/custom';
+import { convertTimeStringToMilliseconds } from './utils';
 
 const config = getConfig();
 const KnexSessionStore = new ConnectSessionKnex(session);
@@ -85,6 +88,24 @@ if (environment === 'development') {
 
 // internal middleware
 app.use(middleware());
+
+// rate limiting
+app.use('/v1', new RateLimit({
+    windowMs: convertTimeStringToMilliseconds(config.ratelimit.default.time),
+    max: config.ratelimit.default.requests,
+    delayMs: 0,
+    statusCode: httpStatusCodes.TOO_MANY_REQUESTS,
+    handler: function (req, res) {
+        res.format({
+            json: function () {
+                res.status(httpStatusCodes.TOO_MANY_REQUESTS).json({status: httpStatusCodes.TOO_MANY_REQUESTS, error: 'Too many requests'});
+            }
+        });
+    },
+    skip: function () {
+        return environment === 'test';
+    }
+}));
 
 // routes
 routes(app);

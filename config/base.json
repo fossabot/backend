@@ -24,5 +24,11 @@
             "access_token": "14D",
             "refresh_token": "3MO"
         }
+    },
+    "ratelimit": {
+        "default": {
+            "requests": 60,
+            "time": "1MI"
+        }
     }
 }

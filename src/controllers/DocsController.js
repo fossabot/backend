@@ -12,6 +12,7 @@ class DocsController extends BaseController {
      *
      * @param {Object} req
      * @param {Object} res
+     * @param {function} next
      * @returns {Object}
      */
     static render(req, res, next) {

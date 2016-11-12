@@ -72,6 +72,46 @@ export function addTimeStringToDate(date, string) {
 }
 
 /**
+ * This will convert a time string to milliseconds.
+ *
+ * For instance passing in 20S will return 20000.
+ *
+ * @param {string} timestring
+ * @returns {number}
+ */
+export function convertTimeStringToMilliseconds(timestring) {
+    if (!timestring) {
+        return 0;
+    }
+
+    const isValid = isValidTimeString(timestring);
+
+    if (!isValid) {
+        return 0;
+    }
+
+    const units = getTimeStringUnits(timestring);
+    const amount = parseInt(timestring.substr(0, timestring.length - units.length), 10);
+
+    switch (units) {
+        case 'S':
+            return amount * 1000;
+        case 'MI':
+            return amount * 60 * 1000;
+        case 'H':
+            return amount * 60 * 60 * 1000;
+        case 'D':
+            return amount * 24 * 60 * 60 * 1000;
+        case 'MO':
+            return amount * 30 * 24 * 60 * 60 * 1000;
+        case 'Y':
+            return amount * 12 * 30 * 24 * 60 * 60 * 1000;
+    }
+
+    return 0;
+}
+
+/**
  * This will determine and return the time string units for the give time string.
  *
  * Valid time string units are:
