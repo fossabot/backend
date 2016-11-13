@@ -4,19 +4,19 @@ machine:
 
 dependencies:
   pre:
-    - npm install -g yarn
-    - yarn install
+    - "rm -rf node_modules/sqlite3"
+    - npm install
   override:
-    - yarn run build
+    - npm run build
   cache_directories:
     - "node_modules"
     - /opt/circleci/nodejs/v6.9.1/lib/node_modules
 
 test:
   override:
-     - yarn run lint
-     - yarn run test:clean
-     - yarn run test
+     - npm run lint
+     - npm run test:clean
+     - npm run test
 
 deployment:
   beta:

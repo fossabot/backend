@@ -6,8 +6,8 @@ Backend API server for ATLauncher NEXT.
 ## Installation
 Before you begin you need to make sure you have the latest LTS version of NodeJS (6.*) installed on your computer.
 
-Optionally you can also install yarn by running `npm install -g yarn` which can be used in place of `npm` which provides benefits over NPM such as faster installs.
- 
+**NOTE:** This repository is **NOT** compatible with Yarn. Please don't attempt to use Yarn as there are some issues. Support will not be given with Yarn.
+
 Clone the repository and run the following commands under your project root:
 
 ```shell

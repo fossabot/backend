@@ -15,10 +15,9 @@ class DocsController extends BaseController {
      *
      * @param {Object} req
      * @param {Object} res
-     * @param {function} next
      * @returns {Object}
      */
-    static async render(req, res, next) {
+    static async render(req, res) {
         try {
             let url = req.url.substr(1);
 
@@ -58,7 +57,7 @@ class DocsController extends BaseController {
 
         const options = {
             'content': markdown.render(content),
-            'meta': markdown.meta,
+            'meta': markdown.meta
         };
 
         return await new Promise((resolve, reject) => {
