@@ -19,9 +19,13 @@ class DocsController extends BaseController {
      */
     static async render(req, res) {
         try {
-            let url = req.url.substr(1);
+            let url = req.url && req.url.substr(1);
 
             if (!url) {
+                if (req.originalUrl === '/docs') {
+                    return res.redirect('/docs/');
+                }
+
                 return res.status(200).send(await DocsController.renderMarkdown(path.resolve(`${process.cwd()}/docs/files/index.md`)));
             }
 
@@ -32,7 +36,13 @@ class DocsController extends BaseController {
             const file = path.resolve(`${process.cwd()}/docs/files/${url}.md`);
 
             if (!fs.existsSync(file)) {
-                return res.status(404).send(await DocsController.renderMarkdown(path.resolve(`${process.cwd()}/docs/errors/404.md`)));
+                const indexFile = path.resolve(`${process.cwd()}/docs/files/${url}/index.md`);
+
+                if (!fs.existsSync(indexFile)) {
+                    return res.status(404).send(await DocsController.renderMarkdown(path.resolve(`${process.cwd()}/docs/errors/404.md`)));
+                }
+
+                return res.redirect(`/docs${req.url}/`);
             }
 
             return res.status(200).send(await DocsController.renderMarkdown(file));
@@ -55,6 +65,11 @@ class DocsController extends BaseController {
 
         markdown.use(meta);
 
+        // this adds in anchor tags to first and second level headings
+        markdown.use(function (remarkable) {
+            remarkable.renderer.rules.heading_open = DocsController.headingsParser;
+        });
+
         const options = {
             'content': markdown.render(content),
             'meta': markdown.meta
@@ -69,6 +84,52 @@ class DocsController extends BaseController {
                 return resolve(contents);
             });
         });
+    }
+
+    /**
+     * This will parse all opening headings and add in anchor tags for all first and second level headings.
+     *
+     * @param {Object} tokens
+     * @param {number} idx
+     * @returns {string}
+     */
+    static headingsParser(tokens, idx) {
+        if (tokens[idx].hLevel <= 2) {
+            return '<h' + tokens[idx].hLevel + ' id=' + DocsController.slugify(tokens[idx + 1].content) + '>';
+        } else {
+            return '<h' + tokens[idx].hLevel + '>';
+        }
+    }
+
+    /**
+     * This will slugify a url for use in anchor tags on headers.
+     *
+     * @param {string} str
+     * @returns {string}
+     */
+    static slugify(str) {
+        str = DocsController.getTitle(str);
+        str = str.toLowerCase();
+        str = str.split(/ /).join('-');
+        str = str.split(/\t/).join('--');
+        str = str.split(/[|$&`~=\\\/@+*!?({[\]})<>=.,;:'"^]/).join('');
+        str = str.split(/[。？！，、；：“”【】（）〔〕［］﹃﹄“ ”‘’﹁﹂—…－～《》〈〉「」]/).join('');
+        return str;
+    }
+
+    /**
+     * This will get the title from the given string.
+     *
+     * @param {string} str
+     * @returns {string}
+     */
+    static getTitle(str) {
+        if (/^\[[^\]]+\]\(/.test(str)) {
+            var m = /^\[([^\]]+)\]/.exec(str);
+            if (m) return m[1];
+        }
+
+        return str;
     }
 }
 
