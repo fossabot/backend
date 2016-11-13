@@ -1,6 +1,5 @@
 ---
-title: ATLauncher API - Roles
-template: templates/base.pug
+title: Roles
 ---
 
 # Roles

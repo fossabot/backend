@@ -1,5 +1,8 @@
 import fs from 'fs';
+import pug from 'pug';
 import path from 'path';
+import meta from 'remarkable-meta';
+import Remarkable from 'remarkable';
 
 import BaseController from './BaseController';
 
@@ -15,28 +18,58 @@ class DocsController extends BaseController {
      * @param {function} next
      * @returns {Object}
      */
-    static render(req, res, next) {
-        let url = req.url.substr(1);
+    static async render(req, res, next) {
+        try {
+            let url = req.url.substr(1);
 
-        if (!url) {
-            return res.render('../../docs/index.md');
+            if (!url) {
+                return res.status(200).send(await DocsController.renderMarkdown(path.resolve(`${process.cwd()}/docs/files/index.md`)));
+            }
+
+            if (url.substr(-1) === '/') {
+                url = `${url}index`;
+            }
+
+            const file = path.resolve(`${process.cwd()}/docs/files/${url}.md`);
+
+            if (!fs.existsSync(file)) {
+                return res.status(404).send(await DocsController.renderMarkdown(path.resolve(`${process.cwd()}/docs/errors/404.md`)));
+            }
+
+            return res.status(200).send(await DocsController.renderMarkdown(file));
+        } catch (e) {
+            return res.status(500).send(await DocsController.renderMarkdown(path.resolve(`${process.cwd()}/docs/errors/500.md`)));
         }
+    }
 
-        if (url.indexOf('/') !== -1 && url.indexOf('v1/') !== 0) {
-            return next();
-        }
+    /**
+     * This will render the given markdown file for the documentation.
+     *
+     * @param {string} filePath
+     * @returns {Promise}
+     */
+    static async renderMarkdown(filePath) {
+        const content = fs.readFileSync(filePath, 'utf8');
+        const templateFile = path.resolve(`${process.cwd()}/docs/templates/base.pug`);
 
-        if (url.substr(-1) === '/') {
-            url = `${url}index`;
-        }
+        const markdown = new Remarkable();
 
-        const file = path.resolve(`${process.cwd()}/docs/${url}.md`);
+        markdown.use(meta);
 
-        if (fs.existsSync(file)) {
-            return res.render(file);
-        }
+        const options = {
+            'content': markdown.render(content),
+            'meta': markdown.meta,
+        };
 
-        return next();
+        return await new Promise((resolve, reject) => {
+            pug.renderFile(templateFile, options, function (err, contents) {
+                if (err) {
+                    reject(err);
+                }
+
+                return resolve(contents);
+            });
+        });
     }
 }
 

@@ -1,5 +1,5 @@
 ---
-title: ATLauncher API - /v1
+title: /v1
 template: templates/base.pug
 ---
 

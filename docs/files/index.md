@@ -1,8 +1,3 @@
----
-title: ATLauncher API
-template: templates/base.pug
----
-
 # ATLauncher API
 This is a the documentation for the ATLauncher API.
 

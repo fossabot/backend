@@ -14,7 +14,6 @@ import cookieParser from 'cookie-parser';
 import responseTime from 'response-time';
 import httpStatusCodes from 'http-status';
 import RateLimit from 'express-rate-limit';
-import remarkable from 'express-remarkable';
 import ConnectSessionKnex from 'connect-session-knex';
 
 import knex from '../db';
@@ -48,9 +47,6 @@ app.use(session({
 }));
 
 Model.knex(knex);
-
-// setup markdown view engine
-app.engine('md', remarkable(app));
 
 // setup view engine and static
 app.set('view engine', 'ejs');

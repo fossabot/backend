@@ -1,6 +1,5 @@
 ---
-title: ATLauncher API - /v1/users
-template: templates/base.pug
+title: /v1/users
 ---
 
 # /v1/users

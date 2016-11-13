@@ -1,6 +1,5 @@
 ---
-title: ATLauncher API - Rate Limiting
-template: templates/base.pug
+title: Rate Limiting
 ---
 
 # Rate Limiting
