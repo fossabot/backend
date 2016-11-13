@@ -67,7 +67,8 @@ class DocsController extends BaseController {
 
         // this adds in anchor tags to first and second level headings
         markdown.use(function (remarkable) {
-            remarkable.renderer.rules.heading_open = DocsController.headingsParser;
+            remarkable.renderer.rules.heading_open = DocsController.headingsOpenParser;
+            remarkable.renderer.rules.heading_close = DocsController.headingsCloseParser;
         });
 
         const options = {
@@ -87,17 +88,32 @@ class DocsController extends BaseController {
     }
 
     /**
-     * This will parse all opening headings and add in anchor tags for all first and second level headings.
+     * This will parse all opening headings and add in anchor tags for all second level headings.
      *
      * @param {Object} tokens
      * @param {number} idx
      * @returns {string}
      */
-    static headingsParser(tokens, idx) {
-        if (tokens[idx].hLevel <= 2) {
-            return '<h' + tokens[idx].hLevel + ' id=' + DocsController.slugify(tokens[idx + 1].content) + '>';
+    static headingsOpenParser(tokens, idx) {
+        if (tokens[idx].hLevel === 2) {
+            return `<h${tokens[idx].hLevel} id="${DocsController.slugify(tokens[idx + 1].content)}"><a class="heading-anchor" href="#${DocsController.slugify(tokens[idx + 1].content)}">`;
         } else {
-            return '<h' + tokens[idx].hLevel + '>';
+            return `<h${tokens[idx].hLevel}>`;
+        }
+    }
+
+    /**
+     * This will parse all closing headings to close off a tags.
+     *
+     * @param {Object} tokens
+     * @param {number} idx
+     * @returns {string}
+     */
+    static headingsCloseParser(tokens, idx) {
+        if (tokens[idx].hLevel === 2) {
+            return `</a></h${tokens[idx].hLevel}>`;
+        } else {
+            return `</h${tokens[idx].hLevel}>`;
         }
     }
 

@@ -337,15 +337,6 @@ ul.list, ol.list {
     border-bottom: 1px solid #EDEDED;
 }
 
-h1:nth-child(1),
-h2:nth-child(1),
-h3:nth-child(1),
-h4:nth-child(1),
-h5:nth-child(1),
-h6:nth-child(1) {
-    margin-top: 0;
-}
-
 body {
     padding: 1em;
 }
@@ -373,4 +364,9 @@ body {
         max-width: 740px;
         padding: 3em;
     }
+}
+
+.heading-anchor {
+    display: block;
+    color: inherit;
 }
