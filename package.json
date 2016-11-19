@@ -51,6 +51,7 @@
     "helmet": "~3.1.0",
     "http-status": "~0.2.3",
     "knex": "0.12.5",
+    "markdown-toc": "^0.13.0",
     "morgan": "~1.7.0",
     "mysql": "~2.12.0",
     "oauth2-server": "~3.0.0-b2",

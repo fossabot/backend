@@ -244,12 +244,6 @@ footer {
     }
 }
 
-#wrapper {
-    margin-left: auto;
-    margin-right: auto;
-    background-color: white;
-}
-
 .ca-menu {
     list-style: none;
     padding: 0;
@@ -330,6 +324,10 @@ ul.list, ol.list {
 
 #wrapper {
     padding: 5em 1em 0 1em;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    margin-top: 5em;
 }
 
 @media (min-width: 48.001em) {
@@ -448,11 +446,11 @@ nav ul ul ul li {
 }
 
 /* Change ' +' in order to change the Dropdown symbol */
-li > a:after {
+nav li > a:after {
     content: ' +';
 }
 
-li > a:only-child:after {
+nav li > a:only-child:after {
     content: '';
 }
 

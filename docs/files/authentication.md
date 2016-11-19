@@ -6,6 +6,9 @@ In order to access some parts of this API, authentication is required.
 
 When authentication is needed, you'll need to use OAuth in order to get access tokens for users.
 
+# Contents
+<!-- toc -->
+
 # OAuth
 OAuth is a way to allow gaining access tokens on behalf of users.
 

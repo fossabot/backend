@@ -3,6 +3,7 @@ import pug from 'pug';
 import path from 'path';
 import meta from 'remarkable-meta';
 import Remarkable from 'remarkable';
+import markdownTOC from 'markdown-toc';
 
 import BaseController from './BaseController';
 
@@ -71,8 +72,10 @@ class DocsController extends BaseController {
             remarkable.renderer.rules.heading_close = DocsController.headingsCloseParser;
         });
 
+        const contentWithTOC = markdownTOC.insert(content, {open: '', close: '', maxdepth: 3});
+
         const options = {
-            'content': markdown.render(content),
+            'content': markdown.render(contentWithTOC),
             'meta': markdown.meta
         };
 
@@ -95,7 +98,7 @@ class DocsController extends BaseController {
      * @returns {string}
      */
     static headingsOpenParser(tokens, idx) {
-        if (tokens[idx].hLevel === 1 || tokens[idx].hLevel === 2) {
+        if (tokens[idx].hLevel <= 3) {
             return `<h${tokens[idx].hLevel} id="${DocsController.slugify(tokens[idx + 1].content)}"><a class="heading-anchor" href="#${DocsController.slugify(tokens[idx + 1].content)}">`;
         } else {
             return `<h${tokens[idx].hLevel}>`;
@@ -110,7 +113,7 @@ class DocsController extends BaseController {
      * @returns {string}
      */
     static headingsCloseParser(tokens, idx) {
-        if (tokens[idx].hLevel === 1 || tokens[idx].hLevel === 2) {
+        if (tokens[idx].hLevel <= 3) {
             return `</a></h${tokens[idx].hLevel}>`;
         } else {
             return `</h${tokens[idx].hLevel}>`;

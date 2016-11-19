@@ -2,40 +2,42 @@
 title: /v1/users
 ---
 
-# /v1/users
-This route interacts with users on the system.
+These routes interact with users on the system.
 
 In order to access any of these routes, you need the `admin` [role](/docs/roles).
 
-## GET /v1/users
+# Contents
+<!-- toc -->
+
+# GET /v1/users
 This will get all the users in the system.
 
-### Scope
+## Scope
 This route requires the `admin:read` [scope](/docs/scope).
 
-## GET /v1/users/{id}
+# GET /v1/users/{id}
 This will get a single user in the system.
 
-### Scope
+## Scope
 This route requires the `admin:read` [scope](/docs/scope).
 
-## POST /v1/users
+# POST /v1/users
 This will create a new user in the system.
 
-### Scope
+## Scope
 This route requires the `admin:write` [scope](/docs/scope).
 
-## PUT /v1/users/{id}
+# PUT /v1/users/{id}
 This will update the information for a user in the system.
 
-### Scope
+## Scope
 This route requires the `admin:write` [scope](/docs/scope).
 
-## DELETE /v1/users/{id}
+# DELETE /v1/users/{id}
 This will delete a user in the system.
 
-### Scope
+## Scope
 This route requires the `admin:write` [scope](/docs/scope).
 
-### Responses
+## Responses
 When successful, this route will return a [204](/docs/response-codes#204) response code with no content.
