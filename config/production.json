@@ -1,5 +1,6 @@
 {
     "port": 443,
+    "baseUrl": "https://api-next.atlauncher.com",
     "database": {
         "name": "atlauncher-next",
         "username": "atlauncher-next",

@@ -7,6 +7,10 @@ import markdownTOC from 'markdown-toc';
 
 import BaseController from './BaseController';
 
+import { getConfig } from '../../config';
+
+const config = getConfig();
+
 /**
  * The DocsController controls the routes for the documentation.
  */
@@ -74,8 +78,10 @@ class DocsController extends BaseController {
 
         const contentWithTOC = markdownTOC.insert(content, {open: '', close: '', maxdepth: 3});
 
+        const finalContent = DocsController.replaceVariables(contentWithTOC);
+
         const options = {
-            'content': markdown.render(contentWithTOC),
+            'content': markdown.render(finalContent),
             'meta': markdown.meta
         };
 
@@ -88,6 +94,14 @@ class DocsController extends BaseController {
                 return resolve(contents);
             });
         });
+    }
+
+    static replaceVariables(content) {
+        if (content.indexOf('{{{OAUTH_BASE_URL}}}') !== -1) {
+            content = content.replace(/{{{OAUTH_BASE_URL}}}/g, `${config.baseUrl}/oauth`);
+        }
+
+        return content;
     }
 
     /**

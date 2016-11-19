@@ -31,10 +31,10 @@ the given scopes.
 If approved they will be redirected back to your registered redirect url with the access token in the hash of the url.
 
 #### Example
-Redirect the user to `http://127.0.0.1:3000/oauth/authorize?response_type=code&client_id={{OAUTH_CLIENT_ID}}&redirect_uri={{OAUTH_REDIRECT_URI}}&scope={{SCOPES}}`.
+Redirect the user to `{{{OAUTH_BASE_URL}}}/authorize?response_type=code&client_id={{OAUTH_CLIENT_ID}}&redirect_uri={{OAUTH_REDIRECT_URI}}&scope={{SCOPES}}`.
 
 Once authorized they'll be redirected to your registered redirect url with the information needed in the hash like
-`http://127.0.0.1:3000/oauth#access_token={{ACCESS_TOKEN}}&refresh_token={{REFRESH_TOKEN}}&scope={{SCOPES}}&expires_at=2016-12-19T09%3A49%3A42.850Z&refresh_token_expires_at=2017-02-19T09%3A49%3A42.864Z&token_type=Bearer`.
+`{{{OAUTH_BASE_URL}}}#access_token={{ACCESS_TOKEN}}&refresh_token={{REFRESH_TOKEN}}&scope={{SCOPES}}&expires_at=2016-12-19T09%3A49%3A42.850Z&refresh_token_expires_at=2017-02-19T09%3A49%3A42.864Z&token_type=Bearer`.
 
 ### Authorization Code
 This is to be used when you have a backend server that can be used to exchange tokens secretly away from the end user.
@@ -46,11 +46,11 @@ If approved they will be redirected back to your registered redirect url with a 
 with an access token, refresh token and expire times.
 
 #### Example
-Redirect the user to `http://127.0.0.1:3000/oauth/authorize?response_type=code&client_id={{OAUTH_CLIENT_ID}}&redirect_uri={{OAUTH_REDIRECT_URI}}&scope={{SCOPES}}`.
+Redirect the user to `{{{OAUTH_BASE_URL}}}/authorize?response_type=code&client_id={{OAUTH_CLIENT_ID}}&redirect_uri={{OAUTH_REDIRECT_URI}}&scope={{SCOPES}}`.
 
-Once authorized they'll be redirected back to your registered redirect url with a code as a query parameter like `http://127.0.0.1:3000/oauth?code=0LA1XTorX9Urd0aLwHqpx5KHZbjOAAHS`.
+Once authorized they'll be redirected back to your registered redirect url with a code as a query parameter like `{{{OAUTH_BASE_URL}}}?code=0LA1XTorX9Urd0aLwHqpx5KHZbjOAAHS`.
 
-Next exchange that code for an access key on your server by making a POST request to `http://127.0.0.1:3000/oauth/token` with the following JSON:
+Next exchange that code for an access key on your server by making a POST request to `{{{OAUTH_BASE_URL}}}/token` with the following JSON:
 
 ```
 {
@@ -79,7 +79,7 @@ Then you'll receive back a JSON response like below:
 This allows you to get an access token directly using your client credentials (client id and client secret) so you can directly use the API to access authenticated routes with your own user.
 
 #### Example
-First make a POST request to `http://127.0.0.1:3000/oauth/token` with the following JSON:
+First make a POST request to `{{{OAUTH_BASE_URL}}}/token` with the following JSON:
 
 ```
 {
@@ -107,7 +107,7 @@ Then you'll receive back a JSON response like below:
 This allows you to refresh a users access token without needing them to reauthorize.
 
 #### Example
-First make a POST request to `http://127.0.0.1:3000/oauth/token` with the following JSON:
+First make a POST request to `{{{OAUTH_BASE_URL}}}/token` with the following JSON:
 
 ```
 {
