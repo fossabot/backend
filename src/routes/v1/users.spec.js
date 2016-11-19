@@ -79,6 +79,7 @@ describe('/v1/users', function () {
 
                 expect(user).to.be.an('object');
                 expect(user.username).to.equal('test');
+                expect(user.password).to.be.undefined;
                 expect(user.email).to.equal('test@example.com');
             });
         });
@@ -215,6 +216,7 @@ describe('/v1/users', function () {
                 expect(body).to.be.an('object');
 
                 expect(body.username).to.equal('test');
+                expect(body.password).to.be.undefined;
                 expect(body.email).to.equal('test@example.com');
             });
 
@@ -436,6 +438,7 @@ describe('/v1/users', function () {
                 expect(body).to.be.an('object');
 
                 expect(body.username).to.equal('_test-User1');
+                expect(body.password).to.be.undefined;
                 expect(body.email).to.equal('testuser@example.com');
             });
 
@@ -942,6 +945,7 @@ describe('/v1/users', function () {
                 expect(body).to.be.an('object');
 
                 expect(body.username).to.equal('_test-User1');
+                expect(body.password).to.be.undefined;
                 expect(body.email).to.equal('testuser1@example.com');
             });
 

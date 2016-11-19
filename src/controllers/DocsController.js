@@ -96,6 +96,12 @@ class DocsController extends BaseController {
         });
     }
 
+    /**
+     * This will replace certain variables in the markdown file that's enclosed in triple braces '{{{VARIABLE_NAME}}}'.
+     *
+     * @param {string} content
+     * @returns {string}
+     */
     static replaceVariables(content) {
         if (content.indexOf('{{{OAUTH_BASE_URL}}}') !== -1) {
             content = content.replace(/{{{OAUTH_BASE_URL}}}/g, `${config.baseUrl}/oauth`);

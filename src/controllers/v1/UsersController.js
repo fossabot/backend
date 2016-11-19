@@ -18,7 +18,7 @@ class ScopesController extends BaseController {
      * @returns {object}
      */
     static async index(req, res) {
-        const users = await cache.wrap('/v1/users', () => (User.query()), {ttl: getTTL(req)});
+        const users = await cache.wrap('/v1/users', () => (User.query().omit(['password'])), {ttl: getTTL(req)});
 
         return res.json(users);
     }
