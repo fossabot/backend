@@ -71,9 +71,61 @@ server.grant(oauth2orize.grant.token({scopeSeparator: ','}, async function (clie
             return done(new APIError('Error creating access token.'));
         }
 
+        const refreshToken = await OAuthRefreshToken.query().insert({
+            access_token_id: accessToken.id,
+            refresh_token: generateUID(256),
+            scope: accessToken.scope,
+            expires_at: addTimeStringToDate(config.oauth.validity.refresh_token)
+        });
+
+        if (!refreshToken) {
+            return done(new APIError('Error creating refresh token.'));
+        }
+
         return done(null, accessToken.access_token, {
             scope: accessToken.scope,
-            expires_at: accessToken.expires_at
+            expires_at: accessToken.expires_at,
+            refresh_token: refreshToken.refresh_token,
+            refresh_token_expires_at: refreshToken.expires_at
+        });
+    } catch (err) {
+        return done(err);
+    }
+}));
+
+server.exchange(oauth2orize.exchange.clientCredentials({scopeSeparator: ','}, async function (client, scope, done) {
+    try {
+        if (!scope || !await OAuthScope.isValidScopes(scope)) {
+            return done(new APIError('Invalid scope provided.'));
+        }
+
+        const accessToken = await OAuthAccessToken.query().insert({
+            user_id: client.user_id,
+            client_id: client.id,
+            scope: scope.join(','),
+            access_token: generateUID(256),
+            expires_at: addTimeStringToDate(config.oauth.validity.access_token)
+        });
+
+        if (!accessToken) {
+            return done(new APIError('Error creating access token.'));
+        }
+
+        const refreshToken = await OAuthRefreshToken.query().insert({
+            access_token_id: accessToken.id,
+            refresh_token: generateUID(256),
+            scope: accessToken.scope,
+            expires_at: addTimeStringToDate(config.oauth.validity.refresh_token)
+        });
+
+        if (!refreshToken) {
+            return done(new APIError('Error creating refresh token.'));
+        }
+
+        return done(null, accessToken.access_token, refreshToken.refresh_token, {
+            scope: accessToken.scope,
+            expires_at: accessToken.expires_at,
+            refresh_token_expires_at: refreshToken.expires_at
         });
     } catch (err) {
         return done(err);
@@ -130,7 +182,74 @@ server.exchange(oauth2orize.exchange.authorizationCode({scopeSeparator: ','}, as
 
         return done(null, accessToken.access_token, refreshToken.refresh_token, {
             scope: accessToken.scope,
-            expires_at: accessToken.expires_at
+            expires_at: accessToken.expires_at,
+            refresh_token_expires_at: refreshToken.expires_at
+        });
+    } catch (err) {
+        return done(err);
+    }
+}));
+
+server.exchange(oauth2orize.exchange.refreshToken({scopeSeparator: ','}, async function (client, code, scope, done) {
+    try {
+        if (!scope || !await OAuthScope.isValidScopes(scope)) {
+            return done(new APIError('Invalid scope provided.'));
+        }
+
+        const oldRefreshToken = await OAuthRefreshToken.query().where({refresh_token: code}).first();
+
+        if (!oldRefreshToken) {
+            return done(new APIError('Invalid refresh token.'));
+        }
+
+        if (oldRefreshToken.scope !== scope.join(',')) {
+            return done(new APIError('Scopes do not match original authorization.'));
+        }
+
+        const expiresAt = parse(oldRefreshToken.expires_at);
+
+        if (oldRefreshToken.revoked) {
+            await OAuthRefreshToken.query().deleteById(oldRefreshToken.id);
+            return done(new APIError('Refresh token has been revoked.'));
+        }
+
+        if (!isFuture(expiresAt)) {
+            await OAuthRefreshToken.query().deleteById(oldRefreshToken.id);
+            return done(new APIError('Refresh token has expired.'));
+        }
+
+        const oldAccessToken = await OAuthAccessToken.query().where({id: oldRefreshToken.access_token_id}).first();
+
+        await OAuthAccessToken.query().deleteById(oldAccessToken.id);
+        await OAuthRefreshToken.query().deleteById(oldRefreshToken.id);
+
+        const accessToken = await OAuthAccessToken.query().insert({
+            user_id: oldAccessToken.user_id,
+            client_id: oldAccessToken.client_id,
+            scope: oldAccessToken.scope.join(','),
+            access_token: generateUID(256),
+            expires_at: addTimeStringToDate(config.oauth.validity.access_token)
+        });
+
+        if (!accessToken) {
+            return done(new APIError('Error creating access token.'));
+        }
+
+        const refreshToken = await OAuthRefreshToken.query().insert({
+            access_token_id: accessToken.id,
+            refresh_token: generateUID(256),
+            scope: accessToken.scope,
+            expires_at: addTimeStringToDate(config.oauth.validity.refresh_token)
+        });
+
+        if (!refreshToken) {
+            return done(new APIError('Error creating refresh token.'));
+        }
+
+        return done(null, accessToken.access_token, refreshToken.refresh_token, {
+            scope: accessToken.scope,
+            expires_at: accessToken.expires_at,
+            refresh_token_expires_at: refreshToken.expires_at
         });
     } catch (err) {
         return done(err);

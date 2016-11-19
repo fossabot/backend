@@ -20,6 +20,7 @@ Below is a simple table showing what we will and will not do in a single version
 | Remove an attribute from the return object of an endpoint | Yes |
 | Change the type of an attribute from the return object of an endpoint | Yes |
 | Change the structure of the response sent from an endpoint | Yes |
+| Change the scope needed to access the endpoint | Yes |
 
 ### Version Documentation
  - [v1](/docs/v1/)

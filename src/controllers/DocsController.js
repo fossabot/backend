@@ -95,7 +95,7 @@ class DocsController extends BaseController {
      * @returns {string}
      */
     static headingsOpenParser(tokens, idx) {
-        if (tokens[idx].hLevel === 2) {
+        if (tokens[idx].hLevel === 1 || tokens[idx].hLevel === 2) {
             return `<h${tokens[idx].hLevel} id="${DocsController.slugify(tokens[idx + 1].content)}"><a class="heading-anchor" href="#${DocsController.slugify(tokens[idx + 1].content)}">`;
         } else {
             return `<h${tokens[idx].hLevel}>`;
@@ -110,7 +110,7 @@ class DocsController extends BaseController {
      * @returns {string}
      */
     static headingsCloseParser(tokens, idx) {
-        if (tokens[idx].hLevel === 2) {
+        if (tokens[idx].hLevel === 1 || tokens[idx].hLevel === 2) {
             return `</a></h${tokens[idx].hLevel}>`;
         } else {
             return `</h${tokens[idx].hLevel}>`;

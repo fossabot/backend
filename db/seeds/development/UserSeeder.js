@@ -11,6 +11,7 @@ exports.seed = function (knex, Promise) {
         knex('users').del(),
         knex('roles').del(),
         knex('user_roles').del(),
+        knex('oauth_clients').del(),
 
         // Inserts seed entries
         knex('users').insert({
@@ -31,6 +32,22 @@ exports.seed = function (knex, Promise) {
             user_id: 1,
             created_by: 1,
             created_at: dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss')
-        })
+        }),
+        knex('oauth_clients').insert([
+            {
+                name: 'Test',
+                user_id: 1,
+                client_id: 'test',
+                client_secret: 'test',
+                redirect_uri: 'http://127.0.0.1:3000/oauth'
+            },
+            {
+                name: 'Postman',
+                user_id: 1,
+                client_id: 'postman',
+                client_secret: 'postman',
+                redirect_uri: 'https://www.getpostman.com/oauth2/callback'
+            }
+        ])
     );
 };

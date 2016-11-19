@@ -12,7 +12,7 @@ class OAuthClient extends BaseModel {
         properties: {
             id: {type: 'integer'},
             name: {type: 'string'},
-            user_id: {type: ['integer', 'null'], minimum: 1, default: null},
+            user_id: {type: 'integer', minimum: 1},
             client_id: {type: 'string'},
             client_secret: {type: 'string'},
             redirect_uri: {type: 'string'},
@@ -27,7 +27,7 @@ class OAuthClient extends BaseModel {
             relation: Model.BelongsToOneRelation,
             modelClass: `${__dirname}/User`,
             join: {
-                from: 'oauth_clients.client_id',
+                from: 'oauth_clients.user_id',
                 to: 'users.id'
             }
         }
