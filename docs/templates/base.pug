@@ -7,6 +7,25 @@ html
         else
             title ATLauncher API
         link(rel = 'stylesheet', type = 'text/css', href = '/css/docs.css')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
     body
+        nav
+            #logo ATLauncher API
+            label.toggle(for='drop') Menu
+            input#drop(type='checkbox')
+            ul.menu
+                li
+                    a(href='/docs') Home
+                li
+                    label.toggle(for='drop-1') Versions +
+                    a(href='#') Versions
+                    input#drop-1(type='checkbox')
+                    ul
+                        li
+                            a(href='/docs/v1') v1
+                li
+                    a(href='/docs/rate-limiting') Rate Limiting
+                li
+                    a(href='/docs/roles') Roles
         div#wrapper
             !=content

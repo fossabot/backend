@@ -8,4 +8,4 @@ This is the documentation for v1 of the api.
 
 ## Contents
  - **Routes**
-   - [Users](/docs/v1/routes/users)
+   - [Users](/docs/v1/users)
