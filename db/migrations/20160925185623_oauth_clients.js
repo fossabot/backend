@@ -3,10 +3,11 @@ exports.up = function (knex) {
         table.increments('id').primary();
         table.string('name');
         table.integer('user_id').index().notNullable();
-        table.string('client_id', 80).index().notNullable();
-        table.string('client_secret', 80).index().notNullable();
-        table.string('redirect_uri', 2000).notNullable();
+        table.string('client_id', 80).index().unique().notNullable();
+        table.string('client_secret', 80).index().unique().notNullable();
+        table.text('redirect_uri').notNullable();
         table.boolean('revoked').notNullable().defaultTo(false);
+
         table.timestamps();
 
         table.foreign('user_id').references('id').inTable('users').onDelete('cascade').onUpdate('cascade');

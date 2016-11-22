@@ -3,10 +3,11 @@ exports.up = function (knex) {
         table.increments('id').primary();
         table.integer('user_id').index().notNullable();
         table.integer('client_id').index().notNullable();
-        table.string('authorization_code').index().notNullable();
+        table.string('authorization_code').index().unique().notNullable();
         table.string('redirect_uri', 2000).notNullable();
         table.string('scope').notNullable();
         table.boolean('revoked').notNullable().defaultTo(false);
+
         table.timestamps();
         table.timestamp('expires_at').notNullable();
 

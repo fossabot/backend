@@ -3,8 +3,9 @@ exports.up = function (knex) {
         table.increments('id').primary();
         table.string('username', 64).notNullable().unique();
         table.string('password').notNullable();
-        table.string('email').notNullable().unique();
+        table.text('email').notNullable().unique();
         table.boolean('must_change_password').notNullable().defaultTo(false);
+
         table.timestamps();
     });
 };

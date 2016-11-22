@@ -4,7 +4,8 @@ exports.up = function (knex) {
         table.integer('role_id').unsigned().notNullable();
         table.integer('user_id').unsigned().notNullable();
         table.integer('created_by').unsigned().notNullable();
-        table.timestamps();
+
+        table.datetime('created_at');
 
         table.unique(['user_id', 'role_id']);
         table.foreign('role_id').references('id').inTable('roles').onDelete('cascade').onUpdate('cascade');

@@ -4,7 +4,8 @@ exports.up = function (knex) {
         table.string('tag', 64).index().notNullable();
         table.integer('pack_id').unsigned().notNullable();
         table.integer('created_by').unsigned().notNullable();
-        table.timestamps();
+
+        table.datetime('created_at');
 
         table.unique(['tag', 'pack_id']);
         table.foreign('pack_id').references('id').inTable('packs').onDelete('cascade').onUpdate('cascade');
