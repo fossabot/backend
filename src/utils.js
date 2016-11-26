@@ -26,6 +26,16 @@ function getRandomInt(min, max) {
 }
 
 /**
+ * This will create a safe string from the given string.
+ *
+ * @param {String}string
+ * @returns {String}
+ */
+export function getSafeString(string) {
+    return string.replace(/[^A-Za-z0-9-_]*/g, '');
+}
+
+/**
  * This adds a stringified length of time to a given date (or now if not provided).
  *
  * Examples of stringified time is '1D', '33S', '3M' etc.

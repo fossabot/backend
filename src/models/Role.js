@@ -10,24 +10,15 @@ class Role extends BaseModel {
         required: ['name', 'description'],
 
         properties: {
-            id: {type: 'integer'},
+            id: {type: 'integer', minimum: 1},
             name: {type: 'string', minLength: 3, maxLength: 255},
             description: {type: 'string'},
-            created_by: {type: 'integer', minimum: 1},
-            created_at: {type: ['string', 'null'], format: 'date-time', default: null},
+            created_at: {type: 'string', format: 'date-time'},
             updated_at: {type: ['string', 'null'], format: 'date-time', default: null}
         }
     };
 
     static relationMappings = {
-        creator: {
-            relation: Model.BelongsToOneRelation,
-            modelClass: `${__dirname}/User`,
-            join: {
-                from: 'roles.created_by',
-                to: 'users.id'
-            }
-        },
         users: {
             relation: Model.ManyToManyRelation,
             modelClass: `${__dirname}/User`,
@@ -36,9 +27,7 @@ class Role extends BaseModel {
                 through: {
                     from: 'user_roles.role_id',
                     to: 'user_roles.user_id',
-                    extra: [
-                        'created_by'
-                    ]
+                    modelClass: `${__dirname}/UserRole`
                 },
                 to: 'users.id'
             }

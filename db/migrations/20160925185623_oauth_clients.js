@@ -6,7 +6,6 @@ exports.up = function (knex) {
         table.string('client_id', 80).index().unique().notNullable();
         table.string('client_secret', 80).index().unique().notNullable();
         table.text('redirect_uri').notNullable();
-        table.boolean('revoked').notNullable().defaultTo(false);
 
         table.timestamps();
 

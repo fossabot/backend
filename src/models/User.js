@@ -15,12 +15,14 @@ class User extends BaseModel {
         required: ['username', 'email', 'password'],
 
         properties: {
-            id: {type: 'integer'},
+            id: {type: 'integer', minimum: 1},
             username: {type: 'string', minLength: 3, maxLength: 64},
             email: {type: 'string', minLength: 1, maxLength: 255, format: 'email'},
-            password: {type: 'string', minLength: 1, maxLength: 255},
+            password: {type: 'string', minLength: 1, maxLength: 60},
             must_change_password: {type: 'boolean', default: false},
-            created_at: {type: ['string', 'null'], format: 'date-time', default: null},
+            is_banned: {type: 'boolean', default: false},
+            ban_reason: {type: ['string', 'null'], default: null},
+            created_at: {type: 'string', format: 'date-time'},
             updated_at: {type: ['string', 'null'], format: 'date-time', default: null}
         }
     };
@@ -34,9 +36,7 @@ class User extends BaseModel {
                 through: {
                     from: 'user_roles.user_id',
                     to: 'user_roles.role_id',
-                    extra: [
-                        'created_by'
-                    ]
+                    modelClass: `${__dirname}/UserRole`
                 },
                 to: 'roles.id'
             }
@@ -49,7 +49,8 @@ class User extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        must_change_password: (input) => (!!input)
+        must_change_password: (input) => (!!input),
+        is_banned: (input) => (!!input)
     };
 
     /**

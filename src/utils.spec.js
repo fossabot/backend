@@ -83,6 +83,15 @@ describe('Utils', function () {
         });
     });
 
+    describe('getSafeString', function () {
+        it('should return non valid characters stripped out', async function () {
+            expect(utils.getSafeString('Hello World')).to.equal('HelloWorld');
+            expect(utils.getSafeString('HI ^&^&% Mom')).to.equal('HIMom');
+            expect(utils.getSafeString('Something-___-&&(*&@Else')).to.equal('Something-___-Else');
+            expect(utils.getSafeString('12836*#@124241')).to.equal('12836124241');
+        });
+    });
+
     describe('convertTimeStringToMilliseconds', function () {
         it('should return correctly for 1S', async function () {
             const expectedOutput = 1000;

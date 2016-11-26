@@ -16,7 +16,6 @@ class OAuthClient extends BaseModel {
             client_id: {type: 'string'},
             client_secret: {type: 'string'},
             redirect_uri: {type: 'string'},
-            revoked: {type: 'boolean', default: false},
             created_at: {type: ['string', 'null'], format: 'date-time', default: null},
             updated_at: {type: ['string', 'null'], format: 'date-time', default: null}
         }
