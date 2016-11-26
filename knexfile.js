@@ -42,7 +42,7 @@ module.exports = {
     },
 
     production: {
-        client: 'postgresql',
+        client: 'mysql',
         connection: {
             database: config.production.database.name,
             user: config.production.database.username,
