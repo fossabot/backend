@@ -3,6 +3,7 @@ import chai, { expect } from 'chai';
 
 import knex from '../../db';
 
+import Pack from './Pack';
 import Role from './Role';
 import User from './User';
 
@@ -175,6 +176,64 @@ describe('Model: User', function () {
             expect(role).to.have.property('name').that.equals('testrole');
 
             expect(role).to.have.property('description').that.equals('This is a test role');
+        });
+    });
+
+    describe('packs', function () {
+        it('should create a pack for a user', async function () {
+            const user = await User.query().insert({
+                username: 'testuser',
+                password: 'password',
+                email: 'test@example.com'
+            });
+
+            await user.$relatedQuery('packs').insert({
+                name: 'Test Pack',
+                description: 'This is a test pack'
+            });
+
+            const usersPacks = await user.$relatedQuery('packs');
+
+            expect(usersPacks).to.be.an('array').with.length(1);
+
+            const pack = usersPacks[0];
+
+            expect(pack).to.be.an('object');
+
+            expect(pack).to.have.property('name').that.equals('Test Pack');
+
+            expect(pack).to.have.property('safe_name').that.equals('TestPack');
+
+            expect(pack).to.have.property('description').that.equals('This is a test pack');
+        });
+
+        it('should attach a pack to a user', async function () {
+            const user = await User.query().insert({
+                username: 'testuser',
+                password: 'test',
+                email: 'test@example.com'
+            });
+
+            await Pack.query().insert({
+                name: 'Test Pack',
+                description: 'This is a test pack'
+            });
+
+            await user.$relatedQuery('packs').relate(1);
+
+            const usersPacks = await user.$relatedQuery('packs');
+
+            expect(usersPacks).to.be.an('array').with.length(1);
+
+            const pack = usersPacks[0];
+
+            expect(pack).to.be.an('object');
+
+            expect(pack).to.have.property('name').that.equals('Test Pack');
+
+            expect(pack).to.have.property('safe_name').that.equals('TestPack');
+
+            expect(pack).to.have.property('description').that.equals('This is a test pack');
         });
     });
 });

@@ -4,6 +4,7 @@ import chai, { expect } from 'chai';
 import knex from '../../db';
 
 import Pack from './Pack';
+import User from './User';
 
 /**
  * These tests are here not to test the functionality of the provided Model library (Objection.js) and is more to make sure commonly used queries (with custom changes to the models) are returning as
@@ -99,6 +100,60 @@ describe('Model: Pack', function () {
             expect(pack).to.have.property('updated_at').that.is.null;
 
             expect(pack).to.have.property('disabled_at').that.is.null;
+        });
+    });
+
+    describe('users', function () {
+        it('should create a user for a pack', async function () {
+            const pack = await Pack.query().insert({
+                name: 'Test Pack',
+                description: 'This is a test pack'
+            });
+
+            await pack.$relatedQuery('users').insert({
+                username: 'testuser',
+                password: 'password',
+                email: 'test@example.com'
+            });
+
+            const packUsers = await pack.$relatedQuery('users');
+
+            expect(packUsers).to.be.an('array').with.length(1);
+
+            const user = packUsers[0];
+
+            expect(user).to.be.an('object');
+
+            expect(user).to.have.property('username').that.equals('testuser');
+
+            expect(user).to.have.property('email').that.equals('test@example.com');
+        });
+
+        it('should attach a user to a pack', async function () {
+            const pack = await Pack.query().insert({
+                name: 'Test Pack',
+                description: 'This is a test pack'
+            });
+
+            await User.query().insert({
+                username: 'testuser',
+                password: 'test',
+                email: 'test@example.com'
+            });
+
+            await pack.$relatedQuery('users').relate(1);
+
+            const packUsers = await pack.$relatedQuery('users');
+
+            expect(packUsers).to.be.an('array').with.length(1);
+
+            const user = packUsers[0];
+
+            expect(user).to.be.an('object');
+
+            expect(user).to.have.property('username').that.equals('testuser');
+
+            expect(user).to.have.property('email').that.equals('test@example.com');
         });
     });
 });

@@ -28,6 +28,26 @@ class User extends BaseModel {
     };
 
     static relationMappings = {
+        packs: {
+            relation: Model.ManyToManyRelation,
+            modelClass: `${__dirname}/Pack`,
+            join: {
+                from: 'users.id',
+                through: {
+                    from: 'pack_users.user_id',
+                    to: 'pack_users.pack_id',
+                    modelClass: `${__dirname}/PackUser`,
+                    extra: [
+                        'can_administrate',
+                        'can_create',
+                        'can_delete',
+                        'can_edit',
+                        'can_publish',
+                    ]
+                },
+                to: 'packs.id'
+            }
+        },
         roles: {
             relation: Model.ManyToManyRelation,
             modelClass: `${__dirname}/Role`,

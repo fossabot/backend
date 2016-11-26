@@ -1,16 +1,23 @@
 exports.up = function (knex) {
     return knex.schema.createTable('pack_users', function (table) {
-        table.increments('id').primary();
+        // table structure
+        table.increments('id').unsigned().primary();
         table.integer('user_id').unsigned().notNullable();
         table.integer('pack_id').unsigned().notNullable();
-        table.integer('created_by').unsigned().notNullable();
+        table.boolean('can_administrate').notNullable().defaultTo(true);
+        table.boolean('can_create').notNullable().defaultTo(true);
+        table.boolean('can_delete').notNullable().defaultTo(true);
+        table.boolean('can_edit').notNullable().defaultTo(true);
+        table.boolean('can_publish').notNullable().defaultTo(true);
+        table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
+        table.timestamp('updated_at').nullable().defaultTo(null);
 
-        table.datetime('created_at');
-
+        // indexes
         table.unique(['user_id', 'pack_id']);
+
+        // foreign keys
         table.foreign('pack_id').references('id').inTable('packs').onDelete('cascade').onUpdate('cascade');
         table.foreign('user_id').references('id').inTable('users').onDelete('cascade').onUpdate('cascade');
-        table.foreign('created_by').references('id').inTable('users').onDelete('cascade').onUpdate('cascade');
     });
 };
 

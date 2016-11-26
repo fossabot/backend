@@ -34,9 +34,7 @@ class User extends BaseModel {
                 through: {
                     from: 'pack_users.pack_id',
                     to: 'pack_users.user_id',
-                    extra: [
-                        'created_by'
-                    ]
+                    modelClass: `${__dirname}/PackUser`
                 },
                 to: 'users.id'
             }
