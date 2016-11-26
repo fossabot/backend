@@ -36,13 +36,13 @@ class User extends BaseModel {
                 through: {
                     from: 'pack_users.user_id',
                     to: 'pack_users.pack_id',
-                    modelClass: `${__dirname}/PackUser`,
+                    modelClass: `${__dirname}/pivots/PackUser`,
                     extra: [
                         'can_administrate',
                         'can_create',
                         'can_delete',
                         'can_edit',
-                        'can_publish',
+                        'can_publish'
                     ]
                 },
                 to: 'packs.id'
@@ -56,7 +56,7 @@ class User extends BaseModel {
                 through: {
                     from: 'user_roles.user_id',
                     to: 'user_roles.role_id',
-                    modelClass: `${__dirname}/UserRole`
+                    modelClass: `${__dirname}/pivots/UserRole`
                 },
                 to: 'roles.id'
             }

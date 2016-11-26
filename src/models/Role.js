@@ -27,7 +27,7 @@ class Role extends BaseModel {
                 through: {
                     from: 'user_roles.role_id',
                     to: 'user_roles.user_id',
-                    modelClass: `${__dirname}/UserRole`
+                    modelClass: `${__dirname}/pivots/UserRole`
                 },
                 to: 'users.id'
             }

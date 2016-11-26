@@ -1,6 +1,6 @@
 import { Model } from 'objection';
 
-import BaseModel from './BaseModel';
+import BaseModel from '../BaseModel';
 
 class PackUser extends BaseModel {
     static tableName = 'pack_users';
@@ -27,7 +27,7 @@ class PackUser extends BaseModel {
     static relationMappings = {
         pack: {
             relation: Model.BelongsToOneRelation,
-            modelClass: `${__dirname}/Pack`,
+            modelClass: `${__dirname}/../Pack`,
             join: {
                 from: 'pack_users.pack_id',
                 to: 'packs.id'
@@ -35,7 +35,7 @@ class PackUser extends BaseModel {
         },
         user: {
             relation: Model.BelongsToOneRelation,
-            modelClass: `${__dirname}/User`,
+            modelClass: `${__dirname}/../User`,
             join: {
                 from: 'pack_users.user_id',
                 to: 'users.id'

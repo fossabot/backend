@@ -34,7 +34,7 @@ class User extends BaseModel {
                 through: {
                     from: 'pack_users.pack_id',
                     to: 'pack_users.user_id',
-                    modelClass: `${__dirname}/PackUser`
+                    modelClass: `${__dirname}/pivots/PackUser`
                 },
                 to: 'users.id'
             }
