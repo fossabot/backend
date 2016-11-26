@@ -1,10 +1,6 @@
-import bcrypt from 'bcryptjs';
 import { Model } from 'objection';
 
 import BaseModel from './BaseModel';
-import { getConfig } from '../../config';
-
-const config = getConfig();
 
 class UserRole extends BaseModel {
     static tableName = 'user_roles';
