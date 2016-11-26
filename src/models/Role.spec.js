@@ -81,7 +81,7 @@ describe('Model: Role', function () {
         });
     });
 
-    describe('roles', function () {
+    describe('users', function () {
         it('should create a user for a role', async function () {
             const role = await Role.query().insert({
                 name: 'testrole',
