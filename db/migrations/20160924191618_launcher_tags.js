@@ -1,15 +1,16 @@
 exports.up = function (knex) {
     return knex.schema.createTable('launcher_tags', function (table) {
-        table.increments('id').primary();
-        table.string('tag', 64).index().notNullable();
+        // table structure
+        table.increments('id').unsigned().primary();
+        table.string('tag', 128).index().notNullable();
         table.integer('pack_id').unsigned().notNullable();
-        table.integer('created_by').unsigned().notNullable();
+        table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
 
-        table.datetime('created_at');
-
+        // indexes
         table.unique(['tag', 'pack_id']);
+
+        // foreign keys
         table.foreign('pack_id').references('id').inTable('packs').onDelete('cascade').onUpdate('cascade');
-        table.foreign('created_by').references('id').inTable('users').onDelete('cascade').onUpdate('cascade');
     });
 };
 

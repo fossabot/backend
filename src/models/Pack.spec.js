@@ -156,4 +156,54 @@ describe('Model: Pack', function () {
             expect(user).to.have.property('email').that.equals('test@example.com');
         });
     });
+
+    describe('packTags', function () {
+        it('should attach a pack tag to a pack', async function () {
+            const pack = await Pack.query().insert({
+                name: 'Test Pack',
+                description: 'This is a test pack'
+            });
+
+            await pack.$relatedQuery('packTags').insert({
+                tag: 'test'
+            });
+
+            const packTags = await pack.$relatedQuery('packTags');
+
+            expect(packTags).to.be.an('array').with.length(1);
+
+            const packTag = packTags[0];
+
+            expect(packTag).to.be.an('object');
+
+            expect(packTag).to.have.property('tag').that.equals('test');
+
+            expect(packTag).to.have.property('pack_id').that.equals(1);
+        });
+    });
+
+    describe('launcherTags', function () {
+        it('should attach a pack tag to a pack', async function () {
+            const pack = await Pack.query().insert({
+                name: 'Test Pack',
+                description: 'This is a test pack'
+            });
+
+            await pack.$relatedQuery('launcherTags').insert({
+                tag: 'test'
+            });
+
+            const launcherTags = await pack.$relatedQuery('launcherTags');
+
+            expect(launcherTags).to.be.an('array').with.length(1);
+
+            const launcherTag = launcherTags[0];
+
+            expect(launcherTag).to.be.an('object');
+
+            expect(launcherTag).to.have.property('tag').that.equals('test');
+
+            expect(launcherTag).to.have.property('pack_id').that.equals(1);
+        });
+    });
 });

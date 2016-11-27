@@ -4,7 +4,7 @@ import BaseModel from './BaseModel';
 
 import { getSafeString } from '../utils';
 
-class User extends BaseModel {
+class Pack extends BaseModel {
     static tableName = 'packs';
 
     static jsonSchema = {
@@ -26,6 +26,22 @@ class User extends BaseModel {
     };
 
     static relationMappings = {
+        launcherTags: {
+            relation: Model.HasManyRelation,
+            modelClass: `${__dirname}/LauncherTag`,
+            join: {
+                from: 'packs.id',
+                to: 'launcher_tags.pack_id'
+            }
+        },
+        packTags: {
+            relation: Model.HasManyRelation,
+            modelClass: `${__dirname}/PackTag`,
+            join: {
+                from: 'packs.id',
+                to: 'pack_tags.pack_id'
+            }
+        },
         users: {
             relation: Model.ManyToManyRelation,
             modelClass: `${__dirname}/User`,
@@ -73,4 +89,4 @@ class User extends BaseModel {
     };
 }
 
-export default User;
+export default Pack;
