@@ -1,6 +1,5 @@
 const getPort = require('get-port-sync');
 
-// eslint-disable-next-line immutable/no-mutation
 require('events').EventEmitter.defaultMaxListeners = 100;
 
 module.exports = {

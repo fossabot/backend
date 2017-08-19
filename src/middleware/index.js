@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as httpStatusCodes from 'http-status';
 
+import logger from '../logger';
 import APIError from '../errors/APIError';
 
 /**
@@ -54,7 +55,7 @@ export function checkRole(role = null) {
  */
 export function checkScope(scope = null) {
     return (req, res, next) => {
-        const {token} = req.authInfo;
+        const { token } = req.authInfo;
 
         if (!hasScope(token, scope)) {
             return next(new APIError(`Invalid scope on token. Scope '${scope}' is needed.`, httpStatusCodes.FORBIDDEN));
@@ -65,16 +66,17 @@ export function checkScope(scope = null) {
 }
 
 /**
- * This middleware checks to see if the given user/token combination has the provided scope and/or role.
+ * This middleware checks to see if the given user/token combination has the provided scope and/or
+ * role.
  *
  * @param {?string} [scope]
  * @param {?string} [role]
  * @returns {function}
  */
-export function checkPermissions({scope = null, role = null}) {
+export function checkPermissions({ scope = null, role = null }) {
     return (req, res, next) => {
         const user = req.user;
-        const {token} = req.authInfo;
+        const { token } = req.authInfo;
 
         if (scope && !hasScope(token, scope)) {
             return next(new APIError(
@@ -94,8 +96,23 @@ export function checkPermissions({scope = null, role = null}) {
     };
 }
 
+/**
+ * This middleware adds in debug logging.
+ *
+ * @returns {function}
+ */
+function debugLogging() {
+    return (req, res, next) => {
+        logger.debug(`${req.method.toUpperCase()}: ${req.path}`);
+
+        return next();
+    };
+}
+
 export default () => {
     const middleware = Router();
+
+    middleware.use(debugLogging());
 
     return middleware;
 };

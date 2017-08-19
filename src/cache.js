@@ -1,19 +1,24 @@
 import config from 'config';
 import cacheManager from 'cache-manager';
 
+import logger from './logger';
+
 /**
  * Gets the store to use based on the configuration.
  *
  * @type {string}
  */
 export const store = (
-    config.cache.type === 'memory' ? 'memory' : require(`cache-manager-${config.get('cache.type')}`)
+    config.get('cache.type') === 'memory' ?
+        'memory' :
+        require(`cache-manager-${config.get('cache.type')}`)
 );
 
 /**
  * Determines if the value can be cached or not.
  *
- * Does some basic checking on the value to check it's set and disabled caching for the test environment.
+ * Does some basic checking on the value to check it's set and disabled caching for the test
+ * environment.
  *
  * @param {*} value
  * @returns {boolean}
@@ -29,7 +34,7 @@ function isCacheableValue(value) {
  */
 export const cache = cacheManager.caching({
     store,
-    ...config.cache.options,
+    ...config.get('cache.options'),
     isCacheableValue,
 });
 
@@ -45,14 +50,14 @@ function getTTL(req) {
     const user = req.user;
 
     if (!user) {
-        return config.cache.ttl.guest;
+        return config.get('cache.ttl.guest');
     }
 
     if (user.hasRole('admin')) {
-        return 10;
+        return config.get('cache.ttl.admin');
     }
 
-    return config.cache.ttl.user;
+    return config.get('cache.ttl.user');
 }
 
 /**
@@ -69,9 +74,11 @@ export async function cacheWrap(req, func, postfix = '') {
     const ttl = getTTL(req);
     const name = `${req.method} ${req.baseUrl}${postfixToUse}`;
 
-    if (req.method !== 'GET') {
+    if (req.method.toUpperCase() !== 'GET') {
         return await func();
     }
 
-    return await cache.wrap(name, func, {ttl});
+    logger.debug(await func());
+
+    return await cache.wrap(name, func, { ttl });
 }

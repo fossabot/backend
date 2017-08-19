@@ -30,5 +30,8 @@
             "requests": 60,
             "time": "1MI"
         }
+    },
+    "log": {
+        "level": "info"
     }
 }
