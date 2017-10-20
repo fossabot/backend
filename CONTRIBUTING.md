@@ -3,10 +3,9 @@ So you want to contribute to ATLauncher? Well here are a few ways you can help m
 better!
 
 ## Commit messages
-Please use semantic commits when committing code. A good example can be found
-[here](http://karma-runner.github.io/0.10/dev/git-commit-msg.html).
-
-Including a scope is not required.
+Please use conventional commits when committing code. The best way to commit code is to use the
+command `npm run commit+` after staging your files as it will walk you through the commit process
+to ensure it's as accurate as possible.
 
 ## Branching structure
 When contributing please follow our branching structure when making a PR. Not following this will
@@ -18,7 +17,7 @@ Our branching structure is based on
  - **master** will always contain the code for the latest production release.
  - **develop** will contain the latest beta version used for testing.
  - **feature/** will contain single issues being developed. Once developed they're merged into
-                develop and tagged with a beta release version. They should be named 
+                develop and tagged with a beta release version. They should be named
                 'feature/22-some-brief-description'.
  - **release/** will contain all the code from each feature branch that are going out in the next
                 release and should all be merged into the branch. Once approved and tested it gets
@@ -45,7 +44,7 @@ being able to delete a pack. A good name for a feature branch would be
 When you commit and create a PR, all code you've committed will be linted against our defined
 eslint rules. You can check if your code follows our standards by running the `npm run lint`
 command.
- 
+
 ## Testing
 All new code created should be properly tested with both unit and end to end tests where
 appropriate.

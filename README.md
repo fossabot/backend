@@ -97,6 +97,10 @@ They're divided up into 5 main files:
  - `local.json`: This file contains setting overrides for all environments and should be gitignored
                   or dynamically populated with a system like Ansible.
 
+Configuration can be specified as either a `json` file, `js` file or as environment variables. For
+more information on the configuration files see the
+[node-config](https://github.com/lorenwest/node-config) repository.
+
 ## Running in production
 To run in production you should use some tool such as NodeMon or Forever to keep your server up and
 running all the time.
