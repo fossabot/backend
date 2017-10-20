@@ -1,4 +1,5 @@
 [![CircleCI](https://circleci.com/gh/ATLauncher/Backend-NEXT/tree/feature%2Finitial-code.svg?style=svg)](https://circleci.com/gh/ATLauncher/Backend-NEXT/tree/feature%2Finitial-code)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 # Backend-NEXT
 Backend API server for ATLauncher NEXT.
