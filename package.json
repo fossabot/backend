@@ -7,7 +7,7 @@
     "build": "atlauncher-scripts build",
     "clean": "atlauncher-scripts clean",
     "commit+": "git-cz",
-    "commitmsg": "validate-commit-msg",
+    "commitmsg": "commitlint -e $GIT_PARAMS",
     "dev": "cross-env NODE_ENV=development nodemon -w src -e js,ejs,json --exec \"atlauncher-scripts babel-run src/server.js\"",
     "dev:debug": "cross-env NODE_ENV=development DEBUG=* nodemon -w src -e js,ejs,json --exec \"atlauncher-scripts babel-run src/server.js\"",
     "lint": "atlauncher-scripts lint",
@@ -41,39 +41,6 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
-    },
-    "validate-commit-msg": {
-      "types": [
-        "feat",
-        "fix",
-        "docs",
-        "style",
-        "refactor",
-        "perf",
-        "test",
-        "build",
-        "ci",
-        "chore",
-        "revert",
-        "WIP"
-      ],
-      "scope": {
-        "required": false,
-        "allowed": [
-          "app",
-          "db",
-          "docs",
-          "test"
-        ],
-        "validate": true,
-        "multiple": false
-      },
-      "warnOnFail": false,
-      "maxSubjectLength": 100,
-      "subjectPattern": ".+",
-      "subjectPatternErrorMsg": "subject does not match subject pattern!",
-      "helpMessage": "Commit message violates the rules defined for this project. Please, execute `npm run commit+` to generate a correct commit message with `commitizen`",
-      "autoFix": false
     }
   },
   "dependencies": {
@@ -94,7 +61,7 @@
     "express": "^4.16.2",
     "express-rate-limit": "^2.9.0",
     "express-request-id": "^1.4.0",
-    "express-request-version": "^2.1.2",
+    "express-request-version": "^2.2.0",
     "express-session": "^1.15.6",
     "helmet": "^3.9.0",
     "highlight.js": "^9.12.0",
@@ -102,8 +69,7 @@
     "knex": "^0.13.0",
     "markdown-toc": "^1.2.0",
     "merge-deep": "^3.0.0",
-    "mysql": "^2.15.0",
-    "mysql2": "^1.5.0",
+    "mysql2": "^1.5.1",
     "oauth2-server": "^3.0.0",
     "oauth2orize": "^1.11.0",
     "objection": "^0.9.0",
@@ -124,6 +90,8 @@
   },
   "devDependencies": {
     "@atlauncher/atlauncher-scripts": "0.1.0-15",
+    "@atlauncher/commitlint-config-atlauncher": "^0.1.0",
+    "@commitlint/cli": "^5.1.1",
     "cross-env": "^5.1.1",
     "cz-conventional-changelog": "^2.1.0",
     "faker": "^4.1.0",
@@ -134,8 +102,7 @@
     "randexp": "^0.4.6",
     "rimraf": "^2.6.2",
     "sqlite3": "^3.1.13",
-    "supertest": "^3.0.0",
-    "validate-commit-msg": "^2.14.0"
+    "supertest": "^3.0.0"
   },
   "engineStrict": true,
   "engines": {
