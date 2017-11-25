@@ -40,15 +40,15 @@ class ModVersion extends BaseModel {
             },
             java_versions: {
                 type: ['array', 'null'],
-                items: {type: 'string'},
+                items: { type: 'string' },
                 default: null,
             },
             minecraft_versions: {
                 type: ['array', 'null'],
-                items: {type: 'string'},
+                items: { type: 'string' },
                 default: null,
             },
-            changelog: {type: 'string'},
+            changelog: { type: 'string' },
             created_at: {
                 type: 'string',
                 format: 'date-time',

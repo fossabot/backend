@@ -12,11 +12,19 @@ import UsersController from '../controllers/UsersController';
 export default () => {
     const routes = Router();
 
-    routes.use(passport.authenticate('bearer', {session: false}));
+    routes.use(passport.authenticate('bearer', { session: false }));
     routes.use(checkRole('admin'));
 
     routes.param('user_id', async function (req, res, next, userId) {
-        const user = await cacheWrap(req, () => (User.query().findById(userId).eager('roles')), 'user');
+        const user = await cacheWrap(
+            req,
+            () => {
+                return User.query()
+                    .findById(userId)
+                    .eager('roles');
+            },
+            'user'
+        );
 
         if (!user) {
             return next(new APIError(`User with ID of ${userId} not found.`, httpStatusCode.NOT_FOUND));
@@ -30,7 +38,9 @@ export default () => {
     });
 
     routes.param('role_id', async function (req, res, next, roleId) {
-        const role = await cacheWrap(req, () => (Role.query().findById(roleId)), 'role');
+        const role = await cacheWrap(req, () => {
+            return Role.query().findById(roleId);
+        }, 'role');
 
         if (!role) {
             return next(new APIError(`Role with ID of ${roleId} not found.`, httpStatusCode.NOT_FOUND));

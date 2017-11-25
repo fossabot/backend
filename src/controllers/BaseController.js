@@ -1,4 +1,3 @@
-class BaseController {
-}
+class BaseController {}
 
 export default BaseController;

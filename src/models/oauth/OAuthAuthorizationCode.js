@@ -37,7 +37,7 @@ class OAuthAuthorizationCode extends BaseModel {
                 type: 'string',
                 format: 'uri',
             },
-            scope: {type: 'string'},
+            scope: { type: 'string' },
             revoked: {
                 type: 'boolean',
                 default: false,
@@ -84,7 +84,9 @@ class OAuthAuthorizationCode extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        revoked: (input) => (!!input),
+        revoked: (input) => {
+            return !!input;
+        },
     };
 
     /**

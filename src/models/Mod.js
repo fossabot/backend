@@ -31,10 +31,10 @@ class Mod extends BaseModel {
                 type: 'string',
                 maxLength: 255,
             },
-            description: {type: 'string'},
+            description: { type: 'string' },
             authors: {
                 type: 'array',
-                items: {type: 'string'},
+                items: { type: 'string' },
             },
             license: {
                 type: ['string', 'null'],

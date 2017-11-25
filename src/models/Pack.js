@@ -136,12 +136,15 @@ class Pack extends BaseModel {
         this.safe_name = getSafeString(this.name);
 
         if (!this.position) {
-            const highestPoisitonPack = await Pack.query().select('position').orderBy('position', 'desc').first();
+            const highestPoisitonPack = await Pack.query()
+                .select('position')
+                .orderBy('position', 'desc')
+                .first();
 
             if (!highestPoisitonPack) {
                 this.position = 1;
             } else {
-                this.position = (highestPoisitonPack.position + 1);
+                this.position = highestPoisitonPack.position + 1;
             }
         }
     }
@@ -164,7 +167,9 @@ class Pack extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        is_disabled: (input) => (!!input),
+        is_disabled: (input) => {
+            return !!input;
+        },
     };
 }
 

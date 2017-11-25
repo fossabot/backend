@@ -48,7 +48,7 @@ class PackVersionRevision extends BaseModel {
                 minLength: 64,
                 maxLength: 64,
             },
-            json: {type: 'string'},
+            json: { type: 'string' },
             is_verified: {
                 type: 'boolean',
                 default: false,
@@ -86,8 +86,12 @@ class PackVersionRevision extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        is_verified: (input) => (!!input),
-        is_verifying: (input) => (!!input),
+        is_verified: (input) => {
+            return !!input;
+        },
+        is_verifying: (input) => {
+            return !!input;
+        },
     };
 
     /**

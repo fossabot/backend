@@ -8,11 +8,8 @@ import logger from './logger';
  *
  * @type {string}
  */
-export const store = (
-    config.get('cache.type') === 'memory' ?
-        'memory' :
-        require(`cache-manager-${config.get('cache.type')}`)
-);
+export const store =
+    config.get('cache.type') === 'memory' ? 'memory' : require(`cache-manager-${config.get('cache.type')}`);
 
 /**
  * Determines if the value can be cached or not.

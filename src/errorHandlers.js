@@ -14,14 +14,14 @@ export default (app) => {
     });
 
     // error handler - no stacktraces leaked to user unless development
-    app.use(function (err, req, res, next) { // eslint-disable-line no-unused-vars
+    app.use(function (err, req, res) {
         const statusCode = err.status || 500;
 
         const isValidationError = (err.error || {}) instanceof ValidationError;
 
-        const stacktrace = app.get('env') === 'development' ? {stack: err.stack} : {};
+        const stacktrace = app.get('env') === 'development' ? { stack: err.stack } : {};
 
-        const validation = isValidationError ? {validation: formatValidationErrors(err.error.data)} : {};
+        const validation = isValidationError ? { validation: formatValidationErrors(err.error.data) } : {};
 
         const message = isValidationError ? 'Validation error.' : err.message;
 

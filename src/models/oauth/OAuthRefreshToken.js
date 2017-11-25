@@ -27,7 +27,7 @@ class OAuthRefreshToken extends BaseModel {
                 minLength: 60,
                 maxLength: 60,
             },
-            scope: {type: 'string'},
+            scope: { type: 'string' },
             revoked: {
                 type: 'boolean',
                 default: false,
@@ -65,7 +65,9 @@ class OAuthRefreshToken extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        revoked: (input) => (!!input),
+        revoked: (input) => {
+            return !!input;
+        },
     };
 
     /**

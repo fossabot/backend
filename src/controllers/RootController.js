@@ -12,14 +12,16 @@ class RootController extends BaseController {
      * @returns {object}
      */
     static index(req, res) {
-        const extraForSpread = !req.isAuthenticated() ? {} : {
-            token: {
-                scopes: req.authInfo.token.scope,
-                created_at: req.authInfo.token.created_at,
-                expires_at: req.authInfo.token.expires_at,
-            },
-            user: req.user,
-        };
+        const extraForSpread = !req.isAuthenticated() ?
+            {} :
+            {
+                token: {
+                    scopes: req.authInfo.token.scope,
+                    created_at: req.authInfo.token.created_at,
+                    expires_at: req.authInfo.token.expires_at,
+                },
+                user: req.user,
+            };
 
         return res.json({
             version: req.version,

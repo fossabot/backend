@@ -33,7 +33,7 @@ class OAuthAccessToken extends BaseModel {
                 minLength: 60,
                 maxLength: 60,
             },
-            scope: {type: 'string'},
+            scope: { type: 'string' },
             revoked: {
                 type: 'boolean',
                 default: false,
@@ -87,8 +87,12 @@ class OAuthAccessToken extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        revoked: (input) => (!!input),
-        scope: (input) => (input.split(',')),
+        revoked: (input) => {
+            return !!input;
+        },
+        scope: (input) => {
+            return input.split(',');
+        },
     };
 
     /**
@@ -120,7 +124,9 @@ class OAuthAccessToken extends BaseModel {
             return false;
         }
 
-        const validScopes = this.scope.filter((name) => (name === scope));
+        const validScopes = this.scope.filter((name) => {
+            return name === scope;
+        });
 
         return validScopes.length;
     }

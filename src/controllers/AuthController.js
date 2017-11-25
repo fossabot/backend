@@ -12,7 +12,7 @@ class AuthController extends BaseController {
      * @returns {object}
      */
     static login(req, res) {
-        return res.render('login', {error: req.flash('error')});
+        return res.render('login', { error: req.flash('error') });
     }
 
     /**

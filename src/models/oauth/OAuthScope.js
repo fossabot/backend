@@ -50,9 +50,13 @@ class OAuthScope extends BaseModel {
         const validScopes = await this.query().select('name');
 
         // get all the invalid scopes
-        const invalidScopes = scopes.filter((scope) => (
-            validScopes.filter((validScope) => (validScope.name === scope)).length === 0
-        ));
+        const invalidScopes = scopes.filter((scope) => {
+            return (
+                validScopes.filter((validScope) => {
+                    return validScope.name === scope;
+                }).length === 0
+            );
+        });
 
         // if there are any invalid scopes, then return false
         return invalidScopes.length === 0;

@@ -16,7 +16,9 @@ class UsersController extends BaseController {
      * @returns {object}
      */
     static async index(req, res) {
-        const users = await cacheWrap(req, () => (User.query().omit(['password'])));
+        const users = await cacheWrap(req, () => {
+            return User.query().omit(['password']);
+        });
 
         return res.json(users);
     }
@@ -46,7 +48,10 @@ class UsersController extends BaseController {
 
             const createdResourceUrl = `${config.get('baseUrl')}/users/${user.id}`;
 
-            return res.status(httpStatusCode.CREATED).set('Location', createdResourceUrl).json(user.$omit('password'));
+            return res
+                .status(httpStatusCode.CREATED)
+                .set('Location', createdResourceUrl)
+                .json(user.$omit('password'));
         } catch (errors) {
             return next(new APIError(errors, httpStatusCode.BAD_REQUEST));
         }
@@ -128,10 +133,13 @@ class UsersController extends BaseController {
         const hasRole = await req.data.user.$relatedQuery('roles').findById(req.data.role.id);
 
         if (!hasRole) {
-            return next(new APIError('User doesn\'t have that role.', httpStatusCode.NOT_FOUND));
+            return next(new APIError("User doesn't have that role.", httpStatusCode.NOT_FOUND));
         }
 
-        await req.data.user.$relatedQuery('roles').unrelate().findById(req.data.role.id);
+        await req.data.user
+            .$relatedQuery('roles')
+            .unrelate()
+            .findById(req.data.role.id);
 
         return res.status(httpStatusCode.NO_CONTENT).end();
     }

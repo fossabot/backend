@@ -11,11 +11,17 @@ import RolesController from '../controllers/RolesController';
 export default () => {
     const routes = Router();
 
-    routes.use(passport.authenticate('bearer', {session: false}));
+    routes.use(passport.authenticate('bearer', { session: false }));
     routes.use(checkRole('admin'));
 
     routes.param('role_id', async function (req, res, next, roleId) {
-        const role = await cacheWrap(req, () => (Role.query().findById(roleId)), 'role');
+        const role = await cacheWrap(
+            req,
+            () => {
+                return Role.query().findById(roleId);
+            },
+            'role'
+        );
 
         if (!role) {
             return next(new APIError(`Role with ID of ${roleId} not found.`, httpStatusCode.NOT_FOUND));

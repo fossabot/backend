@@ -56,7 +56,7 @@ export function isValidTimeString(string) {
 
     const minus1 = string.substr(-1).toUpperCase();
 
-    if (string.length >= 2 && minus1 === 'I' || minus1 === 'O') {
+    if ((string.length >= 2 && minus1 === 'I') || minus1 === 'O') {
         const minus2 = string.substr(-2).toUpperCase();
 
         return minus2 === 'MI' || minus2 === 'MO';
@@ -173,7 +173,9 @@ export function formatValidationErrors(errors) {
 
     Object.keys(errors).forEach((property) => {
         // eslint-disable-next-line immutable/no-mutation
-        newErrors[property] = errors[property].map((errorList) => (errorList.message));
+        newErrors[property] = errors[property].map((errorList) => {
+            return errorList.message;
+        });
     });
 
     return newErrors;

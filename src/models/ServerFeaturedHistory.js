@@ -46,7 +46,7 @@ class ServerFeaturedHistory extends BaseModel {
                 minimum: 1,
                 maximum: 365,
             },
-            price: {type: 'number'},
+            price: { type: 'number' },
             created_at: {
                 type: 'string',
                 format: 'date-time',

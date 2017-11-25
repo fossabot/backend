@@ -37,24 +37,25 @@ const app = express();
 app.server = http.createServer(app);
 
 // response time headers
-app.use(responseTime({
-    suffix: false,
-}));
+app.use(
+    responseTime({
+        suffix: false,
+    })
+);
 
 // setup sessions
-app.use(session({
-    ...config.get('session'),
-    store: sessionStore,
-}));
+app.use(
+    session({
+        ...config.get('session'),
+        store: sessionStore,
+    })
+);
 
 Model.knex(knex);
 
 // setup view engine and static
 app.set('view engine', 'ejs');
-app.set('views', [
-    `${__dirname}/views`,
-    path.resolve(__dirname, '../docs'),
-]);
+app.set('views', [`${__dirname}/views`, path.resolve(__dirname, '../docs')]);
 app.use(flash());
 app.use(express.static(`${__dirname}/public`));
 
@@ -63,11 +64,13 @@ app.use(cors());
 app.use(helmet());
 app.use(compress());
 app.use(cookieParser());
-app.use(bodyParser.json({type: 'application/json'}));
-app.use(bodyParser.urlencoded({
-    type: 'application/x-www-form-urlencoded',
-    extended: true,
-}));
+app.use(bodyParser.json({ type: 'application/json' }));
+app.use(
+    bodyParser.urlencoded({
+        type: 'application/x-www-form-urlencoded',
+        extended: true,
+    })
+);
 
 // oAuth
 app.use(passport.initialize());
@@ -96,21 +99,24 @@ app.use(addRequestId());
 app.use(middleware());
 
 // rate limiting
-app.use('/', new RateLimit({
-    windowMs: convertTimeStringToMilliseconds(config.get('ratelimit.default.time')),
-    max: config.get('ratelimit.default.requests'),
-    delayMs: 0,
-    statusCode: httpStatusCodes.TOO_MANY_REQUESTS,
-    handler: function (req, res) {
-        res.status(httpStatusCodes.TOO_MANY_REQUESTS).json({
-            status: httpStatusCodes.TOO_MANY_REQUESTS,
-            error: 'Too many requests',
-        });
-    },
-    skip: function () {
-        return config.util.getEnv('NODE_ENV') === 'test';
-    },
-}));
+app.use(
+    '/',
+    new RateLimit({
+        windowMs: convertTimeStringToMilliseconds(config.get('ratelimit.default.time')),
+        max: config.get('ratelimit.default.requests'),
+        delayMs: 0,
+        statusCode: httpStatusCodes.TOO_MANY_REQUESTS,
+        handler: function (req, res) {
+            res.status(httpStatusCodes.TOO_MANY_REQUESTS).json({
+                status: httpStatusCodes.TOO_MANY_REQUESTS,
+                error: 'Too many requests',
+            });
+        },
+        skip: function () {
+            return config.util.getEnv('NODE_ENV') === 'test';
+        },
+    })
+);
 
 // routes
 routes(app);

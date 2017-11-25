@@ -71,7 +71,9 @@ class OAuthClient extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        revoked: (input) => (!!input),
+        revoked: (input) => {
+            return !!input;
+        },
     };
 }
 
