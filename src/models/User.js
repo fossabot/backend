@@ -110,13 +110,7 @@ class User extends BaseModel {
                     from: 'pack_users.user_id',
                     to: 'pack_users.pack_id',
                     modelClass: PackUser,
-                    extra: [
-                        'can_administrate',
-                        'can_create',
-                        'can_delete',
-                        'can_edit',
-                        'can_publish',
-                    ],
+                    extra: ['can_administrate', 'can_create', 'can_delete', 'can_edit', 'can_publish'],
                 },
                 to: 'packs.id',
             },
@@ -142,9 +136,15 @@ class User extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        is_banned: (input) => (!!input),
-        is_verified: (input) => (!!input),
-        must_change_password: (input) => (!!input),
+        is_banned: (input) => {
+            return !!input;
+        },
+        is_verified: (input) => {
+            return !!input;
+        },
+        must_change_password: (input) => {
+            return !!input;
+        },
     };
 
     /**
@@ -190,9 +190,29 @@ class User extends BaseModel {
             return false;
         }
 
-        const validRoles = this.roles.filter(({name}) => (name === role));
+        const validRoles = this.roles.filter(({ name }) => {
+            return name === role;
+        });
 
         return validRoles.length;
+    }
+
+    /**
+     * Checks to see if this user has a role with the provided permission or not.
+     *
+     * @param {string} permission
+     * @returns {boolean}
+     */
+    hasPermission(permission) {
+        if (!this.roles) {
+            return false;
+        }
+
+        const hasRoleWithPermission = this.roles.some((role) => {
+            return role.hasPermission(permission);
+        });
+
+        return hasRoleWithPermission;
     }
 }
 

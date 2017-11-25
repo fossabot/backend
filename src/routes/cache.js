@@ -7,10 +7,11 @@ import CacheController from '../controllers/CacheController';
 export default () => {
     const routes = Router();
 
-    routes.use(passport.authenticate('bearer', {session: false}));
+    routes.use(passport.authenticate('bearer', { session: false }));
     routes.use(checkRole('admin'));
+    routes.use(checkScope('admin:read'));
 
-    routes.get('/', checkScope('admin:read'), CacheController.index);
+    routes.get('/', CacheController.index);
 
     return routes;
 };

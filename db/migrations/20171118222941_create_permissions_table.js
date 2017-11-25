@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-    return knex.schema.createTable('roles', function (table) {
+    return knex.schema.createTable('permissions', function (table) {
         // table structure
         table.string('id', 36).primary();
         table
@@ -26,5 +26,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-    return knex.schema.dropTable('roles');
+    return knex.schema.dropTable('permissions');
 };

@@ -1,19 +1,19 @@
 import { Model } from 'objection';
 import BaseModel from './BaseModel';
 
-import Permission from './Permission';
-import RolePermission from './pivots/RolePermission';
-
 /**
- * A Role is a way to group users into one or more (even none) roles to allow restricting certain actions to certain
- * roles.
+ * A Permission is a single permission in the system, such as creating packs
  *
- * Roles must have unique name.
+ * Permissions must have unique name.
+ *
+ * Name should be in dot notation such as:
+ *
+ * packs.versions.delete
  *
  * @extends BaseModel
  */
-class Role extends BaseModel {
-    static tableName = 'roles';
+class Permission extends BaseModel {
+    static tableName = 'permissions';
 
     static jsonSchema = {
         type: 'object',
@@ -56,30 +56,17 @@ class Role extends BaseModel {
     };
 
     static relationMappings = {
-        users: {
+        roles: {
             relation: Model.ManyToManyRelation,
-            modelClass: `${__dirname}/User`,
+            modelClass: `${__dirname}/Role`,
             join: {
-                from: 'roles.id',
+                from: 'permissions.id',
                 through: {
-                    from: 'user_roles.role_id',
-                    to: 'user_roles.user_id',
-                    modelClass: `${__dirname}/pivots/UserRole`,
+                    from: 'role_permissions.permission_id',
+                    to: 'role_permissions.role_id',
+                    modelClass: `${__dirname}/pivots/RolePermission`,
                 },
-                to: 'users.id',
-            },
-        },
-        permissions: {
-            relation: Model.ManyToManyRelation,
-            modelClass: Permission,
-            join: {
-                from: 'roles.id',
-                through: {
-                    from: 'role_permissions.role_id',
-                    to: 'role_permissions.permission_id',
-                    modelClass: RolePermission,
-                },
-                to: 'permissions.id',
+                to: 'roles.id',
             },
         },
     };
@@ -94,24 +81,6 @@ class Role extends BaseModel {
             return input || properties.name;
         },
     };
-
-    /**
-     * Checks to see if this role has the provided permission or not.
-     *
-     * @param {string} permission
-     * @returns {boolean}
-     */
-    hasPermission(permission) {
-        if (!this.permissions) {
-            return false;
-        }
-
-        const validPermissions = this.permissions.filter(({ name }) => {
-            return name === permission;
-        });
-
-        return validPermissions.length;
-    }
 }
 
-export default Role;
+export default Permission;

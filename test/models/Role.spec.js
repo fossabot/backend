@@ -5,16 +5,23 @@ import knex from '../../src/db';
 
 import Role from '../../src/models/Role';
 import User from '../../src/models/User';
+import Permission from '../../src/models/Permission';
 
 describe('Model: Role', () => {
     beforeAll((done) => {
         Model.knex(knex);
 
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+        knex.migrate.rollback().then(() => {
+            return knex.migrate.latest().then(() => {
+                return done();
+            });
+        });
     });
 
     afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+        knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] }).then(() => {
+            return done();
+        });
     });
 
     describe('findById', () => {
@@ -22,12 +29,12 @@ describe('Model: Role', () => {
             const expectedOutput = {
                 name: 'testrole',
                 description: 'This is a test role',
-                updated_at: null
+                updated_at: null,
             };
 
             const created = await Role.query().insert({
                 name: 'testrole',
-                description: 'This is a test role'
+                description: 'This is a test role',
             });
 
             const role = await Role.query().findById(created.id);
@@ -50,12 +57,12 @@ describe('Model: Role', () => {
             const expectedOutput = {
                 name: 'testrole',
                 description: 'This is a test role',
-                updated_at: null
+                updated_at: null,
             };
 
             const role = await Role.query().insert({
                 name: 'testrole',
-                description: 'This is a test role'
+                description: 'This is a test role',
             });
 
             expect(role).toBeInstanceOf(Object);
@@ -69,18 +76,18 @@ describe('Model: Role', () => {
         it('should create a user for a role', async () => {
             const expectedOutput = {
                 username: 'test',
-                email: 'test@example.com'
+                email: 'test@example.com',
             };
 
             const role = await Role.query().insert({
                 name: 'testrole',
-                description: 'This is a test role'
+                description: 'This is a test role',
             });
 
             await role.$relatedQuery('users').insert({
                 username: 'test',
                 password: 'test',
-                email: 'test@example.com'
+                email: 'test@example.com',
             });
 
             const roleUsers = await role.$relatedQuery('users');
@@ -97,13 +104,13 @@ describe('Model: Role', () => {
         it('should attach a user to a role', async () => {
             const role = await Role.query().insert({
                 name: 'testrole',
-                description: 'This is a test role'
+                description: 'This is a test role',
             });
 
             const createdUser = await User.query().insert({
                 username: 'test',
                 password: 'test',
-                email: 'test@example.com'
+                email: 'test@example.com',
             });
 
             await role.$relatedQuery('users').relate(createdUser.id);
@@ -118,6 +125,56 @@ describe('Model: Role', () => {
             expect(user).toBeInstanceOf(Object);
             expect(user).toHaveProperty('username', 'test');
             expect(user).toHaveProperty('email', 'test@example.com');
+        });
+    });
+
+    describe('permissions', () => {
+        it('should create a permission for a role', async () => {
+            const role = await Role.query().insert({
+                name: 'testrole',
+                description: 'This is a test role',
+            });
+
+            await role.$relatedQuery('permissions').insert({
+                name: 'testpermission',
+                description: 'This is a test permission',
+            });
+
+            const permissionRoles = await role.$relatedQuery('permissions');
+
+            expect(permissionRoles).toBeInstanceOf(Array);
+            expect(permissionRoles).toHaveLength(1);
+
+            const permission = permissionRoles[0];
+
+            expect(permission).toBeInstanceOf(Object);
+            expect(permission).toHaveProperty('name', 'testpermission');
+            expect(permission).toHaveProperty('description', 'This is a test permission');
+        });
+
+        it('should attach a permission to a role', async () => {
+            const role = await Role.query().insert({
+                name: 'testrole',
+                description: 'This is a test role',
+            });
+
+            const createdPermission = await Permission.query().insert({
+                name: 'testpermission',
+                description: 'This is a test permission',
+            });
+
+            await role.$relatedQuery('permissions').relate(createdPermission.id);
+
+            const permissionRoles = await role.$relatedQuery('permissions');
+
+            expect(permissionRoles).toBeInstanceOf(Array);
+            expect(permissionRoles).toHaveLength(1);
+
+            const permission = permissionRoles[0];
+
+            expect(permission).toBeInstanceOf(Object);
+            expect(permission).toHaveProperty('name', 'testpermission');
+            expect(permission).toHaveProperty('description', 'This is a test permission');
         });
     });
 });

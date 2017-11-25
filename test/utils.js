@@ -6,6 +6,7 @@ import { generateUID, getSafeString } from '../src/utils';
 import Pack from '../src/models/Pack';
 import Role from '../src/models/Role';
 import User from '../src/models/User';
+import Permission from '../src/models/Permission';
 
 import OAuthScope from '../src/models/oauth/OAuthScope';
 import OAuthClient from '../src/models/oauth/OAuthClient';
@@ -52,6 +53,24 @@ export async function createUser(overrides = {}) {
 }
 
 /**
+ * Creates a Permission for testing.
+ *
+ * @param {object} [overrides={}]
+ * @returns {Permission}
+ */
+export async function createPermission(overrides = {}) {
+    const defaults = {
+        name: Faker.random.words(2),
+        description: Faker.random.words(10),
+    };
+
+    return await Permission.query().insert({
+        ...defaults,
+        ...overrides,
+    });
+}
+
+/**
  * Creates a Role for testing.
  *
  * @param {object} [overrides={}]
@@ -84,6 +103,19 @@ export async function createScope(overrides = {}) {
     return await OAuthScope.query().insert({
         ...defaults,
         ...overrides,
+    });
+}
+
+/**
+ * Adds the given Permission to the given Role.
+ *
+ * @param {Permission} permission
+ * @param {Role} role
+ * @returns {UserRole}
+ */
+export async function addPermissionToRole(permission, role) {
+    return await role.$relatedQuery('permissions').relate({
+        id: permission.id,
     });
 }
 

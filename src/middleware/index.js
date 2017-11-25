@@ -5,6 +5,17 @@ import logger from '../logger';
 import APIError from '../errors/APIError';
 
 /**
+ * This checks to see if the user has the given permission.
+ *
+ * @param {?object} [user]
+ * @param {?string} [permission]
+ * @returns {boolean}
+ */
+function hasPermission(user = null, permission = null) {
+    return user && permission && user.hasPermission(permission);
+}
+
+/**
  * This checks to see if the user has the given role.
  *
  * @param {?object} [user]
@@ -27,6 +38,29 @@ function hasScope(token = null, scope = null) {
 }
 
 /**
+ * This checks to make sure that the user has a role with the given permission.
+ *
+ * @param {?string} [permission]
+ * @returns {function}
+ */
+export function checkPermission(permission = null) {
+    return (req, res, next) => {
+        const user = req.user;
+
+        if (!hasPermission(user, permission)) {
+            return next(
+                new APIError(
+                    `User doesn't have required permission. '${permission}' is needed.`,
+                    httpStatusCodes.FORBIDDEN
+                )
+            );
+        }
+
+        return next();
+    };
+}
+
+/**
  * This checks to make sure that the user has a given role.
  *
  * @param {?string} [role]
@@ -37,10 +71,9 @@ export function checkRole(role = null) {
         const user = req.user;
 
         if (!hasRole(user, role)) {
-            return next(new APIError(
-                `User doesn't have required role. '${role}' role is needed.`,
-                httpStatusCodes.FORBIDDEN
-            ));
+            return next(
+                new APIError(`User doesn't have required role. '${role}' role is needed.`, httpStatusCodes.FORBIDDEN)
+            );
         }
 
         return next();
@@ -79,17 +112,13 @@ export function checkPermissions({ scope = null, role = null }) {
         const { token } = req.authInfo;
 
         if (scope && !hasScope(token, scope)) {
-            return next(new APIError(
-                `Invalid scope on token. Scope '${scope}' is needed.`,
-                httpStatusCodes.FORBIDDEN
-            ));
+            return next(new APIError(`Invalid scope on token. Scope '${scope}' is needed.`, httpStatusCodes.FORBIDDEN));
         }
 
         if (role && !hasRole(user, role)) {
-            return next(new APIError(
-                `User doesn't have required role. '${role}' role is needed.`,
-                httpStatusCodes.FORBIDDEN
-            ));
+            return next(
+                new APIError(`User doesn't have required role. '${role}' role is needed.`, httpStatusCodes.FORBIDDEN)
+            );
         }
 
         return next();
