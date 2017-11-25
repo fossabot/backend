@@ -60,7 +60,7 @@ class RolePermission extends BaseModel {
         },
         permission: {
             relation: Model.BelongsToOneRelation,
-            modelClass: `${__dirname}/../permission`,
+            modelClass: `${__dirname}/../Permission`,
             join: {
                 from: 'role_permissions.permission_id',
                 to: 'permissions.id',
