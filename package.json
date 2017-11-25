@@ -89,7 +89,7 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
-    "@atlauncher/atlauncher-scripts": "0.1.0-15",
+    "@atlauncher/atlauncher-scripts": "0.1.0-17",
     "@atlauncher/commitlint-config-atlauncher": "^0.1.0",
     "@commitlint/cli": "^5.1.1",
     "cross-env": "^5.1.1",
@@ -106,6 +106,7 @@
   },
   "engineStrict": true,
   "engines": {
-    "node": ">= 8"
+    "node": ">= 8",
+    "npm": ">= 5"
   }
 }
