@@ -1,4 +1,4 @@
-FROM node:6
+FROM node:carbon
 MAINTAINER Ryan Dowling <ryan@ryandowling.me>
 
 RUN mkdir -p /app
