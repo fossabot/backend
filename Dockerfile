@@ -1,5 +1,5 @@
 FROM node:carbon
-MAINTAINER Ryan Dowling <ryan@ryandowling.me>
+LABEL maintainer="ryan@ryandowling.me"
 
 RUN mkdir -p /app
 WORKDIR /app
