@@ -14,7 +14,8 @@ export default (app) => {
     });
 
     // error handler - no stacktraces leaked to user unless development
-    app.use(function (err, req, res) {
+    // eslint-disable-next-line no-unused-vars
+    app.use(function (err, req, res, next) {
         const statusCode = err.status || 500;
 
         const isValidationError = (err.error || {}) instanceof ValidationError;

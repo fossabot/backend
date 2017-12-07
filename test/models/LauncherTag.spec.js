@@ -14,28 +14,34 @@ describe('Model: LauncherTag', () => {
     beforeAll((done) => {
         Model.knex(knex);
 
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+        knex.migrate.rollback().then(() => {
+            return knex.migrate.latest().then(() => {
+                return done();
+            });
+        });
     });
 
     afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+        knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] }).then(() => {
+            return done();
+        });
     });
 
     describe('insert', () => {
         it('should create a launcher tag', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const expectedOutput = {
                 tag: 'test',
-                pack_id: pack.id
+                pack_id: pack.id,
             };
 
             const packTag = await LauncherTag.query().insert({
                 tag: 'test',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             expect(packTag).toBeInstanceOf(Object);
@@ -47,27 +53,27 @@ describe('Model: LauncherTag', () => {
         it('should not allow invalid characters when creating a tag', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const input = {
                 tag: 'test*',
-                pack_id: pack.id
+                pack_id: pack.id,
             };
 
-            const expectedError = new Error({
+            const expectedError = {
                 tag: [
                     {
                         message: 'should match pattern "^[A-Za-z0-9-_:]+$"',
                         keyword: 'pattern',
                         params: {
-                            pattern: '^[A-Za-z0-9-_:]+$'
-                        }
-                    }
-                ]
-            });
+                            pattern: '^[A-Za-z0-9-_:]+$',
+                        },
+                    },
+                ],
+            };
 
-            return expect(LauncherTag.query().insert(input)).rejects.toMatchObject(expectedError);
+            return expect(LauncherTag.query().insert(input)).rejects.toHaveProperty('data', expectedError);
         });
     });
 
@@ -75,11 +81,11 @@ describe('Model: LauncherTag', () => {
         it('should attach a tag to a pack', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             await pack.$relatedQuery('launcherTags').insert({
-                tag: 'test'
+                tag: 'test',
             });
 
             const launcherTags = await pack.$relatedQuery('launcherTags');

@@ -11,11 +11,17 @@ describe('Model: User', () => {
     beforeAll((done) => {
         Model.knex(knex);
 
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+        knex.migrate.rollback().then(() => {
+            return knex.migrate.latest().then(() => {
+                return done();
+            });
+        });
     });
 
     afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+        knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] }).then(() => {
+            return done();
+        });
     });
 
     describe('findById', () => {
@@ -30,13 +36,13 @@ describe('Model: User', () => {
                 tfa_secret: null,
                 updated_at: null,
                 verified_at: null,
-                banned_at: null
+                banned_at: null,
             };
 
             const created = await User.query().insert({
                 username: 'test',
                 password: 'test',
-                email: 'test@example.com'
+                email: 'test@example.com',
             });
 
             const user = await User.query().findById(created.id);
@@ -68,13 +74,13 @@ describe('Model: User', () => {
                 tfa_secret: null,
                 updated_at: null,
                 verified_at: null,
-                banned_at: null
+                banned_at: null,
             };
 
             const user = await User.query().insert({
                 username: 'test',
                 password: 'test',
-                email: 'test@example.com'
+                email: 'test@example.com',
             });
 
             expect(user).toBeInstanceOf(Object);
@@ -89,44 +95,44 @@ describe('Model: User', () => {
             const input = {
                 username: 'test',
                 password: 'test',
-                email: 'error'
+                email: 'error',
             };
 
-            const expectedError = new Error({
+            const expectedError = {
                 email: [
                     {
                         message: 'should match format "email"',
                         keyword: 'format',
                         params: {
-                            format: 'email'
-                        }
-                    }
-                ]
-            });
+                            format: 'email',
+                        },
+                    },
+                ],
+            };
 
-            return expect(User.query().insert(input)).rejects.toMatchObject(expectedError);
+            return expect(User.query().insert(input)).rejects.toHaveProperty('data', expectedError);
         });
 
         it('should throw an error if username is invalid format', () => {
             const input = {
                 username: 'a',
                 password: 'test',
-                email: 'test@example.com'
+                email: 'test@example.com',
             };
 
-            const expectedError = new Error({
+            const expectedError = {
                 username: [
                     {
                         message: 'should NOT be shorter than 3 characters',
                         keyword: 'minLength',
                         params: {
-                            limit: 3
-                        }
-                    }
-                ]
-            });
+                            limit: 3,
+                        },
+                    },
+                ],
+            };
 
-            return expect(User.query().insert(input)).rejects.toMatchObject(expectedError);
+            return expect(User.query().insert(input)).rejects.toHaveProperty('data', expectedError);
         });
     });
 
@@ -135,12 +141,12 @@ describe('Model: User', () => {
             const user = await User.query().insert({
                 username: 'test',
                 password: 'test',
-                email: 'test@example.com'
+                email: 'test@example.com',
             });
 
             await user.$relatedQuery('roles').insert({
                 name: 'testrole',
-                description: 'This is a test role'
+                description: 'This is a test role',
             });
 
             const usersRoles = await user.$relatedQuery('roles');
@@ -159,12 +165,12 @@ describe('Model: User', () => {
             const user = await User.query().insert({
                 username: 'test',
                 password: 'test',
-                email: 'test@example.com'
+                email: 'test@example.com',
             });
 
             const created = await Role.query().insert({
                 name: 'testrole',
-                description: 'This is a test role'
+                description: 'This is a test role',
             });
 
             await user.$relatedQuery('roles').relate(created.id);
@@ -187,12 +193,12 @@ describe('Model: User', () => {
             const user = await User.query().insert({
                 username: 'testuser',
                 password: 'password',
-                email: 'test@example.com'
+                email: 'test@example.com',
             });
 
             await user.$relatedQuery('packs').insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const usersPacks = await user.$relatedQuery('packs');
@@ -212,12 +218,12 @@ describe('Model: User', () => {
             const user = await User.query().insert({
                 username: 'testuser',
                 password: 'test',
-                email: 'test@example.com'
+                email: 'test@example.com',
             });
 
             const created = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             await user.$relatedQuery('packs').relate(created.id);

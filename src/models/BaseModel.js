@@ -28,6 +28,7 @@ class BaseModel extends Model {
      * Ran before inserting into the database.
      *
      * It will:
+     *   - add an id if not already added and model doesn't have noAutoID field
      *   - add the created_at field if timestamps are enabled
      *   - check to make sure there are no duplicates values in the database as defined in the
      *     jsonSchema.uniqueProperties value
@@ -38,7 +39,7 @@ class BaseModel extends Model {
     $beforeInsert(queryContext) {
         super.$beforeInsert(queryContext);
 
-        if (!this.id) {
+        if (!this.id && !this.constructor.noAutoID) {
             this.id = uuidV4();
         }
 
@@ -159,7 +160,7 @@ class BaseModel extends Model {
                                 .query()
                                 .select('id')
                                 .where(whereConditions)
-                                .whereNot('id', queryContext.old.id)
+                                .whereNot('id', opt.old.id)
                                 .first()
                                 // eslint-disable-next-line promise/prefer-await-to-then
                                 .then((row) => {
@@ -186,7 +187,7 @@ class BaseModel extends Model {
                             .query()
                             .select('id')
                             .where(property, this[property])
-                            .whereNot('id', queryContext.old.id)
+                            .whereNot('id', opt.old.id)
                             .first()
                             // eslint-disable-next-line promise/prefer-await-to-then
                             .then((row) => {
