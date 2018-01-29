@@ -136,15 +136,9 @@ class User extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        is_banned: (input) => {
-            return !!input;
-        },
-        is_verified: (input) => {
-            return !!input;
-        },
-        must_change_password: (input) => {
-            return !!input;
-        },
+        is_banned: (input) => !!input,
+        is_verified: (input) => !!input,
+        must_change_password: (input) => !!input,
     };
 
     /**
@@ -190,9 +184,7 @@ class User extends BaseModel {
             return false;
         }
 
-        const validRoles = this.roles.filter(({ name }) => {
-            return name === role;
-        });
+        const validRoles = this.roles.filter(({ name }) => name === role);
 
         return validRoles.length;
     }
@@ -208,9 +200,7 @@ class User extends BaseModel {
             return false;
         }
 
-        const hasRoleWithPermission = this.roles.some((role) => {
-            return role.hasPermission(permission);
-        });
+        const hasRoleWithPermission = this.roles.some((role) => role.hasPermission(permission));
 
         return hasRoleWithPermission;
     }

@@ -18,11 +18,9 @@ export default () => {
     routes.param('user_id', async function (req, res, next, userId) {
         const user = await cacheWrap(
             req,
-            () => {
-                return User.query()
-                    .findById(userId)
-                    .eager('roles');
-            },
+            () => User.query()
+                .findById(userId)
+                .eager('roles'),
             'user'
         );
 
@@ -38,9 +36,7 @@ export default () => {
     });
 
     routes.param('role_id', async function (req, res, next, roleId) {
-        const role = await cacheWrap(req, () => {
-            return Role.query().findById(roleId);
-        }, 'role');
+        const role = await cacheWrap(req, () => Role.query().findById(roleId), 'role');
 
         if (!role) {
             return next(new APIError(`Role with ID of ${roleId} not found.`, httpStatusCode.NOT_FOUND));

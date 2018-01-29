@@ -173,9 +173,7 @@ export function formatValidationErrors(errors) {
 
     Object.keys(errors).forEach((property) => {
         // eslint-disable-next-line immutable/no-mutation
-        newErrors[property] = errors[property].map((errorList) => {
-            return errorList.message;
-        });
+        newErrors[property] = errors[property].map((errorList) => (errorList.message));
     });
 
     return newErrors;

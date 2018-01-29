@@ -17,9 +17,7 @@ export default () => {
     routes.param('role_id', async function (req, res, next, roleId) {
         const role = await cacheWrap(
             req,
-            () => {
-                return Role.query().findById(roleId);
-            },
+            () => Role.query().findById(roleId),
             'role'
         );
 

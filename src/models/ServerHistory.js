@@ -64,9 +64,7 @@ class ServerHistory extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        online: (input) => {
-            return !!input;
-        },
+        online: (input) => !!input,
     };
 }
 

@@ -77,9 +77,7 @@ class Permission extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        display_name: (input, properties) => {
-            return input || properties.name;
-        },
+        display_name: (input, properties) => input || properties.name,
     };
 }
 

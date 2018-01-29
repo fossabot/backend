@@ -16,9 +16,7 @@ class UsersController extends BaseController {
      * @returns {object}
      */
     static async index(req, res) {
-        const users = await cacheWrap(req, () => {
-            return User.query().omit(['password']);
-        });
+        const users = await cacheWrap(req, () => User.query().omit(['password']));
 
         return res.json(users);
     }

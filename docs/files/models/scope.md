@@ -5,23 +5,28 @@ title: Scope Model
 Scope model contains information about the scopes in the system available for OAuth.
 
 # Contents
+
 <!-- toc -->
 
-# Structure
-## name
+## Structure
+
+### name
+
 The name of the scope.
 
 **Type:** string
 
-## description
+### description
+
 The description of the scope.
 
 **Type:** string
 
-# Example
+## Example
+
 ```json
-  {
-    "name": "self:read",
-    "description": "Read own user credentials (except password)."
-  }
+{
+  "name": "self:read",
+  "description": "Read own user credentials (except password)."
+}
 ```

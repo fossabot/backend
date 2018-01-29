@@ -90,9 +90,7 @@ class Role extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        display_name: (input, properties) => {
-            return input || properties.name;
-        },
+        display_name: (input, properties) => input || properties.name,
     };
 
     /**
@@ -106,9 +104,7 @@ class Role extends BaseModel {
             return false;
         }
 
-        const validPermissions = this.permissions.filter(({ name }) => {
-            return name === permission;
-        });
+        const validPermissions = this.permissions.filter(({ name }) => name === permission);
 
         return validPermissions.length;
     }

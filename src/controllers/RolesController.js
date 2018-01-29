@@ -15,9 +15,7 @@ class RolesController extends BaseController {
      * @returns {object}
      */
     static async index(req, res) {
-        const roles = await cacheWrap(req, () => {
-            return Role.query();
-        });
+        const roles = await cacheWrap(req, () => Role.query());
 
         return res.json(roles);
     }

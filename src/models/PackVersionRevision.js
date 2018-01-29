@@ -86,12 +86,8 @@ class PackVersionRevision extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        is_verified: (input) => {
-            return !!input;
-        },
-        is_verifying: (input) => {
-            return !!input;
-        },
+        is_verified: (input) => !!input,
+        is_verifying: (input) => !!input,
     };
 
     /**

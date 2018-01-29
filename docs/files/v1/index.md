@@ -1,15 +1,19 @@
 ---
 pretitle: v1
+title: v1
 ---
 
 This is the documentation for version 1 of the api.
 
 # Contents
- - [Scopes](/docs/v1/scopes)
- - [Users](/docs/v1/users)
- 
-# /
-This will return the current information for the API as well as information about if your request is authenticated and if so, the details about the user/token.
+
+* [Scopes](/docs/v1/scopes)
+* [Users](/docs/v1/users)
+
+## /
+
+This will return the current information for the API as well as information about if your request is authenticated and
+if so, the details about the user/token.
 
 ```json
 {
@@ -47,4 +51,5 @@ This will return the current information for the API as well as information abou
 }
 ```
 
-If not authenticated with [OAuth](/docs/authentication) then the `authenticated` property will be false and no `token` or `user` property will be present.
+If not authenticated with [OAuth](/docs/authentication) then the `authenticated` property will be false and no `token`
+or `user` property will be present.

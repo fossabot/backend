@@ -167,9 +167,7 @@ class Pack extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        is_disabled: (input) => {
-            return !!input;
-        },
+        is_disabled: (input) => !!input,
     };
 }
 

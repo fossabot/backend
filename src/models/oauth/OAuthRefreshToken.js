@@ -65,9 +65,7 @@ class OAuthRefreshToken extends BaseModel {
      * @type {object}
      */
     static transforms = {
-        revoked: (input) => {
-            return !!input;
-        },
+        revoked: (input) => (!!input),
     };
 
     /**
