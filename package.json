@@ -85,7 +85,7 @@
     "winston": "~2.4.0"
   },
   "devDependencies": {
-    "@atlauncher/atlauncher-scripts": "~0.1.0-21",
+    "@atlauncher/atlauncher-scripts": "~0.1.0-23",
     "cross-env": "~5.1.1",
     "faker": "~4.1.0",
     "get-port-sync": "~1.0.0",
