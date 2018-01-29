@@ -30,7 +30,7 @@
     "lint:pj": "atlauncher-scripts lint:pj",
     "migrate": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback",
-    "prepush": "npm run lint:js && npm run test",
+    "prepush": "npm-run-all lint test",
     "seed": "knex seed:run",
     "start": "node dist/server.js",
     "test": "atlauncher-scripts test",
