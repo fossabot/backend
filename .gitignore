@@ -1,0 +1,14 @@
+# node modules folder
+**/node_modules/
+
+# Editor/IDE files
+.idea/
+.vscode/
+
+# NPM debug log
+npm-debug.log
+
+# lerna files
+lerna-debug.log
+package.json.lerna_backup
+.changelog

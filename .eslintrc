@@ -1,0 +1,5 @@
+{
+  "extends": [
+    "@atlauncher/eslint-config-atlauncher"
+  ]
+}

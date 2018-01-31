@@ -1,0 +1,34 @@
+{
+  "name": "@atlauncher/gateway-api",
+  "description": "Gateway api to access microservices from a central api",
+  "homepage": "https://github.com/ATLauncher/backend",
+  "bugs": {
+    "url": "https://github.com/ATLauncher/backend/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Ryan Dowling",
+    "email": "ryan.dowling@atlauncher.com",
+    "url": "https://github.com/RyanTheAllmighty"
+  },
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ATLauncher/backend.git"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "engineStrict": true,
+  "dependencies": {
+    "boom": "~7.1.1",
+    "koa": "~2.4.1",
+    "koa-logger": "~3.1.0",
+    "koa-proxies": "~0.6.2",
+    "koa-router": "~7.3.0"
+  }
+}
