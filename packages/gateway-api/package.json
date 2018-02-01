@@ -1,5 +1,6 @@
 {
   "name": "@atlauncher/gateway-api",
+  "version": "0.1.0",
   "description": "Gateway api to access microservices from a central api",
   "homepage": "https://github.com/ATLauncher/backend",
   "bugs": {
@@ -17,7 +18,7 @@
     "url": "git+https://github.com/ATLauncher/backend.git"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server-express.js"
   },
   "engines": {
     "node": ">=8",
@@ -25,10 +26,10 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "boom": "~7.1.1",
-    "koa": "~2.4.1",
-    "koa-logger": "~3.1.0",
-    "koa-proxies": "~0.6.2",
-    "koa-router": "~7.3.0"
+    "express": "~4.16.2",
+    "fastify": "~0.41.0",
+    "fastly": "~2.2.0",
+    "http-proxy-middleware": "~0.17.4",
+    "response-time": "~2.3.2"
   }
 }

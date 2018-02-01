@@ -1,0 +1,9 @@
+module.exports = () => (
+    async (ctx, next) => {
+        const start = Date.now();
+        await next();
+        console.log('logger after');
+        const ms = Date.now() - start;
+        console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
+    }
+);

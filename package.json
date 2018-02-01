@@ -1,9 +1,11 @@
 {
   "scripts": {
+    "debug": "cross-env NODE_ENV=development DEBUG=koa* lerna run --parallel start",
     "postinstall": "lerna bootstrap --hoist",
-    "start": "lerna run --parallel start"
+    "start": "cross-env NODE_ENV=development lerna run --parallel --scope @atlauncher/gateway-api --scope @atlauncher/auth-service start"
   },
   "devDependencies": {
+    "cross-env": "~5.1.3",
     "lerna": "~2.8.0"
   }
 }

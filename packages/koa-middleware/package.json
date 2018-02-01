@@ -1,7 +1,7 @@
 {
-  "name": "@atlauncher/minecraft-service",
+  "name": "@atlauncher/koa-middleware",
   "version": "0.1.0",
-  "description": "Microservice for Minecraft",
+  "description": "A bunch of middleware for Koa in use by the ATLauncher backend",
   "homepage": "https://github.com/ATLauncher/backend",
   "bugs": {
     "url": "https://github.com/ATLauncher/backend/issues"
@@ -12,23 +12,17 @@
     "email": "ryan.dowling@atlauncher.com",
     "url": "https://github.com/RyanTheAllmighty"
   },
-  "main": "server.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ATLauncher/backend.git"
   },
-  "scripts": {
-    "start": "node server.js"
+  "dependencies": {
+    "require-all": "~2.2.0"
   },
   "engines": {
     "node": ">=8",
     "npm": ">=5"
   },
-  "engineStrict": true,
-  "dependencies": {
-    "boom": "~7.1.1",
-    "koa": "~2.4.1",
-    "koa-logger": "~3.1.0",
-    "koa-router": "~7.3.0"
-  }
+  "engineStrict": true
 }

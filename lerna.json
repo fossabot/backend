@@ -1,7 +1,7 @@
 {
   "lerna": "2.8.0",
   "packages": [
-    "packages/gateway-api",
+    "packages/*",
     "microservices/*"
   ],
   "version": "0.0.0"
