@@ -8,7 +8,7 @@ import setupMiddleware from './middleware/setupMiddleware';
 const app = new Koa();
 
 // add in the secret keys
-app.keys = config.secretKeys;
+app.keys = [config.get('secret')];
 
 // setup the database including connecting knex to objection (ORM)
 setupDatabase();

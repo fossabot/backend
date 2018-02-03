@@ -1,106 +1,141 @@
-const bcrypt = require('bcryptjs');
+import config from 'config';
+import bcrypt from 'bcryptjs';
 
-const BaseModel = require('./BaseModel');
+import BaseModel from './BaseModel';
 
-module.exports = class User extends BaseModel {
-    static get tableName() {
-        return 'users';
-    }
+import { generateUID } from '../utils';
 
-    static get jsonSchema() {
-        return {
-            type: 'object',
+/**
+ * A User represents someone who has signed up for an ATLauncher account. An ATLauncher account is not required to
+ * download/install/play packs, but is required to make packs and play some private packs.
+ *
+ * When users sign up, they will get an email with a link they must click in order to confirm their account and login.
+ *
+ * @extends BaseModel
+ */
+class User extends BaseModel {
+    static tableName = 'users';
 
-            required: ['username', 'email', 'password'],
+    static jsonSchema = {
+        type: 'object',
 
-            uniqueProperties: ['username', 'email'],
+        required: ['username', 'email', 'password'],
 
-            additionalProperties: false,
+        uniqueProperties: ['username', 'email'],
 
-            properties: {
-                id: {
-                    type: 'string',
-                    minLength: 36,
-                    maxLength: 36,
-                    pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
-                },
-                username: {
-                    type: 'string',
-                    minLength: 3,
-                    maxLength: 64,
-                    pattern: '^[A-Za-z0-9-_]+$',
-                },
-                email: {
-                    type: 'string',
-                    format: 'email',
-                },
-                password: {
-                    type: 'string',
-                    maxLength: 60,
-                },
-                must_change_password: {
-                    type: 'boolean',
-                    default: false,
-                },
-                is_banned: {
-                    type: 'boolean',
-                    default: false,
-                },
-                ban_reason: {
-                    type: ['string', 'null'],
-                    default: null,
-                },
-                is_verified: {
-                    type: 'boolean',
-                    default: false,
-                },
-                verification_code: {
-                    type: ['string', 'null'],
-                    minLength: 128,
-                    maxLength: 128,
-                    default: null,
-                },
-                tfa_secret: {
-                    type: ['string', 'null'],
-                    minLength: 32,
-                    maxLength: 32,
-                    default: null,
-                },
-                created_at: {
-                    type: 'string',
-                    format: 'date-time',
-                },
-                updated_at: {
-                    type: ['string', 'null'],
-                    format: 'date-time',
-                    default: null,
-                },
-                banned_at: {
-                    type: ['string', 'null'],
-                    format: 'date-time',
-                    default: null,
-                },
-                verified_at: {
-                    type: ['string', 'null'],
-                    format: 'date-time',
-                    default: null,
-                },
+        additionalProperties: false,
+
+        properties: {
+            id: {
+                type: 'string',
+                minLength: 36,
+                maxLength: 36,
+                pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
             },
-        };
-    }
+            username: {
+                type: 'string',
+                minLength: 3,
+                maxLength: 64,
+                pattern: '^[A-Za-z0-9-_]+$',
+            },
+            email: {
+                type: 'string',
+                format: 'email',
+            },
+            password: {
+                type: 'string',
+                maxLength: 60,
+            },
+            must_change_password: {
+                type: 'boolean',
+                default: false,
+            },
+            is_banned: {
+                type: 'boolean',
+                default: false,
+            },
+            ban_reason: {
+                type: ['string', 'null'],
+                default: null,
+            },
+            is_verified: {
+                type: 'boolean',
+                default: false,
+            },
+            verification_code: {
+                type: ['string', 'null'],
+                minLength: 128,
+                maxLength: 128,
+                default: null,
+            },
+            tfa_secret: {
+                type: ['string', 'null'],
+                minLength: 32,
+                maxLength: 32,
+                default: null,
+            },
+            created_at: {
+                type: 'string',
+                format: 'date-time',
+            },
+            updated_at: {
+                type: ['string', 'null'],
+                format: 'date-time',
+                default: null,
+            },
+            banned_at: {
+                type: ['string', 'null'],
+                format: 'date-time',
+                default: null,
+            },
+            verified_at: {
+                type: ['string', 'null'],
+                format: 'date-time',
+                default: null,
+            },
+        },
+    };
+
+    // static relationMappings = {
+    //     packs: {
+    //         relation: Model.ManyToManyRelation,
+    //         modelClass: Pack,
+    //         join: {
+    //             from: 'users.id',
+    //             through: {
+    //                 from: 'pack_users.user_id',
+    //                 to: 'pack_users.pack_id',
+    //                 modelClass: PackUser,
+    //                 extra: ['can_administrate', 'can_create', 'can_delete', 'can_edit', 'can_publish'],
+    //             },
+    //             to: 'packs.id',
+    //         },
+    //     },
+    //     roles: {
+    //         relation: Model.ManyToManyRelation,
+    //         modelClass: Role,
+    //         join: {
+    //             from: 'users.id',
+    //             through: {
+    //                 from: 'user_roles.user_id',
+    //                 to: 'user_roles.role_id',
+    //                 modelClass: UserRole,
+    //             },
+    //             to: 'roles.id',
+    //         },
+    //     },
+    // };
 
     /**
      * Transform the must_change_password field into a boolean.
      *
      * @type {object}
      */
-    static get transforms() {
-        return {
-            is_banned: (input) => !!input,
-            is_verified: (input) => !!input,
-            must_change_password: (input) => !!input,
-        };
-    }
+    static transforms = {
+        is_banned: (input) => !!input,
+        is_verified: (input) => !!input,
+        must_change_password: (input) => !!input,
+    };
 
     /**
      * Before inserting make sure we hash the password if provided and also add in a verification code.
@@ -110,11 +145,11 @@ module.exports = class User extends BaseModel {
      */
     $beforeInsert(queryContext) {
         if (this.hasOwnProperty('password')) {
-            this.password = bcrypt.hashSync(this.password, 10);
+            this.password = bcrypt.hashSync(this.password, config.get('bcryptRounds'));
         }
 
         if (!this.hasOwnProperty('verification_code')) {
-            this.verification_code = '123';
+            this.verification_code = generateUID(128);
         }
 
         return super.$beforeInsert(queryContext);
@@ -130,7 +165,45 @@ module.exports = class User extends BaseModel {
         super.$beforeUpdate(opt, queryContext);
 
         if (this.hasOwnProperty('password')) {
-            this.password = bcrypt.hashSync(this.password, 10);
+            this.password = bcrypt.hashSync(this.password, config.get('bcryptRounds'));
         }
     }
-};
+
+    verify(password) {
+        return bcrypt.compareSync(password, this.password);
+    }
+
+    /**
+     * Checks to see if this user has the provided role or not.
+     *
+     * @param {string} role
+     * @returns {boolean}
+     */
+    hasRole(role) {
+        if (!this.roles) {
+            return false;
+        }
+
+        const validRoles = this.roles.filter(({ name }) => name === role);
+
+        return validRoles.length;
+    }
+
+    /**
+     * Checks to see if this user has a role with the provided permission or not.
+     *
+     * @param {string} permission
+     * @returns {boolean}
+     */
+    hasPermission(permission) {
+        if (!this.roles) {
+            return false;
+        }
+
+        const hasRoleWithPermission = this.roles.some((role) => role.hasPermission(permission));
+
+        return hasRoleWithPermission;
+    }
+}
+
+export default User;

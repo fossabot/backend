@@ -2,10 +2,11 @@ const uuidv4 = require('uuid/v4');
 const bcrypt = require('bcryptjs');
 
 exports.seed = function (knex, Promise) {
-    // Deletes ALL existing entries
-    return knex('users').del()
+    // deletes ALL existing entries
+    return knex('users')
+        .del()
         .then(function () {
-            // Inserts seed entries
+            // inserts seed entries
             return knex('users').insert([
                 {
                     id: uuidv4(),

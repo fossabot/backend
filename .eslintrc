@@ -1,5 +1,11 @@
 {
-  "extends": [
-    "@atlauncher/eslint-config-atlauncher"
-  ]
+    "extends": ["@atlauncher/eslint-config-atlauncher"],
+    "rules": {
+        "camelcase": [
+            "error",
+            {
+                "properties": "never"
+            }
+        ]
+    }
 }

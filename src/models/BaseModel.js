@@ -1,5 +1,5 @@
-const uuidV4 = require('uuid/v4');
-const { Model, ValidationError } = require('objection');
+import uuidV4 from 'uuid/v4';
+import { Model, ValidationError } from 'objection';
 
 /**
  * This BaseModel extends the objection.js Model and adds in some custom things including:
@@ -9,24 +9,20 @@ const { Model, ValidationError } = require('objection');
  *
  * @extends Model
  */
-module.exports = class BaseModel extends Model {
+class BaseModel extends Model {
     /**
      * If we should update the created_at attribute when inserted and the updated_at attribute when updated.
      *
      * @type {boolean}
      */
-    static get timestamps() {
-        return true;
-    };
+    static timestamps = true;
 
     /**
      * An object of attribute names with function values to transform attributes on the model if they exist.
      *
      * @type {object}
      */
-    static get transforms() {
-        return {};
-    };
+    static transforms = {};
 
     /**
      * Ran before inserting into the database.
@@ -54,69 +50,70 @@ module.exports = class BaseModel extends Model {
         const uniqueProperties = (this.constructor.jsonSchema && this.constructor.jsonSchema.uniqueProperties) || [];
 
         return Promise.all(
-            uniqueProperties.map((property) => new Promise((resolve, reject) => {
-                if (Array.isArray(property)) {
-                    if (
-                        property.every((prop) => this.hasOwnProperty(prop))
-                    ) {
-                        // eslint-disable-next-line prefer-const
-                        let whereConditions = {};
+            uniqueProperties.map(
+                (property) =>
+                    new Promise((resolve, reject) => {
+                        if (Array.isArray(property)) {
+                            if (property.every((prop) => this.hasOwnProperty(prop))) {
+                                // eslint-disable-next-line prefer-const
+                                let whereConditions = {};
 
-                        property.forEach((prop) => {
-                            whereConditions[prop] = this[prop];
-                        });
+                                property.forEach((prop) => {
+                                    whereConditions[prop] = this[prop];
+                                });
 
-                        this.constructor
-                            .query()
-                            .select('id')
-                            .where(whereConditions)
-                            .first()
-                            // eslint-disable-next-line promise/prefer-await-to-then
-                            .then((row) => {
-                                if (row) {
-                                    // eslint-disable-next-line prefer-const
-                                    let errors = {};
+                                this.constructor
+                                    .query()
+                                    .select('id')
+                                    .where(whereConditions)
+                                    .first()
+                                    // eslint-disable-next-line promise/prefer-await-to-then
+                                    .then((row) => {
+                                        if (row) {
+                                            // eslint-disable-next-line prefer-const
+                                            let errors = {};
 
-                                    property.forEach((prop) => {
-                                        errors[prop] = [
-                                            {
-                                                message: `${prop} is already taken.`,
-                                            },
-                                        ];
-                                    });
+                                            property.forEach((prop) => {
+                                                errors[prop] = [
+                                                    {
+                                                        message: `${prop} is already taken.`,
+                                                    },
+                                                ];
+                                            });
 
-                                    return reject(new ValidationError(errors));
-                                }
+                                            return reject(new ValidationError(errors));
+                                        }
 
-                                return resolve();
-                            })
-                            .catch(reject);
-                    }
-                } else if (this.hasOwnProperty(property)) {
-                    this.constructor
-                        .query()
-                        .select('id')
-                        .where(property, this[property])
-                        .first()
-                        // eslint-disable-next-line promise/prefer-await-to-then
-                        .then((row) => {
-                            if (row) {
-                                return reject(
-                                    new ValidationError({
-                                        [property]: [
-                                            {
-                                                message: `${property} is already taken.`,
-                                            },
-                                        ],
+                                        return resolve();
                                     })
-                                );
+                                    .catch(reject);
                             }
+                        } else if (this.hasOwnProperty(property)) {
+                            this.constructor
+                                .query()
+                                .select('id')
+                                .where(property, this[property])
+                                .first()
+                                // eslint-disable-next-line promise/prefer-await-to-then
+                                .then((row) => {
+                                    if (row) {
+                                        return reject(
+                                            new ValidationError({
+                                                [property]: [
+                                                    {
+                                                        message: `${property} is already taken.`,
+                                                    },
+                                                ],
+                                            })
+                                        );
+                                    }
 
-                            return resolve();
-                        })
-                        .catch(reject);
-                }
-            }))
+                                    return resolve();
+                                })
+                                .catch(reject);
+                        }
+                    })
+            )
         );
     }
 
@@ -142,69 +139,70 @@ module.exports = class BaseModel extends Model {
         const uniqueProperties = (this.constructor.jsonSchema && this.constructor.jsonSchema.uniqueProperties) || [];
 
         return Promise.all(
-            uniqueProperties.map((property) => new Promise((resolve, reject) => {
-                if (Array.isArray(property)) {
-                    if (
-                        property.every((prop) => this.hasOwnProperty(prop))
-                    ) {
-                        const whereConditions = {};
+            uniqueProperties.map(
+                (property) =>
+                    new Promise((resolve, reject) => {
+                        if (Array.isArray(property)) {
+                            if (property.every((prop) => this.hasOwnProperty(prop))) {
+                                const whereConditions = {};
 
-                        property.forEach((prop) => {
-                            whereConditions[prop] = this[prop];
-                        });
+                                property.forEach((prop) => {
+                                    whereConditions[prop] = this[prop];
+                                });
 
-                        this.constructor
-                            .query()
-                            .select('id')
-                            .where(whereConditions)
-                            .whereNot('id', opt.old.id)
-                            .first()
-                            // eslint-disable-next-line promise/prefer-await-to-then
-                            .then((row) => {
-                                if (row) {
-                                    const errors = {};
+                                this.constructor
+                                    .query()
+                                    .select('id')
+                                    .where(whereConditions)
+                                    .whereNot('id', opt.old.id)
+                                    .first()
+                                    // eslint-disable-next-line promise/prefer-await-to-then
+                                    .then((row) => {
+                                        if (row) {
+                                            const errors = {};
 
-                                    property.forEach((prop) => {
-                                        errors[prop] = [
-                                            {
-                                                message: `${prop} is already taken.`,
-                                            },
-                                        ];
-                                    });
+                                            property.forEach((prop) => {
+                                                errors[prop] = [
+                                                    {
+                                                        message: `${prop} is already taken.`,
+                                                    },
+                                                ];
+                                            });
 
-                                    return reject(new ValidationError(errors));
-                                }
+                                            return reject(new ValidationError(errors));
+                                        }
 
-                                return resolve();
-                            })
-                            .catch(reject);
-                    }
-                } else if (this.hasOwnProperty(property)) {
-                    this.constructor
-                        .query()
-                        .select('id')
-                        .where(property, this[property])
-                        .whereNot('id', opt.old.id)
-                        .first()
-                        // eslint-disable-next-line promise/prefer-await-to-then
-                        .then((row) => {
-                            if (row) {
-                                return reject(
-                                    new ValidationError({
-                                        [property]: [
-                                            {
-                                                message: `${property} is already taken.`,
-                                            },
-                                        ],
+                                        return resolve();
                                     })
-                                );
+                                    .catch(reject);
                             }
+                        } else if (this.hasOwnProperty(property)) {
+                            this.constructor
+                                .query()
+                                .select('id')
+                                .where(property, this[property])
+                                .whereNot('id', opt.old.id)
+                                .first()
+                                // eslint-disable-next-line promise/prefer-await-to-then
+                                .then((row) => {
+                                    if (row) {
+                                        return reject(
+                                            new ValidationError({
+                                                [property]: [
+                                                    {
+                                                        message: `${property} is already taken.`,
+                                                    },
+                                                ],
+                                            })
+                                        );
+                                    }
 
-                            return resolve();
-                        })
-                        .catch(reject);
-                }
-            }))
+                                    return resolve();
+                                })
+                                .catch(reject);
+                        }
+                    })
+            )
         );
     }
 
@@ -226,4 +224,6 @@ module.exports = class BaseModel extends Model {
 
         return parsedJson;
     }
-};
+}
+
+export default BaseModel;
