@@ -1,4 +1,5 @@
 import fs from 'fs';
+import Boom from 'boom';
 import path from 'path';
 import Router from 'koa-router';
 
@@ -35,7 +36,13 @@ export default (app) => {
                 instance[httpMethod](route, ...middleware, async (ctx) => await handler(ctx));
             });
 
-            app.use(instance.routes()).use(instance.allowedMethods());
+            app.use(instance.routes()).use(
+                instance.allowedMethods({
+                    throw: true,
+                    notImplemented: () => Boom.notImplemented(),
+                    methodNotAllowed: () => Boom.methodNotAllowed(),
+                })
+            );
         });
     });
 

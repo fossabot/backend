@@ -6,6 +6,7 @@
             {
                 "properties": "never"
             }
-        ]
+        ],
+        "consistent-return": "warn"
     }
 }

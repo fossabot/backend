@@ -5,11 +5,17 @@ import isAuthenticated from '../../middleware/isAuthenticated';
 
 export const baseUrl = '/users';
 
+export const middleware = [isAuthenticated];
+
 export const routes = [
     {
         method: httpMethods.GET,
         route: '/',
-        middleware: [isAuthenticated],
         handler: controller.getAll,
+    },
+    {
+        method: httpMethods.GET,
+        route: '/:userId',
+        handler: controller.getOne,
     },
 ];

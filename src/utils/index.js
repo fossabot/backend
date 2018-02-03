@@ -1,6 +1,11 @@
+import config from 'config';
 import crypto from 'crypto';
+import { ValidationError } from 'objection';
 
 import { addSeconds, addMinutes, addHours, addDays, addMonths, addYears } from 'date-fns';
+
+const nodeEnv = config.util.getEnv('NODE_ENV');
+const isDev = nodeEnv === 'development';
 
 /**
  * Return a random int, used by `utils.uid()`
@@ -218,4 +223,30 @@ export function addTimeStringToDate(string, date = new Date()) {
         default:
             return date;
     }
+}
+
+/**
+ * This will take an error and then generate a JSON response to return to the user.
+ *
+ * @export
+ * @param {Error} err
+ * @returns {object}
+ */
+export function generateErrorJsonResponse(err) {
+    const status = err.statusCode || err.status || 500;
+
+    const isValidationError = (err.error || {}) instanceof ValidationError;
+
+    const stacktrace = isDev ? { stack: err.stack } : {};
+
+    const validation = isValidationError ? { validation: formatValidationErrors(err.error.data) } : {};
+
+    const message = isValidationError ? 'Validation error' : err.message;
+
+    return {
+        status,
+        message,
+        ...validation,
+        ...stacktrace,
+    };
 }

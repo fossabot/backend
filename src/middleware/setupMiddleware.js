@@ -4,10 +4,12 @@ import jwt from 'koa-jwt';
 import config from 'config';
 import helmet from 'koa-helmet';
 import convert from 'koa-convert';
+import error from 'koa-json-error';
 import bodyParser from 'koa-bodyparser';
 import responseTime from 'koa-response-time';
 
 import passport from '../passport';
+import { generateErrorJsonResponse } from '../utils';
 
 export default (app) => {
     // adds in x-response-time headers
@@ -21,6 +23,8 @@ export default (app) => {
 
     // parses the body on POST/PUT requests and makes it available in `ctx.request.body`
     app.use(bodyParser());
+
+    app.use(error(generateErrorJsonResponse));
 
     // setup passport for authentication
     app.use(passport.initialize());
