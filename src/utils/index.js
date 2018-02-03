@@ -5,7 +5,6 @@ import { ValidationError } from 'objection';
 import { addSeconds, addMinutes, addHours, addDays, addMonths, addYears } from 'date-fns';
 
 const nodeEnv = config.util.getEnv('NODE_ENV');
-const isDev = nodeEnv === 'development';
 
 /**
  * Return a random int, used by `utils.uid()`
@@ -16,6 +15,36 @@ const isDev = nodeEnv === 'development';
  */
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * Checks to see if the server is running on a development environment.
+ *
+ * @export
+ * @returns {boolean}
+ */
+export function isDevelopmentEnvironment() {
+    return nodeEnv === 'development';
+}
+
+/**
+ * Checks to see if the server is running on a test environment.
+ *
+ * @export
+ * @returns {boolean}
+ */
+export function isTestEnvironment() {
+    return nodeEnv === 'test';
+}
+
+/**
+ * Checks to see if the server is running on a production environment.
+ *
+ * @export
+ * @returns {boolean}
+ */
+export function isProductionEnvironment() {
+    return nodeEnv === 'production';
 }
 
 /**
@@ -237,7 +266,7 @@ export function generateErrorJsonResponse(err) {
 
     const isValidationError = (err.error || {}) instanceof ValidationError;
 
-    const stacktrace = isDev ? { stack: err.stack } : {};
+    const stacktrace = isDevelopmentEnvironment() ? { stack: err.stack } : {};
 
     const validation = isValidationError ? { validation: formatValidationErrors(err.error.data) } : {};
 

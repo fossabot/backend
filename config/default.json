@@ -24,10 +24,8 @@
         "jwt_validity": "2H"
     },
     "ratelimit": {
-        "default": {
-            "requests": 60,
-            "time": "1MI"
-        }
+        "requests": 60,
+        "time": "1MI"
     },
     "log": {
         "level": "info"
