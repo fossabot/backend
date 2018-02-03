@@ -7,12 +7,12 @@ export const routes = [
     {
         method: [httpMethods.GET, httpMethods.POST],
         route: '/',
-        handlers: controller.graphql,
+        handler: controller.graphql,
     },
     {
         method: httpMethods.GET,
         route: '/graphiql',
         active: process.env.NODE_ENV === 'development',
-        handlers: controller.graphiql,
+        handler: controller.graphiql,
     },
 ];

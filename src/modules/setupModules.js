@@ -5,7 +5,7 @@ import Router from 'koa-router';
 import logger from '../logger';
 
 export default (app) => {
-    logger.debug('Setting up modules');
+    logger.debug('[Module] Setting up');
 
     // get all files in the directory
     const filesInDir = fs.readdirSync(__dirname);
@@ -14,7 +14,7 @@ export default (app) => {
     const directories = filesInDir.filter((dir) => fs.statSync(path.join(__dirname, dir)).isDirectory());
 
     directories.forEach((dir) => {
-        logger.debug(`Setting up module ${dir}`);
+        logger.debug(`[Module][${dir}] Setting up module`);
 
         const { routes, baseUrl, middleware = [] } = require(path.join(__dirname, dir, '/router.js'));
 
@@ -22,12 +22,16 @@ export default (app) => {
 
         instance.use(...middleware);
 
-        routes.filter((route) => route.active).forEach((config) => {
+        // filter routes and just get ones marked as active (default is true)
+        const activeRoutes = routes.filter(({ active = true }) => active);
+
+        activeRoutes.forEach((config) => {
             const { method, route, middleware = [], handler } = config;
 
             const methods = Array.isArray(method) ? method : [method];
 
             methods.forEach((httpMethod) => {
+                logger.debug(`[Module][${dir}][${httpMethod.toUpperCase()} ${baseUrl}${route}] Setting up route`);
                 instance[httpMethod](route, ...middleware, async (ctx) => await handler(ctx));
             });
 
@@ -35,5 +39,5 @@ export default (app) => {
         });
     });
 
-    logger.debug('Finished setting up modules');
+    logger.debug('[Module] Finished setting up');
 };

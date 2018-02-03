@@ -1,14 +1,6 @@
 {
     "bcryptRounds": 10,
     "secretKeys": ["bC3rdHVaN0IeGuVxQ14xgu0IK5mToNCJ"],
-    "session": {
-        "key": "atlauncher:backend",
-        "maxAge": 86400000,
-        "overwrite": true,
-        "signed": true,
-        "rolling": false,
-        "renew": false
-    },
     "cache": {
         "type": "memory",
         "ttl": {

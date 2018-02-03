@@ -13,8 +13,5 @@
             "db": 0,
             "ttl": 600
         }
-    },
-    "session": {
-        "secure": true
     }
 }

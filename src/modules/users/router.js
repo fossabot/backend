@@ -7,6 +7,6 @@ export const routes = [
     {
         method: httpMethods.GET,
         route: '/',
-        handlers: controller.getAll,
+        handler: controller.getAll,
     },
 ];
