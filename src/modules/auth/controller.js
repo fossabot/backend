@@ -14,6 +14,7 @@ import { convertTimeStringToMilliseconds } from '../../utils';
  * @returns {void}
  */
 export function authenticate(ctx, next) {
+    // eslint-disable-next-line consistent-return
     return passport.authenticate('local', (err, user) => {
         if (err) {
             return ctx.throw(500, Boom.serverUnavailable(err.message));

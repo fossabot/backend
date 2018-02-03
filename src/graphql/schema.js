@@ -3,7 +3,7 @@ const { GraphQLDateTime } = require('graphql-iso-date');
 
 const User = require('../models/User');
 
-// The GraphQL schema in string form
+// the GraphQL schema in string form
 const typeDefs = `
     scalar DateTime
 
@@ -29,13 +29,13 @@ const typeDefs = `
     }
 `;
 
-// The resolvers
+// the resolvers
 const resolvers = {
     DateTime: GraphQLDateTime,
     Query: { users: async () => await User.query() },
 };
 
-// Put together a schema
+// put together a schema
 const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
