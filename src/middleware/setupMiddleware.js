@@ -4,6 +4,7 @@ import jwt from 'koa-jwt';
 import config from 'config';
 import helmet from 'koa-helmet';
 import convert from 'koa-convert';
+import respond from 'koa-respond';
 import error from 'koa-json-error';
 import bodyParser from 'koa-bodyparser';
 import { RateLimit } from 'koa2-ratelimit';
@@ -14,6 +15,9 @@ import passport from '../passport';
 import { convertTimeStringToMilliseconds, generateErrorJsonResponse, isDevelopmentEnvironment } from '../utils';
 
 export default (app) => {
+    // adds in x-response-time headers
+    app.use(responseTime());
+
     // rate limit requests
     app.use(
         RateLimit.middleware({
@@ -32,8 +36,12 @@ export default (app) => {
         })
     );
 
-    // adds in x-response-time headers
-    app.use(responseTime());
+    // adds some convenience methods to the `ctx` object
+    app.use(
+        respond({
+            autoMessage: false,
+        })
+    );
 
     // adds in extra headers for security/best practices
     app.use(helmet());

@@ -57,6 +57,7 @@
         "koa-json-error": "~3.1.2",
         "koa-jwt": "~3.3.0",
         "koa-passport": "~4.0.1",
+        "koa-respond": "~1.0.1",
         "koa-response-time": "~2.0.0",
         "koa-router": "~7.4.0",
         "koa2-ratelimit": "~0.4.3",

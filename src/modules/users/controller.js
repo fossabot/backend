@@ -10,7 +10,7 @@ import User from '../../models/User';
 export async function getAll(ctx) {
     const users = await User.query().omit(['password']);
 
-    ctx.body = users;
+    ctx.ok(users);
 }
 
 /**
@@ -28,5 +28,5 @@ export async function getOne(ctx) {
         return ctx.throw(404, Boom.notFound('No user with that Id was found'));
     }
 
-    ctx.body = user;
+    ctx.ok(user);
 }

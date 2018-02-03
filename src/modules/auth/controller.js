@@ -34,6 +34,6 @@ export function authenticate(ctx, next) {
             }
         );
 
-        ctx.body = { token };
+        ctx.ok({ token });
     })(ctx, next);
 }
