@@ -11,5 +11,8 @@ npm-debug.log
 # Database folder (used for dev sqlite database)
 db/
 
-# Dist files
-dist/
+# CI service
+.circleci/
+
+# GitHub files
+.github/

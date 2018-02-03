@@ -51,15 +51,9 @@ switch (config.util.getEnv('NODE_ENV')) {
     }
     case 'production': {
         knexConfig.production = {
-            client: 'mysql',
+            client: 'sqlite3',
             connection: {
-                database: config.get('database.name'),
-                user: config.get('database.username'),
-                password: config.get('database.password'),
-            },
-            pool: {
-                min: 2,
-                max: 10,
+                filename: './db/production.sqlite3',
             },
             migrations: {
                 tableName: 'migrations',
@@ -67,6 +61,12 @@ switch (config.util.getEnv('NODE_ENV')) {
             },
             seeds: {
                 directory: `${__dirname}/seeds/production`,
+            },
+            useNullAsDefault: true,
+            pool: {
+                afterCreate: (conn, cb) => {
+                    conn.run('PRAGMA foreign_keys = ON', cb);
+                },
             },
         };
         break;

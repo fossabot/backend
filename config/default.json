@@ -1,4 +1,5 @@
 {
+    "port": 3000,
     "bcryptRounds": 10,
     "secret": "bC3rdHVaN0IeGuVxQ14xgu0IK5mToNCJ",
     "cache": {

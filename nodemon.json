@@ -1,0 +1,4 @@
+{
+    "ignore": ["**/__test__/**/*", ".github/*", ".circleci/*", "db/*", "dist/*"],
+    "delay": "2500"
+}

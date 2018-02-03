@@ -1,0 +1,14 @@
+{
+    "apps": [
+        {
+            "name": "@atlauncher/backend",
+            "script": "dist/server.js",
+            "instances": "max",
+            "exec_mode": "cluster",
+            "watch": ["dist", "node_modules", "config", "package.json"],
+            "env": {
+                "NODE_ENV": "production"
+            }
+        }
+    ]
+}
