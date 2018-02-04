@@ -68,10 +68,9 @@ class User extends BaseModel {
                 default: false,
             },
             verification_code: {
-                type: ['string', 'null'],
+                type: 'string',
                 minLength: 128,
                 maxLength: 128,
-                default: null,
             },
             tfa_secret: {
                 type: ['string', 'null'],
