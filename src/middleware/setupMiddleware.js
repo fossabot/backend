@@ -2,13 +2,16 @@ import Boom from 'boom';
 import cors from 'kcors';
 import jwt from 'koa-jwt';
 import config from 'config';
+import etag from 'koa-etag';
 import helmet from 'koa-helmet';
 import convert from 'koa-convert';
 import respond from 'koa-respond';
 import error from 'koa-json-error';
+import compress from 'koa-compress';
 import bodyParser from 'koa-bodyparser';
 import { RateLimit } from 'koa2-ratelimit';
 import responseTime from 'koa-response-time';
+import conditional from 'koa-conditional-get';
 
 import logger from '../logger';
 import passport from '../passport';
@@ -17,6 +20,9 @@ import { convertTimeStringToMilliseconds, generateErrorJsonResponse, isDevelopme
 export default (app) => {
     // adds in x-response-time headers
     app.use(responseTime());
+
+    // compress responses
+    app.use(compress());
 
     // rate limit requests
     app.use(
@@ -65,4 +71,10 @@ export default (app) => {
             secret: config.get('secret'),
         })
     );
+
+    // allow conditional http requests
+    app.use(conditional());
+
+    // add eTag headers
+    app.use(etag());
 };
