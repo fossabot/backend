@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -8,26 +7,25 @@ import Server from '../Server';
 import PackVersion from '../PackVersion';
 
 describe('Model: Server', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('findById', () => {
         it('should return the data for the given server', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'Test Pack Description'
+                description: 'Test Pack Description',
             });
 
             const packVersion = await PackVersion.query().insert({
                 version: '1.2.3',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             const expectedOutput = {
@@ -42,7 +40,7 @@ describe('Model: Server', () => {
                 discord_invite_code: null,
                 votifier_host: null,
                 votifier_port: null,
-                updated_at: null
+                updated_at: null,
             };
 
             const created = await Server.query().insert({
@@ -50,7 +48,7 @@ describe('Model: Server', () => {
                 host: '127.0.0.1',
                 description: 'This is a test pack and it is for a test pack',
                 pack_id: pack.id,
-                pack_version_id: packVersion.id
+                pack_version_id: packVersion.id,
             });
 
             const server = await Server.query().findById(created.id);
@@ -66,12 +64,12 @@ describe('Model: Server', () => {
         it('should create a server', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'Test Pack Description'
+                description: 'Test Pack Description',
             });
 
             const packVersion = await PackVersion.query().insert({
                 version: '1.2.3',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             const expectedOutput = {
@@ -86,7 +84,7 @@ describe('Model: Server', () => {
                 discord_invite_code: null,
                 votifier_host: null,
                 votifier_port: null,
-                updated_at: null
+                updated_at: null,
             };
 
             const server = await Server.query().insert({
@@ -94,7 +92,7 @@ describe('Model: Server', () => {
                 host: '127.0.0.1',
                 description: 'This is a test pack and it is for a test pack',
                 pack_id: pack.id,
-                pack_version_id: packVersion.id
+                pack_version_id: packVersion.id,
             });
 
             expect(server).toBeInstanceOf(Object);

@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -8,33 +7,32 @@ import PackLog from '../PackLog';
 import PackVersion from '../PackVersion';
 
 describe('Model: PackLog', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('insert', () => {
         it('should create a pack log', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const packVersion = await PackVersion.query().insert({
                 version: '1.2.3',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             const packLog = await PackLog.query().insert({
                 pack_id: pack.id,
                 pack_version_id: packVersion.id,
                 username: 'test',
-                action: 'pack_install'
+                action: 'pack_install',
             });
 
             expect(packLog).toBeInstanceOf(Object);
@@ -50,19 +48,19 @@ describe('Model: PackLog', () => {
         it('should return the pack for a pack log', async () => {
             const createdPack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const packVersion = await PackVersion.query().insert({
                 version: '1.2.3',
-                pack_id: createdPack.id
+                pack_id: createdPack.id,
             });
 
             const packLog = await PackLog.query().insert({
                 pack_id: createdPack.id,
                 pack_version_id: packVersion.id,
                 username: 'test',
-                action: 'pack_install'
+                action: 'pack_install',
             });
 
             const pack = await packLog.$relatedQuery('pack');
@@ -78,19 +76,19 @@ describe('Model: PackLog', () => {
         it('should return the pack version for a pack log', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const createdPackVersion = await PackVersion.query().insert({
                 version: '1.2.3',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             const packLog = await PackLog.query().insert({
                 pack_id: pack.id,
                 pack_version_id: createdPackVersion.id,
                 username: 'test',
-                action: 'pack_install'
+                action: 'pack_install',
             });
 
             const packVersion = await packLog.$relatedQuery('packVersion');

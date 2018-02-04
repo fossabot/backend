@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -10,14 +9,13 @@ import PackVersion from '../PackVersion';
 import PackLeaderboard from '../PackLeaderboard';
 
 describe('Model: Pack', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('findById', () => {
@@ -29,12 +27,12 @@ describe('Model: Pack', () => {
                 position: 1,
                 is_disabled: false,
                 updated_at: null,
-                disabled_at: null
+                disabled_at: null,
             };
 
             const created = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const pack = await Pack.query().findById(created.id);
@@ -61,12 +59,12 @@ describe('Model: Pack', () => {
                 position: 1,
                 is_disabled: false,
                 updated_at: null,
-                disabled_at: null
+                disabled_at: null,
             };
 
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             expect(pack).toBeInstanceOf(Object);
@@ -83,17 +81,17 @@ describe('Model: Pack', () => {
                 position: 2,
                 is_disabled: false,
                 updated_at: null,
-                disabled_at: null
+                disabled_at: null,
             };
 
             await Pack.query().insert({
                 name: 'Test Pack Position 1',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             expect(pack).toBeInstanceOf(Object);
@@ -107,11 +105,11 @@ describe('Model: Pack', () => {
         it('should attach a launcher tag to a pack', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             await pack.$relatedQuery('launcherTags').insert({
-                tag: 'test'
+                tag: 'test',
             });
 
             const launcherTags = await pack.$relatedQuery('launcherTags');
@@ -131,19 +129,19 @@ describe('Model: Pack', () => {
         it('should return the pack leaderboards for a user', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const packVersion = await PackVersion.query().insert({
                 version: '1.2.3',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             await PackLeaderboard.query().insert({
                 pack_id: pack.id,
                 pack_version_id: packVersion.id,
                 username: 'test',
-                time_played: 44
+                time_played: 44,
             });
 
             const packLeaderboards = await pack.$relatedQuery('packLeaderboards');
@@ -164,19 +162,19 @@ describe('Model: Pack', () => {
         it('should return the pack logs for a user', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const packVersion = await PackVersion.query().insert({
                 version: '1.2.3',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             await PackLog.query().insert({
                 pack_id: pack.id,
                 pack_version_id: packVersion.id,
                 username: 'test',
-                action: 'pack_install'
+                action: 'pack_install',
             });
 
             const packLogs = await pack.$relatedQuery('packLogs');
@@ -197,11 +195,11 @@ describe('Model: Pack', () => {
         it('should attach a pack tag to a pack', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             await pack.$relatedQuery('packTags').insert({
-                tag: 'test'
+                tag: 'test',
             });
 
             const packTags = await pack.$relatedQuery('packTags');
@@ -221,13 +219,13 @@ describe('Model: Pack', () => {
         it('should create a user for a pack', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             await pack.$relatedQuery('users').insert({
                 username: 'testuser',
                 password: 'password',
-                email: 'test@example.com'
+                email: 'test@example.com',
             });
 
             const packUsers = await pack.$relatedQuery('users');
@@ -245,13 +243,13 @@ describe('Model: Pack', () => {
         it('should attach a user to a pack', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const created = await User.query().insert({
                 username: 'testuser',
                 password: 'test',
-                email: 'test@example.com'
+                email: 'test@example.com',
             });
 
             await pack.$relatedQuery('users').relate(created.id);

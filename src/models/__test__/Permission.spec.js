@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -7,20 +6,13 @@ import Role from '../Role';
 import Permission from '../Permission';
 
 describe('Model: Permission', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => {
-            return knex.migrate.latest().then(() => {
-                return done();
-            });
-        });
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] }).then(() => {
-            return done();
-        });
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('findById', () => {

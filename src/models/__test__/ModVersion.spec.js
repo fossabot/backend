@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -7,14 +6,13 @@ import Mod from '../Mod';
 import ModVersion from '../ModVersion';
 
 describe('Model: ModVersion', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('findById', () => {
@@ -22,19 +20,19 @@ describe('Model: ModVersion', () => {
             const mod = await Mod.query().insert({
                 name: 'Test Mod',
                 description: 'This is a test mod',
-                authors: ['test1', 'test2']
+                authors: ['test1', 'test2'],
             });
 
             const expectedOutput = {
                 mod_id: mod.id,
                 version: '1.2.3',
-                changelog: 'Test'
+                changelog: 'Test',
             };
 
             const created = await ModVersion.query().insert({
                 mod_id: mod.id,
                 version: '1.2.3',
-                changelog: 'Test'
+                changelog: 'Test',
             });
 
             const modVersion = await ModVersion.query().findById(created.id);
@@ -57,26 +55,20 @@ describe('Model: ModVersion', () => {
             const mod = await Mod.query().insert({
                 name: 'Test Mod',
                 description: 'This is a test mod',
-                authors: ['test1', 'test2']
+                authors: ['test1', 'test2'],
             });
             const expectedOutput = {
                 mod_id: mod.id,
                 version: '1.2.3',
                 changelog: 'Test',
-                java_versions: [
-                    '1.7',
-                    '1.8'
-                ]
+                java_versions: ['1.7', '1.8'],
             };
 
             const modVersion = await ModVersion.query().insert({
                 mod_id: mod.id,
                 version: '1.2.3',
                 changelog: 'Test',
-                java_versions: [
-                    '1.7',
-                    '1.8'
-                ]
+                java_versions: ['1.7', '1.8'],
             });
 
             expect(modVersion).toBeInstanceOf(Object);

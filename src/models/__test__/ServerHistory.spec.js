@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -9,26 +8,25 @@ import PackVersion from '../PackVersion';
 import ServerHistory from '../ServerHistory';
 
 describe('Model: ServerHistory', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('findById', () => {
         it('should return the data for the given server history', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'Test Pack Description'
+                description: 'Test Pack Description',
             });
 
             const packVersion = await PackVersion.query().insert({
                 version: '1.2.3',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             const server = await Server.query().insert({
@@ -36,19 +34,19 @@ describe('Model: ServerHistory', () => {
                 host: '127.0.0.1',
                 description: 'This is a test pack and it is for a test pack',
                 pack_id: pack.id,
-                pack_version_id: packVersion.id
+                pack_version_id: packVersion.id,
             });
 
             const expectedOutput = {
                 server_id: server.id,
                 online: true,
-                players: 22
+                players: 22,
             };
 
             const created = await ServerHistory.query().insert({
                 server_id: server.id,
                 online: true,
-                players: 22
+                players: 22,
             });
 
             const serverHistory = await ServerHistory.query().findById(created.id);
@@ -64,12 +62,12 @@ describe('Model: ServerHistory', () => {
         it('should create a server history', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'Test Pack Description'
+                description: 'Test Pack Description',
             });
 
             const packVersion = await PackVersion.query().insert({
                 version: '1.2.3',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             const server = await Server.query().insert({
@@ -77,19 +75,19 @@ describe('Model: ServerHistory', () => {
                 host: '127.0.0.1',
                 description: 'This is a test pack and it is for a test pack',
                 pack_id: pack.id,
-                pack_version_id: packVersion.id
+                pack_version_id: packVersion.id,
             });
 
             const expectedOutput = {
                 server_id: server.id,
                 online: true,
-                players: 22
+                players: 22,
             };
 
             const serverHistory = await ServerHistory.query().insert({
                 server_id: server.id,
                 online: true,
-                players: 22
+                players: 22,
             });
 
             expect(serverHistory).toBeInstanceOf(Object);

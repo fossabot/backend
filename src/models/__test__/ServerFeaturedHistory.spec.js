@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -10,14 +9,13 @@ import PackVersion from '../PackVersion';
 import ServerFeaturedHistory from '../ServerFeaturedHistory';
 
 describe('Model: ServerFeaturedHistory', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('findById', () => {
@@ -25,17 +23,17 @@ describe('Model: ServerFeaturedHistory', () => {
             const user = await User.query().insert({
                 username: 'Test',
                 email: 'test@example.com',
-                password: 'test'
+                password: 'test',
             });
 
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'Test Pack Description'
+                description: 'Test Pack Description',
             });
 
             const packVersion = await PackVersion.query().insert({
                 version: '1.2.3',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             const server = await Server.query().insert({
@@ -43,7 +41,7 @@ describe('Model: ServerFeaturedHistory', () => {
                 host: '127.0.0.1',
                 description: 'This is a test pack and it is for a test pack',
                 pack_id: pack.id,
-                pack_version_id: packVersion.id
+                pack_version_id: packVersion.id,
             });
 
             const expectedOutput = {
@@ -51,7 +49,7 @@ describe('Model: ServerFeaturedHistory', () => {
                 user_id: user.id,
                 price: 5.55,
                 transaction_id: 'asldhjaslkdjlkas1234',
-                days: 14
+                days: 14,
             };
 
             const serverFeaturedHistory = await ServerFeaturedHistory.query().insert({
@@ -60,7 +58,7 @@ describe('Model: ServerFeaturedHistory', () => {
                 price: 5.55,
                 transaction_id: 'asldhjaslkdjlkas1234',
                 days: 14,
-                expires_at: new Date().toJSON()
+                expires_at: new Date().toJSON(),
             });
 
             const serverHistory = await ServerFeaturedHistory.query().findById(serverFeaturedHistory.id);
@@ -78,17 +76,17 @@ describe('Model: ServerFeaturedHistory', () => {
             const user = await User.query().insert({
                 username: 'Test',
                 email: 'test@example.com',
-                password: 'test'
+                password: 'test',
             });
 
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'Test Pack Description'
+                description: 'Test Pack Description',
             });
 
             const packVersion = await PackVersion.query().insert({
                 version: '1.2.3',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             const server = await Server.query().insert({
@@ -96,7 +94,7 @@ describe('Model: ServerFeaturedHistory', () => {
                 host: '127.0.0.1',
                 description: 'This is a test pack and it is for a test pack',
                 pack_id: pack.id,
-                pack_version_id: packVersion.id
+                pack_version_id: packVersion.id,
             });
 
             const expectedOutput = {
@@ -104,7 +102,7 @@ describe('Model: ServerFeaturedHistory', () => {
                 user_id: user.id,
                 price: 5.55,
                 transaction_id: 'asldhjaslkdjlkas1234',
-                days: 14
+                days: 14,
             };
 
             const serverHistory = await ServerFeaturedHistory.query().insert({
@@ -113,7 +111,7 @@ describe('Model: ServerFeaturedHistory', () => {
                 price: 5.55,
                 transaction_id: 'asldhjaslkdjlkas1234',
                 days: 14,
-                expires_at: new Date().toJSON()
+                expires_at: new Date().toJSON(),
             });
 
             expect(serverHistory).toBeInstanceOf(Object);

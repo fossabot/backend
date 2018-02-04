@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -6,18 +5,17 @@ import knex from '../../database/knex';
 import File from '../File';
 
 /**
- * These tests are here not to test the functionality of the provided Model library (Objection.js) and is more to make sure commonly used queries (with custom changes to the models) are returning as
- * expected
+ * These tests are here not to test the functionality of the provided Model library (Objection.js) and is more to make
+ * sure commonly used queries (with custom changes to the models) are returning as expected.
  */
 describe('Model: File', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('findById', () => {
@@ -26,12 +24,12 @@ describe('Model: File', () => {
                 hash: 'cf80cd8aed482d5d1527d7dc72fceff84e6326592848447d2dc0b0e87dfc9a90',
                 size: 22,
                 mod_id: null,
-                mod_version_id: null
+                mod_version_id: null,
             };
 
             const created = await File.query().insert({
                 hash: 'cf80cd8aed482d5d1527d7dc72fceff84e6326592848447d2dc0b0e87dfc9a90',
-                size: 22
+                size: 22,
             });
 
             const packFile = await File.query().findById(created.id);
@@ -55,12 +53,12 @@ describe('Model: File', () => {
                 hash: 'cf80cd8aed482d5d1527d7dc72fceff84e6326592848447d2dc0b0e87dfc9a90',
                 size: 22,
                 mod_id: null,
-                mod_version_id: null
+                mod_version_id: null,
             };
 
             const file = await File.query().insert({
                 hash: 'cf80cd8aed482d5d1527d7dc72fceff84e6326592848447d2dc0b0e87dfc9a90',
-                size: 22
+                size: 22,
             });
 
             expect(file).toBeInstanceOf(Object);

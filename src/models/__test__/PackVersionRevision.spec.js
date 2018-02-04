@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -8,42 +7,44 @@ import PackVersion from '../PackVersion';
 import PackVersionRevision from '../PackVersionRevision';
 
 /**
- * These tests are here not to test the functionality of the provided Model library (Objection.js) and is more to make sure commonly used queries (with custom changes to the models) are returning as
- * expected
+ * These tests are here not to test the functionality of the provided Model library (Objection.js) and is more to make
+ * sure commonly used queries (with custom changes to the models) are returning as expected.
  */
 describe('Model: PackVersionRevision', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('insert', () => {
         it('should create a pack version revision', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const packVersion = await PackVersion.query().insert({
                 version: 'test',
                 changelog: 'test',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             const packVersionRevision = await PackVersionRevision.query().insert({
                 json: '{"test": true}',
-                pack_version_id: packVersion.id
+                pack_version_id: packVersion.id,
             });
 
             expect(packVersionRevision).toBeInstanceOf(Object);
             expect(packVersionRevision).toHaveProperty('id');
             expect(packVersionRevision).toHaveProperty('pack_version_id', packVersion.id);
-            expect(packVersionRevision).toHaveProperty('hash', '80f65706d935d3b928d95207937dd81bad43ab56cd4d3b7ed41772318e734168');
+            expect(packVersionRevision).toHaveProperty(
+                'hash',
+                '80f65706d935d3b928d95207937dd81bad43ab56cd4d3b7ed41772318e734168'
+            );
             expect(packVersionRevision).toHaveProperty('json', '{"test": true}');
             expect(packVersionRevision).toHaveProperty('is_verified', false);
             expect(packVersionRevision).toHaveProperty('is_verifying', false);
@@ -56,18 +57,18 @@ describe('Model: PackVersionRevision', () => {
         it('should get the Minecraft version for a pack version', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const createdPackVersion = await PackVersion.query().insert({
                 version: 'test',
                 changelog: 'test',
-                pack_id: pack.id
+                pack_id: pack.id,
             });
 
             const packVersionRevision = await PackVersionRevision.query().insert({
                 json: '{"test": true}',
-                pack_version_id: createdPackVersion.id
+                pack_version_id: createdPackVersion.id,
             });
 
             const packVersion = await packVersionRevision.$relatedQuery('packVersion');

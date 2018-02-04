@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -6,14 +5,13 @@ import knex from '../../database/knex';
 import Mod from '../Mod';
 
 describe('Model: Mod', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('findById', () => {
@@ -24,13 +22,13 @@ describe('Model: Mod', () => {
                 authors: ['test1', 'test2'],
                 website_url: null,
                 donation_url: null,
-                updated_at: null
+                updated_at: null,
             };
 
             const created = await Mod.query().insert({
                 name: 'Test Mod',
                 description: 'This is a test mod',
-                authors: ['test1', 'test2']
+                authors: ['test1', 'test2'],
             });
 
             const mod = await Mod.query().findById(created.id);
@@ -56,13 +54,13 @@ describe('Model: Mod', () => {
                 authors: ['test1', 'test2'],
                 website_url: null,
                 donation_url: null,
-                updated_at: null
+                updated_at: null,
             };
 
             const mod = await Mod.query().insert({
                 name: 'Test Mod',
                 description: 'This is a test mod',
-                authors: ['test1', 'test2']
+                authors: ['test1', 'test2'],
             });
 
             expect(mod).toBeInstanceOf(Object);
@@ -77,12 +75,12 @@ describe('Model: Mod', () => {
             const mod = await Mod.query().insert({
                 name: 'Test Mod',
                 description: 'This is a test mod',
-                authors: ['test1', 'test2']
+                authors: ['test1', 'test2'],
             });
 
             await mod.$relatedQuery('versions').insert({
                 version: '1.2.3',
-                changelog: 'Test'
+                changelog: 'Test',
             });
 
             const versions = await mod.$relatedQuery('versions');

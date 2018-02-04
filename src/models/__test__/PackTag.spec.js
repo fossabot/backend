@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -7,24 +6,17 @@ import Pack from '../Pack';
 import PackTag from '../PackTag';
 
 /**
- * These tests are here not to test the functionality of the provided Model library (Objection.js) and is more to make sure commonly used queries (with custom changes to the models) are returning as
- * expected
+ * These tests are here not to test the functionality of the provided Model library (Objection.js) and is more to make
+ * sure commonly used queries (with custom changes to the models) are returning as expected.
  */
 describe('Model: PackTag', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => {
-            return knex.migrate.latest().then(() => {
-                return done();
-            });
-        });
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] }).then(() => {
-            return done();
-        });
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('insert', () => {

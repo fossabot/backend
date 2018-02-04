@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -7,27 +6,26 @@ import Pack from '../Pack';
 import PackStat from '../PackStat';
 
 describe('Model: PackStat', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('insert', () => {
         it('should create a pack stat', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const packStat = await PackStat.query().insert({
                 date: '2016-07-07',
                 pack_id: pack.id,
-                pack_installs: 1234
+                pack_installs: 1234,
             });
 
             expect(packStat).toBeInstanceOf(Object);
@@ -46,12 +44,12 @@ describe('Model: PackStat', () => {
         it('should return the pack for a pack stat', async () => {
             const createdPack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const packStat = await PackStat.query().insert({
                 pack_id: createdPack.id,
-                date: '2016-07-07'
+                date: '2016-07-07',
             });
 
             const pack = await packStat.$relatedQuery('pack');

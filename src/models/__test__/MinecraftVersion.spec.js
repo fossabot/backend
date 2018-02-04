@@ -1,4 +1,3 @@
-import { Model } from 'objection';
 import knexCleaner from 'knex-cleaner';
 
 import knex from '../../database/knex';
@@ -8,14 +7,13 @@ import PackVersion from '../PackVersion';
 import MinecraftVersion from '../MinecraftVersion';
 
 describe('Model: MinecraftVersion', () => {
-    beforeAll((done) => {
-        Model.knex(knex);
-
-        knex.migrate.rollback().then(() => knex.migrate.latest().then(() => done()));
+    beforeAll(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
     });
 
-    afterEach((done) => {
-        knexCleaner.clean(knex, {ignoreTables: ['migrations', 'migrations_lock']}).then(() => done());
+    afterEach(async () => {
+        await knexCleaner.clean(knex, { ignoreTables: ['migrations', 'migrations_lock'] });
     });
 
     describe('insert', () => {
@@ -23,11 +21,11 @@ describe('Model: MinecraftVersion', () => {
             const expectedOutput = {
                 version: '1.7.10',
                 json: null,
-                updated_at: null
+                updated_at: null,
             };
 
             const minecraftVersion = await MinecraftVersion.query().insert({
-                version: '1.7.10'
+                version: '1.7.10',
             });
 
             expect(minecraftVersion).toBeInstanceOf(Object);
@@ -41,18 +39,18 @@ describe('Model: MinecraftVersion', () => {
         it('should list the pack versions for a Minecraft version', async () => {
             const pack = await Pack.query().insert({
                 name: 'Test Pack',
-                description: 'This is a test pack'
+                description: 'This is a test pack',
             });
 
             const minecraftVersion = await MinecraftVersion.query().insert({
-                version: '1.2.3'
+                version: '1.2.3',
             });
 
             await PackVersion.query().insert({
                 version: 'test',
                 changelog: 'test',
                 pack_id: pack.id,
-                minecraft_version_id: minecraftVersion.id
+                minecraft_version_id: minecraftVersion.id,
             });
 
             const expectedOutput = {
@@ -60,7 +58,7 @@ describe('Model: MinecraftVersion', () => {
                 changelog: 'test',
                 pack_id: pack.id,
                 minecraft_version_id: minecraftVersion.id,
-                updated_at: null
+                updated_at: null,
             };
 
             const packVersions = await minecraftVersion.$relatedQuery('packVersions');
