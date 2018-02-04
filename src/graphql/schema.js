@@ -1,44 +1,45 @@
-const { makeExecutableSchema } = require('graphql-tools');
-const { GraphQLDateTime } = require('graphql-iso-date');
+import { GraphQLDateTime } from 'graphql-iso-date';
+import { makeExecutableSchema } from 'graphql-tools';
 
-const User = require('../models/User');
+import User from '../models/User';
+import * as types from './types';
 
-// the GraphQL schema in string form
-const typeDefs = `
-    scalar DateTime
+const RootQuery = `
+    """
+    Root query used at the base for all queries
+    """
+    type RootQuery {
+        """
+        Get a single user
+        """
+        user(id: ID!): UserType
 
-    type Query {
-        users: [User]
+        """
+        Get all users
+        """
+        users: [UserType]
     }
+`;
 
-    type User {
-        id: ID!,
-        username: String!,
-        email: String!,
-        password: String!,
-        must_change_password: Boolean!,
-        is_banned: Boolean!,
-        ban_reason: String,
-        is_verified: Boolean!,
-        verfication_code: String,
-        tfa_secret: String,
-        created_at: DateTime!,
-        updated_at: DateTime,
-        banned_at: DateTime,
-        verified_at: DateTime,
+const SchemaDefinition = `
+    schema {
+        query: RootQuery
     }
 `;
 
 // the resolvers
 const resolvers = {
     DateTime: GraphQLDateTime,
-    Query: { users: async () => await User.query() },
+    RootQuery: {
+        user: async (obj, args) => await User.query().findById(args.id),
+        users: async () => await User.query(),
+    },
 };
 
 // put together a schema
 const schema = makeExecutableSchema({
-    typeDefs,
+    typeDefs: [SchemaDefinition, RootQuery, types.UserType],
     resolvers,
 });
 
-module.exports = schema;
+export default schema;
