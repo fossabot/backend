@@ -1,5 +1,6 @@
 import config from 'config';
 import bcrypt from 'bcryptjs';
+import { Model } from 'objection';
 
 import Pack from './Pack';
 import Role from './Role';

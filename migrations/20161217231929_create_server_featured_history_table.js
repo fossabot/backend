@@ -1,5 +1,5 @@
-exports.up = function(knex) {
-    return knex.schema.createTable('server_featured_history', function(table) {
+exports.up = function (knex) {
+    return knex.schema.createTable('server_featured_history', function (table) {
         // table structure
         table.string('id', 36).primary();
         table.string('server_id', 36).notNullable();
@@ -41,6 +41,6 @@ exports.up = function(knex) {
     });
 };
 
-exports.down = function(knex) {
+exports.down = function (knex) {
     return knex.schema.dropTable('server_featured_history');
 };
