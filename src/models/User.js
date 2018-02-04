@@ -1,7 +1,11 @@
 import config from 'config';
 import bcrypt from 'bcryptjs';
 
+import Pack from './Pack';
+import Role from './Role';
 import BaseModel from './BaseModel';
+import PackUser from './pivots/PackUser';
+import UserRole from './pivots/UserRole';
 
 import { generateUID } from '../utils';
 
@@ -96,35 +100,35 @@ class User extends BaseModel {
         },
     };
 
-    // static relationMappings = {
-    //     packs: {
-    //         relation: Model.ManyToManyRelation,
-    //         modelClass: Pack,
-    //         join: {
-    //             from: 'users.id',
-    //             through: {
-    //                 from: 'pack_users.user_id',
-    //                 to: 'pack_users.pack_id',
-    //                 modelClass: PackUser,
-    //                 extra: ['can_administrate', 'can_create', 'can_delete', 'can_edit', 'can_publish'],
-    //             },
-    //             to: 'packs.id',
-    //         },
-    //     },
-    //     roles: {
-    //         relation: Model.ManyToManyRelation,
-    //         modelClass: Role,
-    //         join: {
-    //             from: 'users.id',
-    //             through: {
-    //                 from: 'user_roles.user_id',
-    //                 to: 'user_roles.role_id',
-    //                 modelClass: UserRole,
-    //             },
-    //             to: 'roles.id',
-    //         },
-    //     },
-    // };
+    static relationMappings = {
+        packs: {
+            relation: Model.ManyToManyRelation,
+            modelClass: Pack,
+            join: {
+                from: 'users.id',
+                through: {
+                    from: 'pack_users.user_id',
+                    to: 'pack_users.pack_id',
+                    modelClass: PackUser,
+                    extra: ['can_administrate', 'can_create', 'can_delete', 'can_edit', 'can_publish'],
+                },
+                to: 'packs.id',
+            },
+        },
+        roles: {
+            relation: Model.ManyToManyRelation,
+            modelClass: Role,
+            join: {
+                from: 'users.id',
+                through: {
+                    from: 'user_roles.user_id',
+                    to: 'user_roles.role_id',
+                    modelClass: UserRole,
+                },
+                to: 'roles.id',
+            },
+        },
+    };
 
     /**
      * Transform the must_change_password field into a boolean.
