@@ -1,3 +1,5 @@
+import config from 'config';
+
 import * as controller from './controller';
 import httpMethods from '../../utils/httpMethods';
 
@@ -7,12 +9,13 @@ export const routes = [
     {
         method: [httpMethods.GET, httpMethods.POST],
         route: '/',
+        active: config.get('graphql.enabled'),
         handler: controller.graphql,
     },
     {
         method: httpMethods.GET,
         route: '/graphiql',
-        active: process.env.NODE_ENV === 'development',
+        active: config.get('graphql.graphiql.enabled'),
         handler: controller.graphiql,
     },
 ];

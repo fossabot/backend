@@ -4,6 +4,12 @@
         "name": "atlauncher-next",
         "username": "atlauncher-next"
     },
+    "graphql": {
+        "enabled": false,
+        "graphiql": {
+            "enabled": false
+        }
+    },
     "cache": {
         "type": "redis",
         "options": {

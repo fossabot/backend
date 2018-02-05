@@ -13,6 +13,12 @@
             "ttl": 600
         }
     },
+    "graphql": {
+        "enabled": true,
+        "graphiql": {
+            "enabled": true
+        }
+    },
     "oauth": {
         "validity": {
             "authorization_code": "10MI",
