@@ -1,7 +1,7 @@
 import Faker from 'faker';
 import { randexp } from 'randexp';
 
-import { generateUID, getSafeString } from '../src/utils';
+import { getSafeString } from '../src/utils';
 
 import Pack from '../src/models/Pack';
 import Role from '../src/models/Role';
@@ -37,7 +37,7 @@ export async function createPack(overrides = {}) {
  */
 export async function createUser(overrides = {}) {
     const defaults = {
-        username: randexp('[A-Za-z0-9-_]{6,16}'),
+        username: randexp(/[A-Za-z0-9-_]{6,16}/),
         password: Faker.internet.password(),
         email: Faker.internet.email(),
     };
