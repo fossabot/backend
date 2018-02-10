@@ -3,7 +3,7 @@ import config from 'config';
 import { sign } from 'jsonwebtoken';
 import passport from 'koa-passport';
 
-import { convertTimeStringToMilliseconds } from '../../utils';
+import { convertTimeStringToSeconds } from '../../utils';
 
 /**
  * This will attempt to authenticate a user from a POST request.
@@ -30,7 +30,7 @@ export function authenticate(ctx, next) {
             },
             config.get('secret'),
             {
-                expiresIn: convertTimeStringToMilliseconds(config.get('authentication.jwt_validity')),
+                expiresIn: convertTimeStringToSeconds(config.get('authentication.jwt_validity')),
             }
         );
 

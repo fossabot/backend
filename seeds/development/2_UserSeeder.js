@@ -1,4 +1,6 @@
+const config = require('config');
 const uuidv4 = require('uuid/v4');
+const bcrypt = require('bcryptjs');
 
 exports.seed = async function (knex) {
     async function getRoleID(name) {
@@ -28,7 +30,7 @@ exports.seed = async function (knex) {
         {
             id: uuidv4(),
             username: 'admin',
-            password: 'password',
+            password: bcrypt.hashSync('password', config.get('bcryptRounds')),
             email: 'admin@example.com',
             verification_code: 'testing',
             created_at: new Date().toJSON(),

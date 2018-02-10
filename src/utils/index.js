@@ -171,6 +171,24 @@ export function convertTimeStringToMilliseconds(timestring) {
 }
 
 /**
+ * This will convert a time string to seconds.
+ *
+ * For instance passing in 20S will return 20.
+ *
+ * @param {string} timestring
+ * @returns {number}
+ */
+export function convertTimeStringToSeconds(timestring) {
+    const milliseconds = convertTimeStringToMilliseconds(timestring);
+
+    if (milliseconds === 0) {
+        return 0;
+    }
+
+    return milliseconds / 1000;
+}
+
+/**
  * This will take the message and hash it with SHA256.
  *
  * @param {Buffer|string[]|string} message

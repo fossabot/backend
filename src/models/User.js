@@ -173,7 +173,13 @@ class User extends BaseModel {
         }
     }
 
-    verify(password) {
+    /**
+     * This will attempt to verify the passed in password to see if it matches the users password or not.
+     *
+     * @param {string} password
+     * @returns {boolean}
+     */
+    verifyPassword(password) {
         return bcrypt.compareSync(password, this.password);
     }
 
