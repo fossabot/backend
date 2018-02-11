@@ -23,6 +23,14 @@ exports.up = function (knex) {
             .notNullable()
             .defaultTo(true);
         table
+            .string('website_url')
+            .nullable()
+            .defaultTo(null);
+        table
+            .string('support_url')
+            .nullable()
+            .defaultTo(null);
+        table
             .string('discord_invite_code', 32)
             .nullable()
             .defaultTo(null);

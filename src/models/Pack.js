@@ -55,10 +55,21 @@ class Pack extends BaseModel {
                 type: 'boolean',
                 default: false,
             },
+            website_url: {
+                type: ['string', 'null'],
+                maxLength: 1024,
+                default: null,
+            },
+            support_url: {
+                type: ['string', 'null'],
+                maxLength: 1024,
+                default: null,
+            },
             discord_invite_code: {
-                type: 'string',
+                type: ['string', 'null'],
                 minLength: 8,
                 maxLength: 32,
+                default: null,
             },
             created_at: {
                 type: 'string',

@@ -18,6 +18,13 @@ class BaseModel extends Model {
     static timestamps = true;
 
     /**
+     * If this model is immutable and shouldn't allow updating.
+     *
+     * @type {boolean}
+     */
+    static immutable = true;
+
+    /**
      * An object of attribute names with function values to transform attributes on the model if they exist.
      *
      * @type {object}
@@ -121,6 +128,7 @@ class BaseModel extends Model {
      * Ran before updating the database.
      *
      * It will:
+     *   - throw an error if trying to update an immutable class
      *   - change the updated_at field if timestamps are enabled
      *   - check to make sure there are no duplicates values in the database as defined in the
      *     jsonSchema.uniqueProperties value
@@ -131,6 +139,10 @@ class BaseModel extends Model {
      */
     $beforeUpdate(opt, queryContext) {
         super.$beforeUpdate(opt, queryContext);
+
+        if (this.constructor.immutable) {
+            throw new Error(`${this.constructor.name} is set as immutable so updates are not allowed.`);
+        }
 
         if (this.constructor.timestamps) {
             this.updated_at = new Date().toJSON();

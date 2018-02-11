@@ -30,9 +30,8 @@ exports.seed = async function (knex) {
         {
             id: uuidv4(),
             username: 'admin',
-            password: bcrypt.hashSync('password', config.get('bcryptRounds')),
+            password_hash: bcrypt.hashSync('password', config.get('bcryptRounds')),
             email: 'admin@example.com',
-            verification_code: 'testing',
             created_at: new Date().toJSON(),
         },
     ]);

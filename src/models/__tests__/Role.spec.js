@@ -78,7 +78,7 @@ describe('Model: Role', () => {
 
             await role.$relatedQuery('users').insert({
                 username: 'test',
-                password: 'test',
+                password_hash: 'test',
                 email: 'test@example.com',
             });
 
@@ -101,7 +101,7 @@ describe('Model: Role', () => {
 
             const createdUser = await User.query().insert({
                 username: 'test',
-                password: 'test',
+                password_hash: 'test',
                 email: 'test@example.com',
             });
 

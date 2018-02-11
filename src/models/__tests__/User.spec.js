@@ -33,7 +33,7 @@ describe('Model: User', () => {
 
             const created = await User.query().insert({
                 username: 'test',
-                password: 'test',
+                password_hash: 'test',
                 email: 'test@example.com',
             });
 
@@ -42,7 +42,7 @@ describe('Model: User', () => {
             expect(user).toBeInstanceOf(Object);
             expect(user).toMatchObject(expectedOutput);
             expect(user).toHaveProperty('id');
-            expect(user).toHaveProperty('password');
+            expect(user).toHaveProperty('password_hash');
             expect(user).toHaveProperty('verification_code');
             expect(user).toHaveProperty('created_at');
         });
@@ -71,14 +71,14 @@ describe('Model: User', () => {
 
             const user = await User.query().insert({
                 username: 'test',
-                password: 'test',
+                password_hash: 'test',
                 email: 'test@example.com',
             });
 
             expect(user).toBeInstanceOf(Object);
             expect(user).toMatchObject(expectedOutput);
             expect(user).toHaveProperty('id');
-            expect(user).toHaveProperty('password');
+            expect(user).toHaveProperty('password_hash');
             expect(user).toHaveProperty('verification_code');
             expect(user).toHaveProperty('created_at');
         });
@@ -86,7 +86,7 @@ describe('Model: User', () => {
         it('should throw an error if email is invalid format', () => {
             const input = {
                 username: 'test',
-                password: 'test',
+                password_hash: 'test',
                 email: 'error',
             };
 
@@ -108,7 +108,7 @@ describe('Model: User', () => {
         it('should throw an error if username is invalid format', () => {
             const input = {
                 username: 'a',
-                password: 'test',
+                password_hash: 'test',
                 email: 'test@example.com',
             };
 
@@ -132,7 +132,7 @@ describe('Model: User', () => {
         it('should create a role for a user', async () => {
             const user = await User.query().insert({
                 username: 'test',
-                password: 'test',
+                password_hash: 'test',
                 email: 'test@example.com',
             });
 
@@ -156,7 +156,7 @@ describe('Model: User', () => {
         it('should attach a role to a user', async () => {
             const user = await User.query().insert({
                 username: 'test',
-                password: 'test',
+                password_hash: 'test',
                 email: 'test@example.com',
             });
 
@@ -184,7 +184,7 @@ describe('Model: User', () => {
         it('should create a pack for a user', async () => {
             const user = await User.query().insert({
                 username: 'testuser',
-                password: 'password',
+                password_hash: 'password',
                 email: 'test@example.com',
             });
 
@@ -209,7 +209,7 @@ describe('Model: User', () => {
         it('should attach a pack to a user', async () => {
             const user = await User.query().insert({
                 username: 'testuser',
-                password: 'test',
+                password_hash: 'test',
                 email: 'test@example.com',
             });
 

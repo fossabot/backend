@@ -1,0 +1,6 @@
+{
+    "rules": {
+        "immutable/no-mutation": "off",
+        "import/unambiguous": "off"
+    }
+}

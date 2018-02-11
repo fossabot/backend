@@ -8,7 +8,7 @@ import User from '../../models/User';
  * @param {object} ctx
  */
 export async function getAll(ctx) {
-    const users = await User.query().omit(['password']);
+    const users = await User.query().omit(['password_hash']);
 
     ctx.ok(users);
 }
@@ -22,7 +22,7 @@ export async function getAll(ctx) {
 export async function getOne(ctx) {
     const user = await User.query()
         .findById(ctx.params.userId)
-        .omit(['password']);
+        .omit(['password_hash']);
 
     if (!user) {
         return ctx.throw(404, Boom.notFound('No user with that Id was found'));

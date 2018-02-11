@@ -6,7 +6,7 @@ exports.up = function (knex) {
             .string('username', 64)
             .notNullable()
             .unique();
-        table.string('password', 60).notNullable();
+        table.string('password_hash', 60).notNullable();
         table
             .text('email')
             .notNullable()
@@ -24,12 +24,19 @@ exports.up = function (knex) {
             .nullable()
             .defaultTo(null);
         table
+            .string('tfa_secret', 32)
+            .nullable()
+            .defaultTo(null);
+        table
             .boolean('is_verified')
             .notNullable()
             .defaultTo(false);
-        table.string('verification_code', 128).notNullable();
         table
-            .string('tfa_secret', 32)
+            .string('verification_code', 128)
+            .nullable()
+            .defaultTo(null);
+        table
+            .string('password_reset_code', 128)
             .nullable()
             .defaultTo(null);
         table
@@ -41,11 +48,19 @@ exports.up = function (knex) {
             .nullable()
             .defaultTo(null);
         table
-            .timestamp('banned_at')
+            .timestamp('verified_at')
             .nullable()
             .defaultTo(null);
         table
-            .timestamp('verified_at')
+            .timestamp('password_reset_sent_at')
+            .nullable()
+            .defaultTo(null);
+        table
+            .timestamp('password_last_changed_at')
+            .nullable()
+            .defaultTo(null);
+        table
+            .timestamp('banned_at')
             .nullable()
             .defaultTo(null);
 

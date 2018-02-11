@@ -4,6 +4,7 @@ import { Model } from 'objection';
 
 import Pack from './Pack';
 import Role from './Role';
+import AuditLog from './AuditLog';
 import BaseModel from './BaseModel';
 import PackUser from './pivots/PackUser';
 import UserRole from './pivots/UserRole';
@@ -24,7 +25,7 @@ class User extends BaseModel {
     static jsonSchema = {
         type: 'object',
 
-        required: ['username', 'email', 'password'],
+        required: ['username', 'email', 'password_hash'],
 
         uniqueProperties: ['username', 'email'],
 
@@ -43,13 +44,13 @@ class User extends BaseModel {
                 maxLength: 64,
                 pattern: '^[A-Za-z0-9-_]+$',
             },
+            password_hash: {
+                type: 'string',
+                maxLength: 60,
+            },
             email: {
                 type: 'string',
                 format: 'email',
-            },
-            password: {
-                type: 'string',
-                maxLength: 60,
             },
             must_change_password: {
                 type: 'boolean',
@@ -63,19 +64,26 @@ class User extends BaseModel {
                 type: ['string', 'null'],
                 default: null,
             },
+            tfa_secret: {
+                type: ['string', 'null'],
+                minLength: 32,
+                maxLength: 32,
+                default: null,
+            },
             is_verified: {
                 type: 'boolean',
                 default: false,
             },
             verification_code: {
-                type: 'string',
+                type: ['string', 'null'],
                 minLength: 128,
                 maxLength: 128,
+                default: null,
             },
-            tfa_secret: {
+            password_reset_code: {
                 type: ['string', 'null'],
-                minLength: 32,
-                maxLength: 32,
+                minLength: 128,
+                maxLength: 128,
                 default: null,
             },
             created_at: {
@@ -87,12 +95,22 @@ class User extends BaseModel {
                 format: 'date-time',
                 default: null,
             },
-            banned_at: {
+            verified_at: {
                 type: ['string', 'null'],
                 format: 'date-time',
                 default: null,
             },
-            verified_at: {
+            password_reset_sent_at: {
+                type: ['string', 'null'],
+                format: 'date-time',
+                default: null,
+            },
+            password_last_changed_at: {
+                type: ['string', 'null'],
+                format: 'date-time',
+                default: null,
+            },
+            banned_at: {
                 type: ['string', 'null'],
                 format: 'date-time',
                 default: null,
@@ -148,8 +166,8 @@ class User extends BaseModel {
      * @returns {*}
      */
     $beforeInsert(queryContext) {
-        if (this.hasOwnProperty('password')) {
-            this.password = bcrypt.hashSync(this.password, config.get('bcryptRounds'));
+        if (this.hasOwnProperty('password_hash')) {
+            this.password_hash = bcrypt.hashSync(this.password_hash, config.get('bcryptRounds'));
         }
 
         if (!this.hasOwnProperty('verification_code')) {
@@ -168,8 +186,8 @@ class User extends BaseModel {
     $beforeUpdate(opt, queryContext) {
         super.$beforeUpdate(opt, queryContext);
 
-        if (this.hasOwnProperty('password')) {
-            this.password = bcrypt.hashSync(this.password, config.get('bcryptRounds'));
+        if (this.hasOwnProperty('password_hash')) {
+            this.password_hash = bcrypt.hashSync(this.password_hash, config.get('bcryptRounds'));
         }
     }
 
@@ -180,7 +198,7 @@ class User extends BaseModel {
      * @returns {boolean}
      */
     verifyPassword(password) {
-        return bcrypt.compareSync(password, this.password);
+        return bcrypt.compareSync(password, this.password_hash);
     }
 
     /**

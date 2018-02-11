@@ -224,7 +224,7 @@ describe('Model: Pack', () => {
 
             await pack.$relatedQuery('users').insert({
                 username: 'testuser',
-                password: 'password',
+                password_hash: 'password',
                 email: 'test@example.com',
             });
 
@@ -248,7 +248,7 @@ describe('Model: Pack', () => {
 
             const created = await User.query().insert({
                 username: 'testuser',
-                password: 'test',
+                password_hash: 'test',
                 email: 'test@example.com',
             });
 
