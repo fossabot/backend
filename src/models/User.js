@@ -119,6 +119,14 @@ class User extends BaseModel {
     };
 
     static relationMappings = {
+        auditLogs: {
+            relation: Model.HasManyRelation,
+            modelClass: AuditLog,
+            join: {
+                from: 'users.id',
+                to: 'audit_logs.user_id',
+            },
+        },
         packs: {
             relation: Model.ManyToManyRelation,
             modelClass: Pack,
