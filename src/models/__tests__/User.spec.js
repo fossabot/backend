@@ -3,7 +3,6 @@ import knexCleaner from 'knex-cleaner';
 import knex from '../../database/knex';
 
 import Pack from '../Pack';
-import Role from '../Role';
 import User from '../User';
 
 describe('Model: User', () => {
@@ -125,58 +124,6 @@ describe('Model: User', () => {
             };
 
             return expect(User.query().insert(input)).rejects.toHaveProperty('data', expectedError);
-        });
-    });
-
-    describe('roles', () => {
-        it('should create a role for a user', async () => {
-            const user = await User.query().insert({
-                username: 'test',
-                password_hash: 'test',
-                email: 'test@example.com',
-            });
-
-            await user.$relatedQuery('roles').insert({
-                name: 'testrole',
-                description: 'This is a test role',
-            });
-
-            const usersRoles = await user.$relatedQuery('roles');
-
-            expect(usersRoles).toBeInstanceOf(Array);
-            expect(usersRoles).toHaveLength(1);
-
-            const role = usersRoles[0];
-
-            expect(role).toBeInstanceOf(Object);
-            expect(role).toHaveProperty('name', 'testrole');
-            expect(role).toHaveProperty('description', 'This is a test role');
-        });
-
-        it('should attach a role to a user', async () => {
-            const user = await User.query().insert({
-                username: 'test',
-                password_hash: 'test',
-                email: 'test@example.com',
-            });
-
-            const created = await Role.query().insert({
-                name: 'testrole',
-                description: 'This is a test role',
-            });
-
-            await user.$relatedQuery('roles').relate(created.id);
-
-            const usersRoles = await user.$relatedQuery('roles');
-
-            expect(usersRoles).toBeInstanceOf(Array);
-            expect(usersRoles).toHaveLength(1);
-
-            const role = usersRoles[0];
-
-            expect(role).toBeInstanceOf(Object);
-            expect(role).toHaveProperty('name', 'testrole');
-            expect(role).toHaveProperty('description', 'This is a test role');
         });
     });
 
