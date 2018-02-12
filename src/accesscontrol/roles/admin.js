@@ -1,8 +1,8 @@
 export default {
     $extend: ['user'],
     user: {
-        'create:any': ['*'],
-        'read:any': ['*', '!password_hash', '!tfa_secret', '!verification_code', '!password_reset_code'],
+        'create:any': ['*', '!tfa_secret', '!verification_code', '!password_reset_code'],
+        'read:any': ['*', '!password', '!tfa_secret', '!verification_code', '!password_reset_code'],
         'update:any': ['*'],
         'delete:any': ['*'],
     },

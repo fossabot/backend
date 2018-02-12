@@ -6,7 +6,7 @@ exports.up = function (knex) {
             .string('username', 64)
             .notNullable()
             .unique();
-        table.string('password_hash', 60).notNullable();
+        table.string('password', 60).notNullable();
         table
             .text('email')
             .notNullable()

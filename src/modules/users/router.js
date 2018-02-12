@@ -27,6 +27,18 @@ export const routes = [
         },
     },
     {
+        method: httpMethods.POST,
+        route: '/',
+        handler: controller.create,
+        accessControl: {
+            authenticated: true,
+            check: true,
+            filter: true,
+            resource: 'user',
+            action: 'createAny',
+        },
+    },
+    {
         method: httpMethods.GET,
         route: '/:userId',
         handler: controller.getOne,

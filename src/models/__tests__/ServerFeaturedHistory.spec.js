@@ -23,7 +23,7 @@ describe('Model: ServerFeaturedHistory', () => {
             const user = await User.query().insert({
                 username: 'Test',
                 email: 'test@example.com',
-                password_hash: 'test',
+                password: 'test',
             });
 
             const pack = await Pack.query().insert({
@@ -76,7 +76,7 @@ describe('Model: ServerFeaturedHistory', () => {
             const user = await User.query().insert({
                 username: 'Test',
                 email: 'test@example.com',
-                password_hash: 'test',
+                password: 'test',
             });
 
             const pack = await Pack.query().insert({

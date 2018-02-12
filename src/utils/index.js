@@ -282,11 +282,11 @@ export function addTimeStringToDate(string, date = new Date()) {
 export function generateErrorJsonResponse(err) {
     const status = err.statusCode || err.status || 500;
 
-    const isValidationError = (err.error || {}) instanceof ValidationError;
+    const isValidationError = err instanceof ValidationError;
 
     const stacktrace = isDevelopmentEnvironment() ? { stack: err.stack } : {};
 
-    const validation = isValidationError ? { validation: formatValidationErrors(err.error.data) } : {};
+    const validation = isValidationError ? { validation: formatValidationErrors(err.data) } : {};
 
     const message = isValidationError ? 'Validation error' : err.message;
 

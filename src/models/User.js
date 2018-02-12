@@ -20,10 +20,12 @@ import { generateUID } from '../utils';
 class User extends BaseModel {
     static tableName = 'users';
 
+    static pickJsonSchemaProperties = true;
+
     static jsonSchema = {
         type: 'object',
 
-        required: ['username', 'email', 'password_hash'],
+        required: ['username', 'email', 'password'],
 
         uniqueProperties: ['username', 'email'],
 
@@ -42,7 +44,7 @@ class User extends BaseModel {
                 maxLength: 64,
                 pattern: '^[A-Za-z0-9-_]+$',
             },
-            password_hash: {
+            password: {
                 type: 'string',
                 maxLength: 60,
             },
@@ -159,8 +161,8 @@ class User extends BaseModel {
      * @returns {*}
      */
     $beforeInsert(queryContext) {
-        if (this.hasOwnProperty('password_hash')) {
-            this.password_hash = bcrypt.hashSync(this.password_hash, config.get('bcryptRounds'));
+        if (this.hasOwnProperty('password')) {
+            this.password = bcrypt.hashSync(this.password, config.get('bcryptRounds'));
         }
 
         if (!this.hasOwnProperty('verification_code')) {
@@ -179,8 +181,8 @@ class User extends BaseModel {
     $beforeUpdate(opt, queryContext) {
         super.$beforeUpdate(opt, queryContext);
 
-        if (this.hasOwnProperty('password_hash')) {
-            this.password_hash = bcrypt.hashSync(this.password_hash, config.get('bcryptRounds'));
+        if (this.hasOwnProperty('password')) {
+            this.password = bcrypt.hashSync(this.password, config.get('bcryptRounds'));
         }
     }
 
@@ -191,7 +193,7 @@ class User extends BaseModel {
      * @returns {boolean}
      */
     verifyPassword(password) {
-        return bcrypt.compareSync(password, this.password_hash);
+        return bcrypt.compareSync(password, this.password);
     }
 }
 

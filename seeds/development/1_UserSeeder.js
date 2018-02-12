@@ -11,7 +11,7 @@ exports.seed = async function (knex) {
         {
             id: uuidv4(),
             username: 'admin',
-            password_hash: bcrypt.hashSync('password', config.get('bcryptRounds')),
+            password: bcrypt.hashSync('password', config.get('bcryptRounds')),
             role: 'admin',
             email: 'admin@example.com',
             created_at: new Date().toJSON(),
@@ -19,7 +19,7 @@ exports.seed = async function (knex) {
         {
             id: uuidv4(),
             username: 'user',
-            password_hash: bcrypt.hashSync('password', config.get('bcryptRounds')),
+            password: bcrypt.hashSync('password', config.get('bcryptRounds')),
             role: 'user',
             email: 'user@example.com',
             created_at: new Date().toJSON(),

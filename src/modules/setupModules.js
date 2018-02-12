@@ -6,6 +6,7 @@ import Router from 'koa-router';
 import logger from '../logger';
 import checkAccess from '../middleware/checkAccess';
 import isAuthenticated from '../middleware/isAuthenticated';
+import filterRequestByAccess from '../middleware/filterRequestByAccess';
 import filterResponseByAccess from '../middleware/filterResponseByAccess';
 
 const defaultAccessControl = {
@@ -54,23 +55,26 @@ export default (app) => {
 
             const accessControlAuthenticatedMiddleware = accessControl.authenticated && isAuthenticated;
             const accessControlCheckMiddleware = accessControl.check && checkAccess(accessControl);
-            const accessControlFilterMiddleware = accessControl.filter && filterResponseByAccess;
-
-            const middlewareToRun = [
-                accessControlAuthenticatedMiddleware,
-                ...routeMiddleware,
-                accessControlCheckMiddleware,
-                async (ctx, next) => {
-                    await handler(ctx);
-
-                    return next();
-                },
-                accessControlFilterMiddleware,
-                ...afterRouteMiddleware,
-            ].filter(Boolean);
+            const accessControlPreFilterMiddleware = accessControl.filter && filterRequestByAccess;
+            const accessControlPostFilterMiddleware = accessControl.filter && filterResponseByAccess;
 
             methods.forEach((httpMethod) => {
                 logger.debug(`[Module][${dir}][${httpMethod.toUpperCase()} ${baseUrl}${route}] Setting up route`);
+
+                const middlewareToRun = [
+                    accessControlAuthenticatedMiddleware,
+                    ...routeMiddleware,
+                    accessControlCheckMiddleware,
+                    accessControlPreFilterMiddleware,
+                    async (ctx, next) => {
+                        await handler(ctx);
+
+                        return next();
+                    },
+                    accessControlPostFilterMiddleware,
+                    ...afterRouteMiddleware,
+                ].filter(Boolean);
+
                 instance[httpMethod](route, ...middlewareToRun);
             });
 

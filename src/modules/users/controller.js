@@ -14,6 +14,21 @@ export async function getAll(ctx) {
 }
 
 /**
+ * This will create a user in the system.
+ *
+ * @param {object} ctx
+ */
+export async function create(ctx) {
+    const user = await User.query().insert(ctx.request.body);
+
+    const createdResourceUrl = `/users/${user.id}`;
+
+    ctx.set('Location', createdResourceUrl);
+
+    ctx.created(user);
+}
+
+/**
  * This gets a single user in the system.
  *
  * @param {object} ctx
