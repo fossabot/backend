@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-    return knex.schema.createTable('audit_log', function (table) {
+    return knex.schema.createTable('audit_logs', function (table) {
         // table structure
         table.string('id', 36).primary();
         table.string('user_id', 36).notNullable();
@@ -27,5 +27,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-    return knex.schema.dropTable('audit_log');
+    return knex.schema.dropTable('audit_logs');
 };

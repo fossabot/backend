@@ -8,7 +8,7 @@ import BaseModel from './BaseModel';
  * @extends BaseModel
  */
 class AuditLog extends BaseModel {
-    static tableName = 'audit_log';
+    static tableName = 'audit_logs';
 
     static jsonAttributes = ['extra'];
 
@@ -50,12 +50,12 @@ class AuditLog extends BaseModel {
     };
 
     static relationMappings = {
-        mod: {
+        user: {
             relation: Model.BelongsToOneRelation,
-            modelClass: `${__dirname}/Mod`,
+            modelClass: `${__dirname}/User`,
             join: {
-                from: 'mod_versions.mod_id',
-                to: 'mods.id',
+                from: 'audit_logs.user_id',
+                to: 'user.id',
             },
         },
     };

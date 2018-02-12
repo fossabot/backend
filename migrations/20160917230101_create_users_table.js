@@ -12,6 +12,10 @@ exports.up = function (knex) {
             .notNullable()
             .unique();
         table
+            .enu('role', ['user', 'admin'])
+            .notNullable()
+            .defaultTo('user');
+        table
             .boolean('must_change_password')
             .notNullable()
             .defaultTo(false);

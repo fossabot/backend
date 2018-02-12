@@ -3,11 +3,9 @@ import bcrypt from 'bcryptjs';
 import { Model } from 'objection';
 
 import Pack from './Pack';
-import Role from './Role';
 import AuditLog from './AuditLog';
 import BaseModel from './BaseModel';
 import PackUser from './pivots/PackUser';
-import UserRole from './pivots/UserRole';
 
 import { generateUID } from '../utils';
 
@@ -141,19 +139,6 @@ class User extends BaseModel {
                 to: 'packs.id',
             },
         },
-        roles: {
-            relation: Model.ManyToManyRelation,
-            modelClass: Role,
-            join: {
-                from: 'users.id',
-                through: {
-                    from: 'user_roles.user_id',
-                    to: 'user_roles.role_id',
-                    modelClass: UserRole,
-                },
-                to: 'roles.id',
-            },
-        },
     };
 
     /**
@@ -207,38 +192,6 @@ class User extends BaseModel {
      */
     verifyPassword(password) {
         return bcrypt.compareSync(password, this.password_hash);
-    }
-
-    /**
-     * Checks to see if this user has the provided role or not.
-     *
-     * @param {string} role
-     * @returns {boolean}
-     */
-    hasRole(role) {
-        if (!this.roles) {
-            return false;
-        }
-
-        const validRoles = this.roles.filter(({ name }) => name === role);
-
-        return validRoles.length;
-    }
-
-    /**
-     * Checks to see if this user has a role with the provided permission or not.
-     *
-     * @param {string} permission
-     * @returns {boolean}
-     */
-    hasPermission(permission) {
-        if (!this.roles) {
-            return false;
-        }
-
-        const hasRoleWithPermission = this.roles.some((role) => role.hasPermission(permission));
-
-        return hasRoleWithPermission;
     }
 }
 

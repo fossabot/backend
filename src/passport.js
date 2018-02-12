@@ -35,7 +35,7 @@ passport.use(
                     return done(null, false);
                 }
 
-                return done(null, (user.verifyPassword(password)) ? user : false);
+                return done(null, user.verifyPassword(password) && user);
             } catch (err) {
                 return done(err);
             }
