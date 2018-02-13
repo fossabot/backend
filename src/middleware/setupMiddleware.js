@@ -5,7 +5,6 @@ import config from 'config';
 import etag from 'koa-etag';
 import helmet from 'koa-helmet';
 import convert from 'koa-convert';
-import respond from 'koa-respond';
 import error from 'koa-json-error';
 import compress from 'koa-compress';
 import bodyParser from 'koa-bodyparser';
@@ -40,13 +39,6 @@ export default (app) => {
                 logger.info(`[RateLimiter] IP ${ctx.request.ip} reached RateLimit`);
             },
             skip: () => isDevelopmentEnvironment(),
-        })
-    );
-
-    // adds some convenience methods to the `ctx` object
-    app.use(
-        respond({
-            autoMessage: false,
         })
     );
 

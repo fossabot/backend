@@ -1,6 +1,7 @@
 import Koa from 'koa';
 import config from 'config';
 
+import setupHelpers from './helpers/setupHelpers';
 import setupModules from './modules/setupModules';
 import setupDatabase from './database/setupDatabase';
 import setupMiddleware from './middleware/setupMiddleware';
@@ -12,6 +13,9 @@ app.keys = [config.get('secret')];
 
 // setup the database including connecting knex to objection (ORM)
 setupDatabase();
+
+// setup the context helpers
+setupHelpers(app);
 
 // setup the global middleware
 setupMiddleware(app);
