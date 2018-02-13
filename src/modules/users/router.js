@@ -24,7 +24,6 @@ export const routes = [
             check: true,
             filter: true,
             resource: 'user',
-            action: 'readAny',
         },
     },
     {
@@ -36,7 +35,6 @@ export const routes = [
             check: true,
             filter: true,
             resource: 'user',
-            action: 'createAny',
         },
     },
     {
@@ -48,7 +46,6 @@ export const routes = [
             check: true,
             filter: true,
             resource: 'user',
-            action: 'readAny',
         },
     },
     {
@@ -59,7 +56,6 @@ export const routes = [
             authenticated: true,
             check: true,
             resource: 'user',
-            action: 'deleteAny',
         },
     },
     {
@@ -71,7 +67,6 @@ export const routes = [
             check: true,
             filter: true,
             resource: 'user',
-            action: 'updateAny',
         },
     },
 ];

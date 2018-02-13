@@ -2,10 +2,28 @@ import Boom from 'boom';
 
 import logger from '../logger';
 import ac from '../accesscontrol';
+import httpMethods from '../utils/httpMethods';
 
 export default (accessControl) => (ctx, next) => {
     if (!ctx.state.user) {
         return ctx.throw(401, Boom.unauthorized('You must be authenticated'));
+    }
+
+    // no action defined, so let's try to figure it out
+    if (!accessControl.action) {
+        const method = ctx.method.toLowerCase();
+
+        if (method === httpMethods.GET) {
+            accessControl.action = 'readAny';
+        } else if (method === httpMethods.POST) {
+            accessControl.action = 'createAny';
+        } else if (method === httpMethods.PUT) {
+            accessControl.action = 'updateAny';
+        } else if (method === httpMethods.DELETE) {
+            accessControl.action = 'deleteAny';
+        } else {
+            throw new Error('Cannot determine access control action from http method');
+        }
     }
 
     logger.debug(
