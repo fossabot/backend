@@ -51,4 +51,27 @@ export const routes = [
             action: 'readAny',
         },
     },
+    {
+        method: httpMethods.DELETE,
+        route: '/:userId',
+        handler: controller.deleteOne,
+        accessControl: {
+            authenticated: true,
+            check: true,
+            resource: 'user',
+            action: 'deleteAny',
+        },
+    },
+    {
+        method: httpMethods.PUT,
+        route: '/:userId',
+        handler: controller.update,
+        accessControl: {
+            authenticated: true,
+            check: true,
+            filter: true,
+            resource: 'user',
+            action: 'updateAny',
+        },
+    },
 ];

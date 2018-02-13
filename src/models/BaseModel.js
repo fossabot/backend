@@ -22,7 +22,7 @@ class BaseModel extends Model {
      *
      * @type {boolean}
      */
-    static immutable = true;
+    static immutable = false;
 
     /**
      * An object of attribute names with function values to transform attributes on the model if they exist.

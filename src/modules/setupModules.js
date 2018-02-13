@@ -47,9 +47,13 @@ export default (app) => {
                 method,
                 handler,
                 middleware: routeMiddleware = [],
-                accessControl = defaultAccessControl,
                 afterMiddleware: afterRouteMiddleware = [],
             } = config;
+
+            const accessControl = {
+                ...defaultAccessControl,
+                ...config.accessControl,
+            };
 
             const methods = Array.isArray(method) ? method : [method];
 

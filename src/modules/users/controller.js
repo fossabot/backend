@@ -42,3 +42,39 @@ export async function getOne(ctx) {
 
     ctx.ok(user);
 }
+
+/**
+ * This deletes a single user in the system.
+ *
+ * @param {object} ctx
+ * @returns {void}
+ */
+export async function deleteOne(ctx) {
+    const user = await User.query().findById(ctx.params.userId);
+
+    if (!user) {
+        return ctx.throw(404, Boom.notFound('No user with that Id was found'));
+    }
+
+    await user.$query().delete();
+
+    ctx.noContent();
+}
+
+/**
+ * This will update a user in the system.
+ *
+ * @param {object} ctx
+ * @returns {void}
+ */
+export async function update(ctx) {
+    const user = await User.query().findById(ctx.params.userId);
+
+    if (!user) {
+        return ctx.throw(404, Boom.notFound('No user with that Id was found'));
+    }
+
+    const updatedUser = await user.$query().patchAndFetch(ctx.request.body);
+
+    ctx.ok(updatedUser);
+}
