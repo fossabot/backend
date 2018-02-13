@@ -6,9 +6,10 @@ export const baseUrl = '/users';
 /**
  * Middleware run order:
  *
- * - Check for authenticated user if (accessControl.authenticated === true)
+ * - Check for authenticated user (accessControl.authenticated === true)
  * - Any middleware defined in the route definition under `middleware` array
- * - Check if user has access to route if (accessControl.check === true)
+ * - Check if user has access to route (accessControl.check === true)
+ * - Filter out inaccessible attributes from request (accessControl.filter === true)
  * - Handler method
  * - Filter out inaccessible attributes from response (accessControl.filter === true)
  * - Any middleware defined in the route definition under `afterMiddleware` array
@@ -36,6 +37,10 @@ export const routes = [
             filter: true,
             resource: 'user',
             action: 'createAny',
+            response: {
+                resource: 'user',
+                action: 'readAny',
+            },
         },
     },
     {

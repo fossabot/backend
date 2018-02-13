@@ -21,6 +21,7 @@ export default (accessControl) => (ctx, next) => {
     }
 
     ctx.state.permission = permission;
+    ctx.state.accessControl = accessControl;
 
     return next();
 };
