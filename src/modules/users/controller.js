@@ -21,9 +21,8 @@ export async function getAll(ctx) {
 export async function create(ctx) {
     const user = await User.query().insert(ctx.request.body);
 
-    const createdResourceUrl = `/users/${user.id}`;
-
-    ctx.set('Location', createdResourceUrl);
+    // set the Location header of the newly created user
+    ctx.set('Location', `/users/${user.id}`);
 
     ctx.created(user);
 }

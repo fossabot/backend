@@ -67,7 +67,7 @@ export default (app) => {
                     accessControlCheckMiddleware,
                     accessControlPreFilterMiddleware,
                     async (ctx, next) => {
-                        await handler(ctx);
+                        await handler(ctx, next);
 
                         return next();
                     },
@@ -77,15 +77,17 @@ export default (app) => {
 
                 instance[httpMethod](route, ...middlewareToRun);
             });
-
-            app.use(instance.routes()).use(
-                instance.allowedMethods({
-                    throw: true,
-                    notImplemented: () => Boom.notImplemented(),
-                    methodNotAllowed: () => Boom.methodNotAllowed(),
-                })
-            );
         });
+
+        app.use(instance.routes());
+
+        app.use(
+            instance.allowedMethods({
+                throw: true,
+                notImplemented: () => Boom.notImplemented(),
+                methodNotAllowed: () => Boom.methodNotAllowed(),
+            })
+        );
     });
 
     logger.debug('[Module] Finished setting up');

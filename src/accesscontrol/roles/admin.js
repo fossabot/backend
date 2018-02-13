@@ -1,9 +1,14 @@
 export default {
     $extend: ['user'],
     user: {
+        // doesn't allow admins to create users with custom secret/code attributes
         'create:any': ['*', '!tfa_secret', '!verification_code', '!password_reset_code'],
+
+        // doesn't allow admins to see password hash, secrets or codes
         'read:any': ['*', '!password', '!tfa_secret', '!verification_code', '!password_reset_code'],
-        'update:any': ['*'],
+
+        // doesn't allow admins to update users with custom secret/code attributes
+        'update:any': ['*', '!tfa_secret', '!verification_code', '!password_reset_code'],
         'delete:any': ['*'],
     },
     pack: {

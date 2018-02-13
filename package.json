@@ -24,6 +24,7 @@
         "db:migrate:rollback": "knex migrate:rollback",
         "db:seed": "knex seed:run",
         "dev": "nodemon --exec npm run dev:run",
+        "dev:debug": "cross-env NODE_ENV=development DEBUG=* atlauncher-scripts babel:run src/server.js",
         "dev:run": "cross-env NODE_ENV=development atlauncher-scripts babel:run src/server.js",
         "lint": "npm-run-all lint:js lint:md lint:pj",
         "lint:js": "atlauncher-scripts lint:js",
