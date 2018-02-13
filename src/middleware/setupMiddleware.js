@@ -10,6 +10,7 @@ import error from 'koa-json-error';
 import compress from 'koa-compress';
 import bodyParser from 'koa-bodyparser';
 import { RateLimit } from 'koa2-ratelimit';
+import * as paginate from 'koa-ctx-paginate';
 import responseTime from 'koa-response-time';
 import conditional from 'koa-conditional-get';
 
@@ -77,4 +78,7 @@ export default (app) => {
 
     // add eTag headers
     app.use(etag());
+
+    // add in pagination helpers
+    app.use(paginate.middleware(config.get('pagination.limit'), config.get('pagination.max')));
 };

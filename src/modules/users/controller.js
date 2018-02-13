@@ -1,4 +1,5 @@
 import Boom from 'boom';
+import { hasNextPages } from 'koa-ctx-paginate';
 
 import User from '../../models/User';
 
@@ -8,9 +9,22 @@ import User from '../../models/User';
  * @param {object} ctx
  */
 export async function getAll(ctx) {
-    const users = await User.query();
+    const users = await User.query()
+        .limit(ctx.query.limit)
+        .offset(ctx.paginate.skip);
 
-    ctx.ok(users);
+    const totalUsers = (await User.query().count())[0]['count(*)'];
+
+    const pageCount = Math.ceil(totalUsers / ctx.query.limit);
+
+    const response = {
+        type: 'list',
+        total_count: totalUsers,
+        has_more: hasNextPages(ctx)(pageCount),
+        items: users,
+    };
+
+    ctx.ok(response);
 }
 
 /**

@@ -18,7 +18,14 @@ export default (ctx, next) => {
     }
 
     // filter the response based on the permission the user has
-    ctx.response.body = ctx.state.permission.filter(ctx.response.body);
+    const body = ctx.response.body;
+
+    // filter list types differently than normal
+    if (body.type && body.type === 'list') {
+        ctx.response.body.items = ctx.state.permission.filter(body.items);
+    } else {
+        ctx.response.body = ctx.state.permission.filter(body);
+    }
 
     return next();
 };

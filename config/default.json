@@ -19,6 +19,10 @@
         "discord": "https://atl.pw/discord",
         "general": "https://www.atlauncher.com/contact-us"
     },
+    "pagination": {
+        "limit": 10,
+        "max": 50
+    },
     "graphql": {
         "enabled": true,
         "graphiql": {
