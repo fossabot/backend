@@ -1,13 +1,11 @@
 import Boom from 'boom';
 
-import User from '../../models/User';
-
 /**
  * This gets all the users in the system.
  *
  * @param {object} ctx
  */
-export async function get(ctx) {
+export function get(ctx) {
     ctx.ok(ctx.state.user);
 }
 
