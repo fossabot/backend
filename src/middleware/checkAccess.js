@@ -17,7 +17,7 @@ export default (accessControl) => (ctx, next) => {
             accessControl.action = 'readAny';
         } else if (method === httpMethods.POST) {
             accessControl.action = 'createAny';
-        } else if (method === httpMethods.PUT) {
+        } else if (method === httpMethods.PUT || method === httpMethods.PATCH) {
             accessControl.action = 'updateAny';
         } else if (method === httpMethods.DELETE) {
             accessControl.action = 'deleteAny';

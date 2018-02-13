@@ -1,12 +1,13 @@
 export default {
     user: {
-        'read:own': ['username', 'email', 'is_verified', 'created_at', 'updated_at'],
+        'read:own': ['id', 'username', 'email', 'is_verified', 'created_at', 'updated_at'],
         'update:own': ['username', 'email'],
         'delete:own': ['*'],
     },
     pack: {
         'create:own': ['name', 'description', 'type', 'website_url', 'support_url', 'discord_invite_code'],
         'read:own': [
+            'id',
             'name',
             'safe_name',
             'position',
@@ -23,7 +24,7 @@ export default {
     },
     packTag: {
         'create:own': ['tag'],
-        'read:own': ['tag', 'created_at'],
+        'read:own': ['id', 'tag', 'created_at'],
         'update:own': ['tag'],
         'delete:own': ['*'],
     },

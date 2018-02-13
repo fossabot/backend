@@ -4,5 +4,6 @@ export default {
     POST: 'post',
     PUT: 'put',
     DELETE: 'delete',
+    PATCH: 'patch',
     ALL: 'all',
 };

@@ -1,7 +1,7 @@
 import * as controller from './controller';
 import httpMethods from '../../utils/httpMethods';
 
-export const baseUrl = '/users';
+export const baseUrl = '/user';
 
 /**
  * Middleware run order:
@@ -18,55 +18,36 @@ export const routes = [
     {
         method: httpMethods.GET,
         route: '/',
-        handler: controller.getAll,
+        handler: controller.get,
         accessControl: {
             authenticated: true,
             check: true,
             filter: true,
             resource: 'user',
-        },
-    },
-    {
-        method: httpMethods.POST,
-        route: '/',
-        handler: controller.create,
-        accessControl: {
-            authenticated: true,
-            check: true,
-            filter: true,
-            resource: 'user',
-        },
-    },
-    {
-        method: httpMethods.GET,
-        route: '/:userId',
-        handler: controller.getOne,
-        accessControl: {
-            authenticated: true,
-            check: true,
-            filter: true,
-            resource: 'user',
+            action: 'readOwn',
         },
     },
     {
         method: httpMethods.DELETE,
-        route: '/:userId',
-        handler: controller.deleteOne,
+        route: '/',
+        handler: controller.deleteSelf,
         accessControl: {
             authenticated: true,
             check: true,
             resource: 'user',
+            action: 'deleteOwn',
         },
     },
     {
         method: httpMethods.PATCH,
-        route: '/:userId',
+        route: '/',
         handler: controller.update,
         accessControl: {
             authenticated: true,
             check: true,
             filter: true,
             resource: 'user',
+            action: 'updateOwn',
         },
     },
 ];
