@@ -13,6 +13,12 @@
             "ttl": 600
         }
     },
+    "contact": {
+        "security": "security@atlauncher.com",
+        "issues": "https://github.com/ATLauncher/backend/issues",
+        "discord": "https://atl.pw/discord",
+        "general": "https://www.atlauncher.com/contact-us"
+    },
     "graphql": {
         "enabled": true,
         "graphiql": {
