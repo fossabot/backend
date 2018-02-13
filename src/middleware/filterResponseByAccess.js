@@ -5,16 +5,20 @@ export default (ctx, next) => {
         return next();
     }
 
-    if (ctx.state.accessControl.response) {
-        const accessControl = ctx.state.accessControl;
-        const permission = ac.can(ctx.state.user.role)[accessControl.response.action](accessControl.response.resource);
+    const accessControl = ctx.state.accessControl;
 
-        // filter the response based on the permission the user has for the custom response control
-        ctx.response.body = permission.filter(ctx.response.body);
-    } else {
-        // filter the response based on the permission the user has
-        ctx.response.body = ctx.state.permission.filter(ctx.response.body);
+    // when creating or updating any, we need to change the permission to that of a read
+    if (accessControl.action === 'createAny' || accessControl.action === 'updateAny') {
+        ctx.state.permission = ac.can(ctx.state.user.role).readAny(accessControl.resource);
     }
+
+    // when creating or updating own, we need to change the permission to that of a read
+    if (accessControl.action === 'createOwn' || accessControl.action === 'updateOwn') {
+        ctx.state.permission = ac.can(ctx.state.user.role).readOwn(accessControl.resource);
+    }
+
+    // filter the response based on the permission the user has
+    ctx.response.body = ctx.state.permission.filter(ctx.response.body);
 
     return next();
 };

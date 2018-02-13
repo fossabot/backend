@@ -37,10 +37,6 @@ export const routes = [
             filter: true,
             resource: 'user',
             action: 'createAny',
-            response: {
-                resource: 'user',
-                action: 'readAny',
-            },
         },
     },
     {
