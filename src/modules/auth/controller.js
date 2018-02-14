@@ -37,3 +37,37 @@ export function authenticate(ctx, next) {
         ctx.ok({ token });
     })(ctx, next);
 }
+
+/**
+ * This will change the password for the current logged in user.
+ *
+ * @export
+ * @param {object} ctx
+ * @returns {void}
+ */
+export async function password(ctx) {
+    const body = ctx.request.body;
+    const user = ctx.state.user;
+
+    if (!body.password) {
+        return ctx.throw(400, Boom.forbidden('Current password must be provided'));
+    }
+
+    if (!user.verifyPassword(body.password)) {
+        return ctx.throw(400, Boom.forbidden("Current password doesn't match"));
+    }
+
+    if (body.password === body.new_password) {
+        return ctx.throw(400, Boom.badRequest('New password must be different from old password'));
+    }
+
+    if (!body.new_password) {
+        return ctx.throw(400, Boom.badRequest('New password must be provided'));
+    }
+
+    await user.$query().patch({
+        password: body.new_password,
+    });
+
+    ctx.noContent();
+}

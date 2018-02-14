@@ -9,4 +9,12 @@ export const routes = [
         route: '/',
         handler: controller.authenticate,
     },
+    {
+        method: httpMethods.POST,
+        route: '/password',
+        handler: controller.password,
+        accessControl: {
+            authenticated: true,
+        },
+    },
 ];
