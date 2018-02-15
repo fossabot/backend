@@ -1,4 +1,3 @@
-import Boom from 'boom';
 import config from 'config';
 import { sign } from 'jsonwebtoken';
 import passport from 'koa-passport';
@@ -16,11 +15,11 @@ import { convertTimeStringToSeconds } from '../../utils';
 export function authenticate(ctx, next) {
     return passport.authenticate('local', (err, user) => {
         if (err) {
-            return ctx.throw(500, Boom.serverUnavailable(err.message));
+            return ctx.internalServerError(err.message);
         }
 
         if (!user) {
-            return ctx.throw(401, Boom.unauthorized());
+            return ctx.unauthorized();
         }
 
         const token = sign(
@@ -50,19 +49,19 @@ export async function password(ctx) {
     const user = ctx.state.user;
 
     if (!body.password) {
-        return ctx.throw(400, Boom.forbidden('Current password must be provided'));
+        return ctx.badRequest('Current password must be provided');
     }
 
     if (!user.verifyPassword(body.password)) {
-        return ctx.throw(400, Boom.forbidden("Current password doesn't match"));
+        return ctx.badRequest("Current password doesn't match");
     }
 
     if (body.password === body.new_password) {
-        return ctx.throw(400, Boom.badRequest('New password must be different from old password'));
+        return ctx.badRequest('New password must be different from old password');
     }
 
     if (!body.new_password) {
-        return ctx.throw(400, Boom.badRequest('New password must be provided'));
+        return ctx.badRequest('New password must be provided');
     }
 
     await user.$query().patch({

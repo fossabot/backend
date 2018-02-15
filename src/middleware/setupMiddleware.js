@@ -1,4 +1,3 @@
-import Boom from 'boom';
 import cors from 'kcors';
 import jwt from 'koa-jwt';
 import config from 'config';
@@ -33,7 +32,8 @@ export default (app) => {
             timeWait: 0,
             handler: (ctx) => {
                 ctx.set('Retry-After', Math.ceil(config.get('ratelimit.time') / 1000));
-                ctx.throw(429, Boom.tooManyRequests('Too many requests, please try again later'));
+
+                ctx.tooManyRequests('Too many requests, please try again later');
             },
             onLimitReached: (ctx) => {
                 logger.info(`[RateLimiter] IP ${ctx.request.ip} reached RateLimit`);

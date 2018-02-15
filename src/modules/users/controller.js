@@ -1,4 +1,3 @@
-import Boom from 'boom';
 import { hasNextPages } from 'koa-ctx-paginate';
 
 import User from '../../models/User';
@@ -51,7 +50,7 @@ export async function getOne(ctx) {
     const user = await User.query().findById(ctx.params.userId);
 
     if (!user) {
-        return ctx.throw(404, Boom.notFound('No user with that Id was found'));
+        return ctx.notFound('No user with that Id was found');
     }
 
     ctx.ok(user);
@@ -67,7 +66,7 @@ export async function deleteOne(ctx) {
     const user = await User.query().findById(ctx.params.userId);
 
     if (!user) {
-        return ctx.throw(404, Boom.notFound('No user with that Id was found'));
+        return ctx.notFound('No user with that Id was found');
     }
 
     await user.$query().delete();
@@ -85,7 +84,7 @@ export async function update(ctx) {
     const user = await User.query().findById(ctx.params.userId);
 
     if (!user) {
-        return ctx.throw(404, Boom.notFound('No user with that Id was found'));
+        return ctx.notFound('No user with that Id was found');
     }
 
     const updatedUser = await user.$query().patchAndFetch(ctx.request.body);

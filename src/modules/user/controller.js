@@ -1,5 +1,3 @@
-import Boom from 'boom';
-
 /**
  * This gets all the users in the system.
  *
@@ -17,7 +15,7 @@ export function get(ctx) {
  */
 export async function deleteSelf(ctx) {
     if (!ctx.request.body.password || !ctx.state.user.verifyPassword(ctx.request.body.password)) {
-        return ctx.throw(403, Boom.forbidden('Password must be sent in request and must match'));
+        return ctx.forbidden('Password must be sent in request and must match');
     }
 
     await ctx.state.user.$query().delete();
