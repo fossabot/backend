@@ -95,10 +95,10 @@ class PackVersionRevision extends BaseModel {
      *
      * @param {object} queryContext
      */
-    $beforeInsert(queryContext) {
-        super.$beforeInsert(queryContext);
-
+    async $beforeInsert(queryContext) {
         this.hash = sha256(this.json);
+
+        await super.$beforeInsert(queryContext);
     }
 
     /**
@@ -107,10 +107,12 @@ class PackVersionRevision extends BaseModel {
      * @param {ModelOptions} opt
      * @param {QueryBuilderContext} queryContext
      */
-    $beforeUpdate(opt, queryContext) {
-        super.$beforeUpdate(opt, queryContext);
+    async $beforeUpdate(opt, queryContext) {
+        if (this.hasOwnProperty('json')) {
+            this.hash = sha256(this.json);
+        }
 
-        this.hash = sha256(this.json);
+        await super.$beforeUpdate(opt, queryContext);
     }
 }
 

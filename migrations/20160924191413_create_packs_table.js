@@ -21,7 +21,11 @@ exports.up = function (knex) {
         table
             .boolean('is_disabled')
             .notNullable()
-            .defaultTo(true);
+            .defaultTo(false);
+        table
+            .boolean('is_private')
+            .notNullable()
+            .defaultTo(false);
         table
             .string('website_url')
             .nullable()

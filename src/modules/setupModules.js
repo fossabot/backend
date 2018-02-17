@@ -5,7 +5,7 @@ import Router from 'koa-router';
 
 import logger from '../logger';
 import checkAccess from '../middleware/checkAccess';
-import isAuthenticated from '../middleware/isAuthenticated';
+import checkAuthentication from '../middleware/checkAuthentication';
 import filterRequestByAccess from '../middleware/filterRequestByAccess';
 import filterResponseByAccess from '../middleware/filterResponseByAccess';
 
@@ -57,7 +57,7 @@ export default (app) => {
 
             const methods = Array.isArray(method) ? method : [method];
 
-            const accessControlAuthenticatedMiddleware = accessControl.authenticated && isAuthenticated;
+            const accessControlCheckAuthenticationMiddleware = accessControl.authenticated && checkAuthentication;
             const accessControlCheckMiddleware = accessControl.check && checkAccess(accessControl);
             const accessControlPreFilterMiddleware = accessControl.filter && filterRequestByAccess;
             const accessControlPostFilterMiddleware = accessControl.filter && filterResponseByAccess;
@@ -66,7 +66,7 @@ export default (app) => {
                 logger.debug(`[Module][${dir}][${httpMethod.toUpperCase()} ${baseUrl}${route}] Setting up route`);
 
                 const middlewareToRun = [
-                    accessControlAuthenticatedMiddleware,
+                    accessControlCheckAuthenticationMiddleware,
                     ...routeMiddleware,
                     accessControlCheckMiddleware,
                     accessControlPreFilterMiddleware,

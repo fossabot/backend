@@ -12,9 +12,9 @@ export default {
         'delete:any': ['*'],
     },
     pack: {
-        'create:any': ['*'],
+        'create:any': ['*', '!safe_name'],
         'read:any': ['*'],
-        'update:any': ['*'],
+        'update:any': ['*', '!safe_name'],
         'delete:any': ['*'],
     },
     packTag: {

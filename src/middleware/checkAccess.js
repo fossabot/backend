@@ -24,13 +24,15 @@ export default (accessControl) => (ctx, next) => {
         }
     }
 
+    const role = ctx.state.user ? ctx.state.user.role : 'guest';
+
     logger.debug(
-        `Checking permissions for role '${ctx.state.user.role}' on action '${accessControl.action}' for resource '${
+        `Checking permissions for role '${role}' on action '${accessControl.action}' for resource '${
             accessControl.resource
         }'`
     );
 
-    const permission = ac.can(ctx.state.user.role)[accessControl.action](accessControl.resource);
+    const permission = ac.can(role)[accessControl.action](accessControl.resource);
 
     if (!permission.granted) {
         return ctx.forbidden('You do not have permission to do this');

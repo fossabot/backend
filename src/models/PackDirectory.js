@@ -85,8 +85,6 @@ class PackDirectory extends BaseModel {
      * @param {object} queryContext
      */
     async $beforeInsert(queryContext) {
-        super.$beforeInsert(queryContext);
-
         if (this.parent) {
             const parentDirectory = await PackDirectory.query()
                 .select('pack_id')
@@ -94,9 +92,17 @@ class PackDirectory extends BaseModel {
                 .first();
 
             if (parentDirectory.pack_id !== this.pack_id) {
-                throw new ValidationError('Parent cannot belong to a different pack.');
+                throw new ValidationError({
+                    pack_id: [
+                        {
+                            message: 'Parent cannot belong to a different pack',
+                        },
+                    ],
+                });
             }
         }
+
+        await super.$beforeInsert(queryContext);
     }
 }
 

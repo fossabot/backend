@@ -1,25 +1,13 @@
 export default {
+    $extend: ['guest'],
     user: {
         'read:own': ['id', 'username', 'email', 'is_verified', 'created_at', 'updated_at'],
         'update:own': ['username', 'email'],
         'delete:own': ['*'],
     },
     pack: {
-        'create:own': ['name', 'description', 'type', 'website_url', 'support_url', 'discord_invite_code'],
-        'read:own': [
-            'id',
-            'name',
-            'safe_name',
-            'position',
-            'description',
-            'type',
-            'website_url',
-            'support_url',
-            'discord_invite_code',
-            'created_at',
-            'updated_at',
-        ],
-        'update:own': ['name', 'description', 'type', 'website_url', 'support_url', 'discord_invite_code'],
+        'create:own': ['name', 'description', 'is_private', 'website_url', 'support_url', 'discord_invite_code'],
+        'update:own': ['name', 'description', 'is_private', 'website_url', 'support_url', 'discord_invite_code'],
         'delete:own': ['*'],
     },
     packTag: {

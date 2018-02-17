@@ -14,6 +14,7 @@ import conditional from 'koa-conditional-get';
 
 import logger from '../logger';
 import passport from '../passport';
+import isAuthenticated from './isAuthenticated';
 import { convertTimeStringToMilliseconds, generateErrorJsonResponse, isDevelopmentEnvironment } from '../utils';
 
 export default (app) => {
@@ -64,6 +65,9 @@ export default (app) => {
             secret: config.get('secret'),
         })
     );
+
+    // add in user to state if logged in
+    app.use(isAuthenticated);
 
     // allow conditional http requests
     app.use(conditional());

@@ -55,6 +55,10 @@ class Pack extends BaseModel {
                 type: 'boolean',
                 default: false,
             },
+            is_private: {
+                type: 'boolean',
+                default: false,
+            },
             website_url: {
                 type: ['string', 'null'],
                 maxLength: 1024,
@@ -142,8 +146,6 @@ class Pack extends BaseModel {
      * @param {object} queryContext
      */
     async $beforeInsert(queryContext) {
-        super.$beforeInsert(queryContext);
-
         this.safe_name = getSafeString(this.name);
 
         if (!this.position) {
@@ -158,6 +160,8 @@ class Pack extends BaseModel {
                 this.position = highestPoisitonPack.position + 1;
             }
         }
+
+        await super.$beforeInsert(queryContext);
     }
 
     /**
@@ -166,10 +170,12 @@ class Pack extends BaseModel {
      * @param {ModelOptions} opt
      * @param {QueryBuilderContext} queryContext
      */
-    $beforeUpdate(opt, queryContext) {
-        super.$beforeUpdate(opt, queryContext);
+    async $beforeUpdate(opt, queryContext) {
+        if (this.hasOwnProperty('name')) {
+            this.safe_name = getSafeString(this.name);
+        }
 
-        this.safe_name = getSafeString(this.name);
+        await super.$beforeUpdate(opt, queryContext);
     }
 
     /**
@@ -179,6 +185,7 @@ class Pack extends BaseModel {
      */
     static transforms = {
         is_disabled: (input) => !!input,
+        is_private: (input) => !!input,
     };
 }
 

@@ -160,7 +160,7 @@ class User extends BaseModel {
      * @param {object} queryContext
      * @returns {*}
      */
-    $beforeInsert(queryContext) {
+    async $beforeInsert(queryContext) {
         if (this.hasOwnProperty('password')) {
             this.password = bcrypt.hashSync(this.password, config.get('bcryptRounds'));
         }
@@ -169,7 +169,7 @@ class User extends BaseModel {
             this.verification_code = generateUID(128);
         }
 
-        return super.$beforeInsert(queryContext);
+        await super.$beforeInsert(queryContext);
     }
 
     /**
@@ -178,12 +178,12 @@ class User extends BaseModel {
      * @param {ModelOptions} opt
      * @param {QueryBuilderContext} queryContext
      */
-    $beforeUpdate(opt, queryContext) {
-        super.$beforeUpdate(opt, queryContext);
-
+    async $beforeUpdate(opt, queryContext) {
         if (this.hasOwnProperty('password')) {
             this.password = bcrypt.hashSync(this.password, config.get('bcryptRounds'));
         }
+
+        await super.$beforeUpdate(opt, queryContext);
     }
 
     /**
