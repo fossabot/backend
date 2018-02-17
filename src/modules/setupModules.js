@@ -32,7 +32,7 @@ export default (app) => {
     directories.forEach((dir) => {
         logger.debug(`[Module][${dir}] Setting up module`);
 
-        const { routes, baseUrl, middleware = [] } = require(path.join(__dirname, dir, '/router.js'));
+        const { routes, baseUrl, paramResolver, middleware = [] } = require(path.join(__dirname, dir, '/router.js'));
 
         const instance = new Router({ prefix: baseUrl });
 
@@ -57,6 +57,7 @@ export default (app) => {
 
             const methods = Array.isArray(method) ? method : [method];
 
+            const paramResolverMiddleware = paramResolver;
             const accessControlCheckAuthenticationMiddleware = accessControl.authenticated && checkAuthentication;
             const accessControlCheckMiddleware = accessControl.check && checkAccess(accessControl);
             const accessControlPreFilterMiddleware = accessControl.filter && filterRequestByAccess;
@@ -67,6 +68,7 @@ export default (app) => {
 
                 const middlewareToRun = [
                     accessControlCheckAuthenticationMiddleware,
+                    paramResolverMiddleware,
                     ...routeMiddleware,
                     accessControlCheckMiddleware,
                     accessControlPreFilterMiddleware,

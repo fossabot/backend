@@ -1,7 +1,37 @@
+import Pack from '../../models/Pack';
 import * as controller from './controller';
 import httpMethods from '../../utils/httpMethods';
 
 export const baseUrl = '/packs';
+
+/**
+ * This will resolve any packId params to a Pack object and place it in the context state, returning a not found if it
+ * wasn't found.
+ *
+ * @param {object} ctx
+ * @param {function} next
+ * @returns {void}
+ */
+export const paramResolver = async (ctx, next) => {
+    if (!ctx.params || !ctx.params.packId) {
+        return next();
+    }
+
+    // grab the pack (if exists) along with it's tags
+    const pack = await Pack.query()
+        .eager('[packTags as pack_tags, launcherTags as launcher_tags]')
+        .findById(ctx.params.packId);
+
+    if (!pack) {
+        return ctx.notFound('No pack with that Id was found');
+    }
+
+    ctx.state.resolved = {
+        pack,
+    };
+
+    return next();
+};
 
 /**
  * Middleware run order:

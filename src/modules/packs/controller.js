@@ -9,6 +9,7 @@ import Pack from '../../models/Pack';
  */
 export async function getAll(ctx) {
     const packs = await Pack.query()
+        .eager('[packTags as pack_tags, launcherTags as launcher_tags]')
         .limit(ctx.query.limit)
         .offset(ctx.paginate.skip);
 
@@ -46,14 +47,8 @@ export async function create(ctx) {
  * @param {object} ctx
  * @returns {void}
  */
-export async function getOne(ctx) {
-    const pack = await Pack.query().findById(ctx.params.packId);
-
-    if (!pack) {
-        return ctx.notFound('No pack with that Id was found');
-    }
-
-    ctx.ok(pack);
+export function getOne(ctx) {
+    ctx.ok(ctx.state.resolved.pack);
 }
 
 /**
@@ -63,13 +58,7 @@ export async function getOne(ctx) {
  * @returns {void}
  */
 export async function deleteOne(ctx) {
-    const pack = await Pack.query().findById(ctx.params.packId);
-
-    if (!pack) {
-        return ctx.notFound('No pack with that Id was found');
-    }
-
-    await pack.$query().delete();
+    await ctx.state.resolved.pack.$query().delete();
 
     ctx.noContent();
 }
@@ -81,13 +70,7 @@ export async function deleteOne(ctx) {
  * @returns {void}
  */
 export async function update(ctx) {
-    const pack = await Pack.query().findById(ctx.params.packId);
-
-    if (!pack) {
-        return ctx.notFound('No pack with that Id was found');
-    }
-
-    const updatedPack = await pack.$query().patchAndFetch(ctx.request.body);
+    const updatedPack = await ctx.state.resolved.pack.$query().patchAndFetch(ctx.request.body);
 
     ctx.ok(updatedPack);
 }
