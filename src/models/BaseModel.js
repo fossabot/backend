@@ -71,10 +71,8 @@ class BaseModel extends Model {
      *     jsonSchema.uniqueProperties value
      *
      * @param {ModelOptions} opt
-     * @param {QueryBuilderContext} queryContext
-     * @returns {*}
      */
-    async $beforeUpdate(opt, queryContext) {
+    async $beforeUpdate(opt) {
         if (this.constructor.immutable) {
             throw new Error(`${this.constructor.name} is set as immutable so updates are not allowed.`);
         }
@@ -141,6 +139,7 @@ class BaseModel extends Model {
                             query.whereNot('id', queryOptions.old.id);
                         }
 
+                        // eslint-disable-next-line promise/prefer-await-to-then
                         return query.then((row) => {
                             if (row) {
                                 const errors = {};

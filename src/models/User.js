@@ -158,7 +158,6 @@ class User extends BaseModel {
      * Before inserting make sure we hash the password if provided and also add in a verification code.
      *
      * @param {object} queryContext
-     * @returns {*}
      */
     async $beforeInsert(queryContext) {
         if (this.hasOwnProperty('password')) {
