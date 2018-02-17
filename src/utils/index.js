@@ -282,7 +282,7 @@ export function addTimeStringToDate(string, date = new Date()) {
 export function generateErrorJsonResponse(err) {
     const status = err.statusCode || err.status || 500;
 
-    const isValidationError = err instanceof ValidationError;
+    const isValidationError = err instanceof ValidationError && err.type === 'ModelValidation';
 
     const stacktrace = isDevelopmentEnvironment() ? { stack: err.stack } : {};
 
