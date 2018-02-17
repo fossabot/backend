@@ -6,15 +6,19 @@ export default {
         'delete:own': ['*'],
     },
     pack: {
+        'read:own': ['*', '!is_disabled', '!disabled_at'],
         'create:own': ['name', 'description', 'is_private', 'website_url', 'support_url', 'discord_invite_code'],
         'update:own': ['name', 'description', 'is_private', 'website_url', 'support_url', 'discord_invite_code'],
         'delete:own': ['*'],
     },
     packTag: {
         'create:own': ['tag'],
-        'read:own': ['id', 'tag', 'created_at'],
+        'read:own': ['*'],
         'update:own': ['tag'],
         'delete:own': ['*'],
+    },
+    launcherTag: {
+        'read:own': ['*'],
     },
     packFile: {
         'create:own': ['*'],

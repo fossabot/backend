@@ -5,6 +5,9 @@ export default {
     packTag: {
         'read:any': ['*'],
     },
+    launcherTag: {
+        'read:any': ['*'],
+    },
     packFile: {
         'read:any': ['*'],
     },

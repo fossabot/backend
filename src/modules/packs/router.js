@@ -69,6 +69,30 @@ export const routes = [
     },
     {
         method: httpMethods.POST,
+        route: '/:packId/tags/pack',
+        handler: controller.postPackTags,
+        accessControl: {
+            authenticated: true,
+            check: true,
+            filter: true,
+            resource: 'packTag',
+            isResourceOwner: async (ctx) => await ctx.state.resolved.pack.canCreate(ctx.state.user),
+        },
+    },
+    {
+        method: httpMethods.POST,
+        route: '/:packId/tags/launcher',
+        handler: controller.postLauncherTags,
+        accessControl: {
+            authenticated: true,
+            check: true,
+            filter: true,
+            resource: 'launcherTag',
+            isResourceOwner: async (ctx) => await ctx.state.resolved.pack.canCreate(ctx.state.user),
+        },
+    },
+    {
+        method: httpMethods.POST,
         route: '/',
         handler: controller.create,
         accessControl: {

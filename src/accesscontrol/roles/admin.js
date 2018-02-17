@@ -23,6 +23,12 @@ export default {
         'update:any': ['*'],
         'delete:any': ['*'],
     },
+    launcherTag: {
+        'create:any': ['*'],
+        'read:any': ['*'],
+        'update:any': ['*'],
+        'delete:any': ['*'],
+    },
     packFile: {
         'create:any': ['*'],
         'read:any': ['*'],
@@ -36,12 +42,6 @@ export default {
         'delete:any': ['*'],
     },
     packVersionRevision: {
-        'create:any': ['*'],
-        'read:any': ['*'],
-        'update:any': ['*'],
-        'delete:any': ['*'],
-    },
-    launcherTag: {
         'create:any': ['*'],
         'read:any': ['*'],
         'update:any': ['*'],

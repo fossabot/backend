@@ -140,6 +140,16 @@ class Pack extends BaseModel {
         },
     };
 
+    async canCreate(user) {
+        const packUser = await this.$relatedQuery('users').where('user_id', user.id);
+
+        if (!packUser) {
+            return false;
+        }
+
+        return packUser.can_create;
+    }
+
     /**
      * Before inserting make sure we add in the packs safe name as well as set the position if not set.
      *

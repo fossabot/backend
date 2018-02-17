@@ -52,6 +52,32 @@ export function getOne(ctx) {
 }
 
 /**
+ * This gets a single pack's pack tags.
+ *
+ * @param {object} ctx
+ * @returns {void}
+ */
+export async function postPackTags(ctx) {
+    const packTag = await ctx.state.resolved.pack.$relatedQuery('packTags').insert({ tag: ctx.request.body.tag });
+
+    ctx.ok(packTag);
+}
+
+/**
+ * This gets a single pack's launcher tags.
+ *
+ * @param {object} ctx
+ * @returns {void}
+ */
+export async function postLauncherTags(ctx) {
+    const launcherTag = await ctx.state.resolved.pack
+        .$relatedQuery('launcherTags')
+        .insert({ tag: ctx.request.body.tag });
+
+    ctx.ok(launcherTag);
+}
+
+/**
  * This deletes a single pack in the system.
  *
  * @param {object} ctx
