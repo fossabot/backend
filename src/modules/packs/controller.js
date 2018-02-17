@@ -21,7 +21,11 @@ export async function getAll(ctx) {
         type: 'list',
         total_count: totalPacks,
         has_more: hasNextPages(ctx)(pageCount),
-        items: packs,
+        items: packs.map((pack) => ({
+            ...pack,
+            pack_tags: pack.pack_tags.map((tag) => tag.tag),
+            launcher_tags: pack.launcher_tags.map((tag) => tag.tag),
+        })),
     };
 
     ctx.ok(response);
@@ -48,7 +52,13 @@ export async function create(ctx) {
  * @returns {void}
  */
 export function getOne(ctx) {
-    ctx.ok(ctx.state.resolved.pack);
+    const pack = ctx.state.resolved.pack;
+
+    ctx.ok({
+        ...pack,
+        pack_tags: pack.pack_tags.map((tag) => tag.tag),
+        launcher_tags: pack.launcher_tags.map((tag) => tag.tag),
+    });
 }
 
 /**
@@ -98,5 +108,9 @@ export async function deleteOne(ctx) {
 export async function update(ctx) {
     const updatedPack = await ctx.state.resolved.pack.$query().patchAndFetch(ctx.request.body);
 
-    ctx.ok(updatedPack);
+    ctx.ok({
+        ...updatedPack,
+        pack_tags: updatedPack.pack_tags.map((tag) => tag.tag),
+        launcher_tags: updatedPack.launcher_tags.map((tag) => tag.tag),
+    });
 }
