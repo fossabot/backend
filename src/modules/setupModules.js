@@ -4,6 +4,7 @@ import path from 'path';
 import Router from 'koa-router';
 
 import logger from '../logger';
+import checkRole from '../middleware/checkRole';
 import checkAccess from '../middleware/checkAccess';
 import checkAuthentication from '../middleware/checkAuthentication';
 import filterRequestByAccess from '../middleware/filterRequestByAccess';
@@ -59,6 +60,7 @@ export default (app) => {
 
             const paramResolverMiddleware = paramResolver;
             const accessControlCheckAuthenticationMiddleware = accessControl.authenticated && checkAuthentication;
+            const accessControlCheckRoleMiddleware = accessControl.role && checkRole(accessControl.role);
             const accessControlCheckMiddleware = accessControl.check && checkAccess(accessControl);
             const accessControlPreFilterMiddleware = accessControl.filter && filterRequestByAccess;
             const accessControlPostFilterMiddleware = accessControl.filter && filterResponseByAccess;
@@ -68,17 +70,18 @@ export default (app) => {
 
                 const middlewareToRun = [
                     accessControlCheckAuthenticationMiddleware,
+                    accessControlCheckRoleMiddleware,
+                    accessControlCheckMiddleware,
                     paramResolverMiddleware,
                     ...routeMiddleware,
-                    accessControlCheckMiddleware,
                     accessControlPreFilterMiddleware,
                     async (ctx, next) => {
                         await handler(ctx, next);
 
                         return next();
                     },
-                    accessControlPostFilterMiddleware,
                     ...afterRouteMiddleware,
+                    accessControlPostFilterMiddleware,
                 ].filter(Boolean);
 
                 instance[httpMethod](route, ...middlewareToRun);

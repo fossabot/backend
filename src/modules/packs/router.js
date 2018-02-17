@@ -33,17 +33,6 @@ export const paramResolver = async (ctx, next) => {
     return next();
 };
 
-/**
- * Middleware run order:
- *
- * - Check for authenticated user (accessControl.authenticated === true)
- * - Any middleware defined in the route definition under `middleware` array
- * - Check if user has access to route (accessControl.check === true)
- * - Filter out inaccessible attributes from request (accessControl.filter === true)
- * - Handler method
- * - Filter out inaccessible attributes from response (accessControl.filter === true)
- * - Any middleware defined in the route definition under `afterMiddleware` array
- */
 export const routes = [
     {
         method: httpMethods.GET,
@@ -88,7 +77,8 @@ export const routes = [
             check: true,
             filter: true,
             resource: 'launcherTag',
-            isResourceOwner: async (ctx) => await ctx.state.resolved.pack.canCreate(ctx.state.user),
+            action: 'createAny',
+            role: 'admin',
         },
     },
     {

@@ -1,7 +1,6 @@
 import logger from '../logger';
 import ac from '../accesscontrol';
 import httpMethods from '../utils/httpMethods';
-import { access } from 'fs';
 
 export default (accessControl) => (ctx, next) => {
     if (!ctx.state.user) {
@@ -43,7 +42,7 @@ export default (accessControl) => (ctx, next) => {
     const permission = ac.can(role)[accessControl.action](accessControl.resource);
 
     if (!permission.granted) {
-        return ctx.forbidden('You do not have permission to do this');
+        return ctx.forbidden('You do not have permission to do that');
     }
 
     ctx.state.permission = permission;

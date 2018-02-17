@@ -126,6 +126,29 @@ They're divided up into 5 main files:
 Configuration can be specified as either a `json` file, `js` file or as environment variables. For more information on
 the configuration files see the [node-config](https://github.com/lorenwest/node-config) repository.
 
+## Defining Routes
+
+To define routes, we use different modules. Each module contains a `router.js` and a `controller.js` file.
+
+Inside the `router.js` file is the configuration for the routes, including any middleware, access control and
+authentication checks to run.
+
+### Middleware Order
+
+There is a bunch of middleware that runs on each request, depending on how you have defined your route.
+
+The general order is:
+
+* Check for authenticated user (accessControl.authenticated === true)
+* Check for the user to have a specific role (accessControl.role)
+* Check if user has access to route (accessControl.check === true)
+* Param resolver (defined as an export in the `routes.js` file)
+* Any middleware defined in the route definition under `middleware` array
+* Filter out inaccessible attributes from request (accessControl.filter === true)
+* Controller method
+* Any middleware defined in the route definition under `afterMiddleware` array
+* Filter out inaccessible attributes from response (accessControl.filter === true)
+
 ## Running in production
 
 To run in production you need to first build the code:
