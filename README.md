@@ -3,6 +3,7 @@
 Backend API server for ATLauncher NEXT.
 
 [![CircleCI](https://circleci.com/gh/ATLauncher/Backend-NEXT/tree/feature%2Finitial-code.svg?style=svg)](https://circleci.com/gh/ATLauncher/Backend-NEXT/tree/feature%2Finitial-code)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FATLauncher%2Fbackend.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FATLauncher%2Fbackend?ref=badge_shield)
 
 ## Development
 
@@ -140,3 +141,7 @@ docker run -p 8080:8080 atlauncher/backend-next
 ## Contributing
 
 If you wish to contribute to this repository in any way, take a look at [CONTRIBUTING.md](CONTRIBUTING.md).
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FATLauncher%2Fbackend.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FATLauncher%2Fbackend?ref=badge_large)
